@@ -1,0 +1,5 @@
+# Photos are downloaded by demo/fetch_evidence.py (plan.md: never commit images). Keep the manifest + evidence.js.
+*.jpg
+*.jpeg
+*.png
+*.webp

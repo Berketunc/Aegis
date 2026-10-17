@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aegis Claim Screening</title>
+  <meta name="description" content="Real-time screening of motor-insurance claim photos for AI generation and AI editing, inside the claims transaction, on IBM Z.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%230f62fe' d='M12 2 3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5z'/%3E%3Cpath fill='%23fff' d='m10.6 15.6-3.3-3.3 1.4-1.4 1.9 1.9 4.7-4.7 1.4 1.4z'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#/overview" aria-label="Aegis home">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2 3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5z"/><path fill="#fff" d="m10.6 15.6-3.3-3.3 1.4-1.4 1.9 1.9 4.7-4.7 1.4 1.4z"/></svg>
+      Aegis <small>on IBM Z</small>
+    </a>
+    <nav class="tabs" aria-label="Sections">
+      <a href="#/overview" data-view="overview">Overview</a>
+      <a href="#/claim" data-view="claim">Submit a claim</a>
+      <a href="#/adjuster" data-view="adjuster">Adjuster</a>
+      <a href="#/system" data-view="system">System</a>
+    </nav>
+    <span id="conn" class="conn" role="status">Connecting…</span>
+    <button id="theme" class="theme-btn" type="button" aria-label="Toggle colour theme">◐</button>
+  </div>
+</header>
+<div id="mock-banner" class="banner" hidden>
+  <div><strong>Offline demo mode.</strong> The CLMI gateway isn't reachable, so responses are simulated in your browser. Nothing here is running on LinuxONE. Open the page through the gateway (SSH tunnel → http://localhost:8080) for the real system.</div>
+</div>
+
+<main>
+<!-- ======================================================= OVERVIEW -->
+<section id="view-overview" class="view active" aria-labelledby="ov-title">
+  <div class="hero">
+    <div>
+      <div class="eyebrow">IBM Z Datathon 2026 · Theme 1: Real-Time AI for Critical Decisions</div>
+      <h1 id="ov-title">Every claim photo checked for AI editing, inside the claims transaction.</h1>
+      <p class="lead">Every photo attached to a motor insurance claim is screened for AI generation or AI editing in real time, with every model running on IBM Z, so customer data never leaves it. Honest claims are fast-tracked; suspicious ones go to a person, with reasons.</p>
+      <div class="btn-row">
+        <a class="btn" href="#/claim">Try a claim</a>
+        <a class="btn secondary" href="#/adjuster">Open the adjuster view</a>
+      </div>
+    </div>
+    <div class="hero-panel" aria-label="Decision bands at a glance">
+      <div class="row"><span class="band GREEN">GREEN</span><span class="small">Fast-tracked to normal processing</span></div>
+      <div class="row"><span class="band AMBER">AMBER</span><span class="small">Human review</span></div>
+      <div class="row"><span class="band RED">RED</span><span class="small">Investigator referral. Never auto-rejected.</span></div>
+      <div class="row"><span class="muted small">Decision-path target</span><strong class="mono">p95 ≤ 200 ms</strong></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <header>
+      <div class="eyebrow">The problem</div>
+      <h2>AI makes it cheap to fake or inflate damage</h2>
+      <p class="muted">Motor claims are the biggest share of detected insurance fraud in the UK, and insurers are already seeing AI-generated and doctored photos.</p>
+    </header>
+    <div class="grid g4">
+      <article class="card stat"><div class="num">£1.34bn</div><p>of fraud detected by UK insurers in 2025, across 93,900 claims.</p><a class="src" href="https://www.insurancebusinessmag.com/uk/news/claims/fewer-fraud-cases-fatter-claims-as-average-scam-hits-14300-592527.aspx" target="_blank" rel="noopener">ABI figures, Insurance Business, 6 Oct 2026</a></article>
+      <article class="card stat"><div class="num">55%</div><p>of detected cases were motor: 51,900 cases worth £625m. Aviva reports more claims backed by AI-generated images.</p><a class="src" href="https://www.insurancebusinessmag.com/uk/news/claims/fewer-fraud-cases-fatter-claims-as-average-scam-hits-14300-592527.aspx" target="_blank" rel="noopener">Insurance Business, 6 Oct 2026</a></article>
+      <article class="card stat"><div class="num">1 in 8</div><p>people admit inflating a claim. Admiral has seen a damaged-car photo edited with a different number plate to claim twice.</p><a class="src" href="https://www.admiral.com/press-office/the-white-lie-effect-1-in-8-admit-exaggerating-insurance-claims-as-untruths-and-ai" target="_blank" rel="noopener">Admiral press office</a></article>
+      <article class="card stat"><div class="num">7%</div><p>of anti-fraud professionals say their organisation is more than moderately prepared for AI-enabled fraud.</p><a class="src" href="https://www.sas.com/en_us/news/press-releases/2026/may/synthetic-images-ai-insurance-fraud.html" target="_blank" rel="noopener">ACFE / SAS, May 2026</a></article>
+    </div>
+  </div>
+
+  <div class="section">
+    <header>
+      <div class="eyebrow">Who benefits</div>
+      <h2>Faster for honest claimants, fairer for everyone</h2>
+    </header>
+    <div class="grid g4">
+      <article class="card benefit"><h3>Honest claimants</h3><p class="muted">GREEN claims are fast-tracked, so genuine claimants are paid sooner.</p></article>
+      <article class="card benefit"><h3>All policyholders</h3><p class="muted">Fraud is caught before payout, not after, which keeps premiums down.</p></article>
+      <article class="card benefit"><h3>Anyone wrongly suspected</h3><p class="muted">Nothing is rejected automatically. RED means a person reviews it with the reasons, and false-positive rates are capped and reported by subgroup.</p></article>
+      <article class="card benefit"><h3>Investigators</h3><p class="muted">A short, explained queue instead of checking every photo by eye.</p></article>
+    </div>
+  </div>
+
+  <div class="section">
+    <header>
+      <div class="eyebrow">How it works</div>
+      <h2>One transaction, one trust boundary</h2>
+      <p class="muted">The transaction layer owns the decision. AI services only return signals. Nothing slow sits on the decision path, and every model runs inside IBM Z.</p>
+    </header>
+    <div class="split">
+      <div class="card arch" aria-label="Architecture diagram">
+        <svg viewBox="0 0 960 420" role="img" aria-labelledby="arch-t arch-d">
+          <title id="arch-t">Architecture</title>
+          <desc id="arch-d">The UI uploads a photo to the evidence store and submits a claim to the CLMI transaction. CLMI makes one call to the risk service, which runs privacy rules, the AI-image detector and the metadata and duplicate checks in parallel, then returns signals. CLMI applies the COBOL decision rule, journals the result and returns a band. Granite runs asynchronously for AMBER and RED claims. Everything except the UI is inside the IBM Z trust boundary.</desc>
+          <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z"/></marker></defs>
+          <rect class="boundary" x="200" y="16" width="744" height="392" rx="14"/>
+          <text class="lbl" x="216" y="38">Trust boundary: IBM Z · LinuxONE · Docker containers</text>
+
+          <rect class="box" x="16" y="160" width="160" height="80" rx="10"/>
+          <text x="96" y="194" text-anchor="middle">Claimant / adjuster UI</text>
+          <text class="sub" x="96" y="214" text-anchor="middle">via SSH tunnel</text>
+
+          <rect class="box key" x="226" y="140" width="210" height="120" rx="10"/>
+          <text x="331" y="168" text-anchor="middle" font-weight="700">Claims transaction CLMI</text>
+          <text class="sub" x="331" y="190" text-anchor="middle">CICS-pattern gateway</text>
+          <text class="sub" x="331" y="208" text-anchor="middle">COBOL decision rule CLMIPOL</text>
+          <text class="sub" x="331" y="226" text-anchor="middle">SQLite syncpoint + journal</text>
+          <text class="sub" x="331" y="244" text-anchor="middle">(CICS on z/OS in production)</text>
+
+          <rect class="box" x="226" y="316" width="210" height="70" rx="10"/>
+          <text x="331" y="346" text-anchor="middle">Evidence store</text>
+          <text class="sub" x="331" y="366" text-anchor="middle">encrypted originals + crops</text>
+
+          <rect class="box key" x="490" y="140" width="170" height="90" rx="10"/>
+          <text x="575" y="178" text-anchor="middle" font-weight="700">Risk service</text>
+          <text class="sub" x="575" y="198" text-anchor="middle">checks run in parallel</text>
+
+          <rect class="box" x="720" y="54" width="206" height="62" rx="10"/>
+          <text x="823" y="80" text-anchor="middle">Privacy rules</text>
+          <text class="sub" x="823" y="99" text-anchor="middle">regex + gazetteer, HMAC pseudonyms</text>
+          <rect class="box" x="720" y="134" width="206" height="62" rx="10"/>
+          <text x="823" y="160" text-anchor="middle">AI-image detector</text>
+          <text class="sub" x="823" y="179" text-anchor="middle">zDLC-compiled · NNPA if present</text>
+          <rect class="box" x="720" y="214" width="206" height="62" rx="10"/>
+          <text x="823" y="240" text-anchor="middle">Metadata + duplicate photo</text>
+          <text class="sub" x="823" y="259" text-anchor="middle">EXIF, software tag, perceptual hash</text>
+          <rect class="box" x="720" y="316" width="206" height="70" rx="10"/>
+          <text x="823" y="344" text-anchor="middle">Granite LLM (llama.cpp)</text>
+          <text class="sub" x="823" y="364" text-anchor="middle">PII 2nd pass + adjuster note</text>
+
+          <path class="edge" d="M96 240 C 96 330, 160 351, 224 351"/><text class="num" x="120" y="300">1 upload</text>
+          <path class="edge" d="M176 186 H 224"/><text class="num" x="182" y="178">2</text>
+          <path class="edge" d="M436 172 H 488"/><text class="num" x="452" y="164">3</text>
+          <path class="edge" d="M488 206 H 438"/><text class="num" x="452" y="224">4</text>
+          <path class="edge" d="M224 222 H 178"/><text class="num" x="182" y="242">5 band</text>
+          <path class="edge" d="M660 160 C 690 160, 690 85, 718 85"/>
+          <path class="edge" d="M660 180 C 690 180, 690 165, 718 165"/>
+          <path class="edge" d="M660 205 C 690 205, 690 245, 718 245"/>
+          <path class="edge async" d="M722 190 C 620 290, 520 340, 438 345"/><text class="sub" x="560" y="318">reads crops</text>
+          <path class="edge async" d="M600 230 C 620 330, 680 351, 718 351"/><text class="num" x="606" y="290">6 async</text>
+        </svg>
+      </div>
+      <div class="card">
+        <ol class="steps">
+          <li><div><strong>Upload.</strong> <span class="muted">The photo is decoded, cropped, hashed and encrypted at upload time, so the decision path only runs inference.</span></div></li>
+          <li><div><strong>Submit.</strong> <span class="muted">The claim and its evidence ID go to transaction <code>CLMI</code>. Personal data is pseudonymised before anything is stored or scored.</span></div></li>
+          <li><div><strong>One internal call.</strong> <span class="muted">The risk service runs privacy rules, the detector and the metadata/duplicate checks in parallel, under a hard 300 ms deadline.</span></div></li>
+          <li><div><strong>Signals back.</strong> <span class="muted">Calibrated AI score, duplicate match, metadata flags and timings.</span></div></li>
+          <li><div><strong>Decide and commit.</strong> <span class="muted">The COBOL rule <code>CLMIPOL</code> sets the band. The claim, decision and journal entry commit in one transaction, and the band is returned.</span></div></li>
+          <li><div><strong>Explain, after the fact.</strong> <span class="muted">For AMBER and RED only, Granite on LinuxONE writes an advisory note. It can't change the band.</span></div></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <header>
+      <div class="eyebrow">Decision policy</div>
+      <h2>Three bands, set by a false-positive cap</h2>
+      <p class="muted">Thresholds are fitted on LinuxONE scores so that genuine photos are flagged RED at most 1% of the time, and AMBER at most 5%.</p>
+    </header>
+    <div class="grid g3">
+      <article class="card band-card RED"><span class="band RED">RED</span><p style="margin-top:10px">Calibrated score ≥ τ<sub>red</sub>, <strong>or</strong> the same photo was already used on a different claim.</p><p class="muted small">Referred to an investigator with the reasons. Never auto-rejected.</p></article>
+      <article class="card band-card AMBER"><span class="band AMBER">AMBER</span><p style="margin-top:10px">τ<sub>amber</sub> ≤ score &lt; τ<sub>red</sub>, <strong>or</strong> metadata names an editing or generation tool, <strong>or</strong> the risk service is unavailable.</p><p class="muted small">Human review. The fail-safe: an error is never an approval.</p></article>
+      <article class="card band-card GREEN"><span class="band GREEN">GREEN</span><p style="margin-top:10px">None of the above.</p><p class="muted small">Fast-tracked to normal processing.</p></article>
+    </div>
+  </div>
+
+  <div class="section">
+    <header>
+      <div class="eyebrow">Built on IBM Z</div>
+      <h2>Why LinuxONE</h2>
+    </header>
+    <div class="grid g3">
+      <article class="card"><h3>Data never leaves</h3><p class="muted">Original photos and personal data stay inside IBM Z. Every model runs inside the boundary, including the LLM.</p></article>
+      <article class="card"><h3>AI next to the transaction</h3><p class="muted">The detector is compiled with the IBM Z Deep Learning Compiler, targets the Telum on-chip AI accelerator (NNPA) where available, and answers within the claims transaction.</p></article>
+      <article class="card"><h3>COBOL where it belongs</h3><p class="muted">The decision rule is real COBOL. In production, the CICS transaction on z/OS reaches LinuxONE over HiperSockets, memory to memory.</p></article>
+    </div>
+  </div>
+
+  <div class="section">
+    <header>
+      <div class="eyebrow">Responsible AI</div>
+      <h2>Designed so honest people aren't harmed</h2>
+    </header>
+    <div class="grid g2">
+      <div class="card">
+        <ul class="tight">
+          <li><strong>A person makes every adverse decision.</strong> RED means investigation, in line with UK GDPR Article 22.</li>
+          <li><strong>False positives are capped and reported per subgroup</strong>, so people with older phones or low-light photos aren't flagged more often.</li>
+          <li><strong>Bands and reasons, never a bare "FAKE".</strong> The detector score is one signal, not proof.</li>
+          <li><strong>The LLM is advisory</strong>, runs after the decision, and treats claim text as untrusted input.</li>
+          <li><strong>Pseudonymised by default.</strong> Only an authorised role can re-link identity, and every re-link is journaled.</li>
+          <li><strong>Egress allowlist + log</strong> for anything that ever leaves.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>What's real and what's simulated</h3>
+        <div class="table-wrap"><table>
+          <tbody>
+            <tr><td>Dataset generation and training</td><td class="status-real">Real, on Modal GPUs</td></tr>
+            <tr><td>Evaluation and thresholds</td><td class="status-real">Real, on LinuxONE</td></tr>
+            <tr><td>Detector inference</td><td class="status-real">Real, on LinuxONE</td></tr>
+            <tr><td>Privacy rules, pseudonyms, egress log</td><td class="status-real">Real, on LinuxONE</td></tr>
+            <tr><td>On-prem LLM</td><td class="status-real">Real: Granite on LinuxONE</td></tr>
+            <tr><td>Decision rule</td><td class="status-real">Real COBOL (GnuCOBOL) on LinuxONE</td></tr>
+            <tr><td>CICS</td><td class="status-sim">Emulated by the gateway</td></tr>
+            <tr><td>Customer data</td><td class="status-sim">Fictional personas</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <header>
+      <div class="eyebrow">Open source and resources</div>
+      <h2>Built with</h2>
+    </header>
+    <div class="card credits">
+      <a href="https://linuxone.cloud.marist.edu" target="_blank" rel="noopener">LinuxONE Community Cloud</a>
+      <a href="https://github.com/IBM/zDLC" target="_blank" rel="noopener">IBM Z Deep Learning Compiler</a>
+      <a href="https://huggingface.co/ibm-granite" target="_blank" rel="noopener">IBM Granite</a>
+      <a href="https://github.com/ggml-org/llama.cpp" target="_blank" rel="noopener">llama.cpp</a>
+      <a href="https://gnucobol.sourceforge.io" target="_blank" rel="noopener">GnuCOBOL</a>
+      <a href="https://pytorch.org" target="_blank" rel="noopener">PyTorch + torchvision</a>
+      <a href="https://onnx.ai" target="_blank" rel="noopener">ONNX</a>
+      <a href="https://fastapi.tiangolo.com" target="_blank" rel="noopener">FastAPI</a>
+      <a href="https://github.com/huggingface/diffusers" target="_blank" rel="noopener">diffusers</a>
+      <a href="https://huggingface.co/stabilityai/stable-diffusion-2-inpainting" target="_blank" rel="noopener">Stable Diffusion 2 inpainting</a>
+      <a href="https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0" target="_blank" rel="noopener">SDXL base 1.0</a>
+      <a href="https://huggingface.co/black-forest-labs/FLUX.1-schnell" target="_blank" rel="noopener">FLUX.1-schnell (held-out test)</a>
+      <a href="https://github.com/openai/CLIP" target="_blank" rel="noopener">CLIP</a>
+      <a href="https://humansintheloop.org/resources/datasets/car-parts-and-car-damages-dataset/" target="_blank" rel="noopener">Humans in the Loop car damage dataset (CC0)</a>
+      <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">Wikimedia Commons (attribution manifest in repo)</a>
+      <a href="https://arxiv.org/abs/2412.17671" target="_blank" rel="noopener">B-Free, CVPR 2025 (method)</a>
+      <a href="https://modal.com" target="_blank" rel="noopener">Modal</a>
+    </div>
+  </div>
+
+  <footer class="site">Aegis · IBM Z Datathon 2026 · Theme 1: Real-Time AI for Critical Decisions. All personas in the demo are fictional.</footer>
+</section>
+
+<!-- ======================================================= CLAIM -->
+<section id="view-claim" class="view" aria-labelledby="claim-title">
+  <header style="margin-bottom:16px">
+    <h1 id="claim-title" style="font-size:1.6rem">Submit a claim</h1>
+    <p class="muted">Upload a damage photo, fill in the claim and submit. The decision comes back in milliseconds, with reasons and a timing breakdown.</p>
+  </header>
+  <div class="split">
+    <form id="claim-form" class="card" novalidate>
+      <div class="eyebrow">Demo scenarios (fictional personas)</div>
+      <div class="scenarios" role="group" aria-label="Demo scenarios">
+        <button type="button" class="chip" data-scenario="genuine"><span class="n">1</span>Genuine claim</button>
+        <button type="button" class="chip" data-scenario="generated"><span class="n">2</span>AI-generated photo</button>
+        <button type="button" class="chip" data-scenario="inflated"><span class="n">3</span>Inflated damage</button>
+        <button type="button" class="chip" data-scenario="duplicate"><span class="n">4</span>Re-used photo, new plate</button>
+      </div>
+      <p id="scenario-hint" class="small muted" hidden></p>
+
+      <fieldset>
+        <legend>Photos</legend>
+        <label class="drop" id="drop">
+          <input id="file" type="file" accept="image/jpeg,image/png" multiple>
+          <strong>Choose or drop damage photos</strong><br>
+          <span class="small muted">JPEG or PNG, up to 15 MB each, max 3. Each one is uploaded immediately for precomputation.</span>
+        </label>
+        <div class="btn-row" style="margin-top:8px">
+          <button type="button" class="btn ghost small" id="reuse-photo" hidden>Re-use last submitted photo</button>
+          <button type="button" class="btn ghost small" id="test-photo" title="Generates a plain synthetic image in the browser. For testing the flow only.">Use a synthetic test image</button>
+        </div>
+        <div id="thumbs" class="thumbs" aria-live="polite"></div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Policy and claimant</legend>
+        <div class="field-row">
+          <label class="field"><span>Policy number</span><input id="f-policy" type="text" required placeholder="PN-0000-0000" autocomplete="off"></label>
+          <label class="field"><span>Full name</span><input id="f-name" type="text" required autocomplete="off"></label>
+        </div>
+        <div class="field-row">
+          <label class="field"><span>Email</span><input id="f-email" type="email" autocomplete="off"></label>
+          <label class="field"><span>Phone</span><input id="f-phone" type="tel" autocomplete="off"></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Incident</legend>
+        <div class="field-row">
+          <label class="field"><span>Date</span><input id="f-date" type="date" required></label>
+          <label class="field"><span>Damage type</span>
+            <select id="f-damage">
+              <option value="">Select…</option>
+              <option value="dent">Dent</option>
+              <option value="scratch">Scratch / scuff</option>
+              <option value="lamp">Smashed lamp</option>
+              <option value="windscreen">Cracked windscreen</option>
+              <option value="bumper">Crumpled bumper</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+        </div>
+        <label class="field"><span>What happened?</span><textarea id="f-desc" required maxlength="4000"></textarea></label>
+      </fieldset>
+
+      <div id="form-error" class="form-error" role="alert" hidden></div>
+      <div class="btn-row">
+        <button class="btn" id="submit" type="submit">Submit claim</button>
+        <button class="btn ghost" id="resubmit" type="button" hidden title="Sends the same idempotency key again. You should get the same decision without re-scoring.">Submit the same claim again</button>
+        <button class="btn ghost" id="new-claim" type="button">New claim</button>
+      </div>
+      <p class="small muted" style="margin-top:10px">Idempotency key: <code id="idem"></code></p>
+    </form>
+
+    <div id="result" class="card" aria-live="polite">
+      <div class="result-empty">
+        <p><strong>No decision yet</strong></p>
+        <p class="small">Pick a scenario or fill in the form, add a photo and submit.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= ADJUSTER -->
+<section id="view-adjuster" class="view" aria-labelledby="adj-title">
+  <header style="margin-bottom:16px">
+    <h1 id="adj-title" style="font-size:1.6rem">Adjuster view</h1>
+    <p class="muted">Pseudonymised by default. Signals, the Granite note and the journal for each claim.</p>
+  </header>
+  <div class="split wide-right">
+    <div class="card">
+      <div class="result-head">
+        <h3 style="margin:0">Queue</h3>
+        <button class="btn ghost small" id="refresh-queue" type="button">Refresh</button>
+      </div>
+      <div class="scenarios" role="group" aria-label="Filter by band">
+        <button type="button" class="chip" data-filter="REVIEW" aria-pressed="true">Needs review</button>
+        <button type="button" class="chip" data-filter="RED" aria-pressed="false">RED</button>
+        <button type="button" class="chip" data-filter="AMBER" aria-pressed="false">AMBER</button>
+        <button type="button" class="chip" data-filter="GREEN" aria-pressed="false">GREEN</button>
+        <button type="button" class="chip" data-filter="ALL" aria-pressed="false">All</button>
+      </div>
+      <ul id="queue" class="queue"></ul>
+    </div>
+    <div id="detail">
+      <div class="card result-empty"><p><strong>Select a claim</strong></p><p class="small">Claims submitted to the gateway appear in the queue.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================= SYSTEM -->
+<section id="view-system" class="view" aria-labelledby="sys-title">
+  <header style="margin-bottom:16px">
+    <h1 id="sys-title" style="font-size:1.6rem">System</h1>
+    <p class="muted">Live status of the claims transaction, and latency measured from the decisions made in this browser session.</p>
+  </header>
+  <div class="grid g4" id="health-cards"></div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card">
+      <h3>Latency budget (decision path)</h3>
+      <p class="small muted">Targets from the project plan. "Measured" uses the decisions made in this session (excluding replays).</p>
+      <div class="table-wrap"><table id="latency-table"></table></div>
+    </div>
+    <div class="card">
+      <h3>Fail-safe demo</h3>
+      <p class="muted small">Stop the risk service and submit a claim. It must come back <span class="band AMBER">AMBER</span> with <code>RISK_SERVICE_UNAVAILABLE</code>, never approved.</p>
+      <pre class="cmd">docker stop &lt;risk-service-container&gt;
+# submit a claim in the browser → AMBER
+docker start &lt;risk-service-container&gt;</pre>
+      <p class="muted small">With the development stub instead of the real risk service:</p>
+      <pre class="cmd">curl -X POST localhost:9000/stub/mode \
+  -H 'content-type: application/json' -d '{"mode":"fail"}'</pre>
+      <h3 style="margin-top:16px">Recent journal</h3>
+      <p class="muted small">Append-only. Updates and deletes are rejected by the database.</p>
+      <div class="table-wrap"><table class="journal" id="sys-journal"></table></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<div id="toast" class="toast" role="status" hidden></div>
+<script src="mock.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

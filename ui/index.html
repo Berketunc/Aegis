@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Aegis Claims Integrity</title>
+  <meta name="description" content="Claims integrity console: AI-image screening results for motor claims, decided inside the claims transaction on IBM Z.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%230f62fe' d='M12 2 3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5z'/%3E%3Cpath fill='%23fff' d='m10.6 15.6-3.3-3.3 1.4-1.4 1.9 1.9 4.7-4.7 1.4 1.4z'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="console.css">
+</head>
+<body>
+<a class="skip" href="#view">Skip to content</a>
+<div class="app">
+  <aside class="sidebar" aria-label="Main navigation">
+    <a class="brand" href="#/dashboard">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2 3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5z"/><path fill="var(--sidebar-bg)" d="m10.6 15.6-3.3-3.3 1.4-1.4 1.9 1.9 4.7-4.7 1.4 1.4z"/></svg>
+      <span><strong>Aegis</strong><small>Claims integrity</small></span>
+    </a>
+    <nav class="side-nav">
+      <a href="#/dashboard" data-nav="dashboard"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 3h6v8H3zM11 3h6v5h-6zM11 10h6v7h-6zM3 13h6v4H3z"/></svg>Dashboard</a>
+      <a href="#/queue" data-nav="queue"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4h14v2H3zM3 9h14v2H3zM3 14h14v2H3z"/></svg>Work queue <span class="nav-count" id="nav-open" hidden></span></a>
+      <a href="#/audit" data-nav="audit"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 2h8l4 4v12H5zM12 3v4h4M7 10h8M7 13h8M7 16h5" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>Audit log</a>
+      <a href="#/policy" data-nav="policy"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2 3 5v5c0 4 3 7 7 8 4-1 7-4 7-8V5z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>Decision policy</a>
+      <a href="#/system" data-nav="system"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4h14v8H3zM7 16h6M10 12v4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>System</a>
+    </nav>
+    <div class="side-foot">
+      <div class="side-env" id="side-env">Connecting…</div>
+      <p>Screening runs inside the claims transaction on IBM Z. Original photos and personal data stay inside the boundary.</p>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="crumbs" id="crumbs" aria-live="polite"></div>
+      <form class="search" id="search-form" role="search">
+        <label class="visually-hidden" for="search">Find a claim</label>
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M8.5 3a5.5 5.5 0 0 1 4.4 8.8l4 4-1.2 1.2-4-4A5.5 5.5 0 1 1 8.5 3zm0 1.7a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6z"/></svg>
+        <input id="search" type="search" placeholder="Find claim ID, e.g. CLM-000101" autocomplete="off">
+      </form>
+      <span class="env" id="env" role="status">…</span>
+      <button class="icon-btn" id="theme" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2a8 8 0 1 0 0 16V2z"/><circle cx="10" cy="10" r="7.2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+      </button>
+      <div class="user">
+        <span class="avatar" id="avatar" aria-hidden="true">MO</span>
+        <label class="visually-hidden" for="role">Signed-in role</label>
+        <select id="role" title="Switch role (demo)">
+          <option value="handler">Morgan Osei · Claims handler</option>
+          <option value="siu">Kai Brandt · SIU investigator</option>
+        </select>
+      </div>
+    </header>
+    <div class="banner" id="demo-banner" hidden>
+      <strong>Demo data.</strong> This console isn't connected to the CLMI gateway, so it's showing a built-in set of fictional claims with simulated screening results. Connect through the gateway (SSH tunnel → http://localhost:8080) to see live decisions from LinuxONE.
+    </div>
+    <main id="view" tabindex="-1"></main>
+  </div>
+</div>
+
+<div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+
+<dialog id="action-dialog" aria-labelledby="ad-title">
+  <form method="dialog" id="action-form">
+    <h2 id="ad-title">Action</h2>
+    <p id="ad-desc" class="muted"></p>
+    <label class="field"><span>Reason (recorded in the case history)</span>
+      <textarea id="ad-note" rows="4" maxlength="500" required></textarea>
+    </label>
+    <p class="small muted" id="ad-hint"></p>
+    <div class="dialog-actions">
+      <button type="button" class="btn ghost" id="ad-cancel">Cancel</button>
+      <button type="submit" class="btn" id="ad-confirm">Confirm</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" class="toast" role="status" hidden></div>
+<script src="data.js"></script>
+<script src="evidence/evidence.js"></script>
+<script src="console.js"></script>
+</body>
+</html>
