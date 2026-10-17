@@ -1,0 +1,8 @@
+{
+  "set": "cardd",
+  "n": 4000,
+  "mean_p_damage": 0.8996620312705637,
+  "share_damaged_at_0.5": 0.995,
+  "share_scene_ok_at_0.5": 0.999,
+  "file": "data/tags/damage_cardd.jsonl"
+}

@@ -1,0 +1,13 @@
+{
+  "source": "user-supplied LinuxONE terminal output, 17 October 2026",
+  "platform": "s390x",
+  "container_image": "aegis-gateway:person-b",
+  "selected_tests": ["txn/tests/test_policy.py", "txn/tests/test_gateway.py"],
+  "passed": 67,
+  "skipped": 0,
+  "warnings": 1,
+  "elapsed_seconds": 2.57,
+  "previously_skipped_native_cobol_cases_executed": 23,
+  "warning": "Starlette uses the deprecated anyio.abc.BlockingPortal alias",
+  "scope": "gateway/policy tests with controlled risk fixtures and native GnuCOBOL; not trained detector validation"
+}

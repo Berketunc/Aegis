@@ -1,0 +1,22 @@
+{
+  "model_id": "granite-3.0-1b-a400m-instruct-be-q4_k_m",
+  "repository": "taronaeo/Granite-3.0-1B-A400M-Instruct-BE-GGUF",
+  "revision": "d58dd347ce9272161290e58a4a1b5b9bb2e43247",
+  "filename": "granite-3.0-1b-a400m-instruct-be.Q4_K_M.gguf",
+  "size_bytes": 821845024,
+  "sha256": "937a8c4828cae34dbf3d6d76cfd119bca51eb314e28ed455d60ed0701545a8f6",
+  "gguf_header_hex": "4747554600000003",
+  "license": "Apache-2.0",
+  "license_url": "https://www.apache.org/licenses/LICENSE-2.0.txt",
+  "license_size_bytes": 11358,
+  "license_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+  "upstream_model": "ibm-granite/granite-3.0-1b-a400m-instruct",
+  "upstream_revision": "ffec3c35bdfd97a06f0b4cd5fcc92cd9b1584445",
+  "provenance": "Community big-endian conversion by taronaeo, listed in the s390x Verified Models collection linked by the official llama.cpp s390x build guide; not an IBM-published GGUF.",
+  "source_urls": [
+    "https://github.com/ggml-org/llama.cpp/blob/master/docs/build-s390x.md#getting-gguf-models",
+    "https://huggingface.co/collections/taronaeo/s390x-verified-models-672765393af438d0ccb72a08",
+    "https://huggingface.co/taronaeo/Granite-3.0-1B-A400M-Instruct-BE-GGUF/blob/d58dd347ce9272161290e58a4a1b5b9bb2e43247/README.md",
+    "https://huggingface.co/ibm-granite/granite-3.0-1b-a400m-instruct/blob/ffec3c35bdfd97a06f0b4cd5fcc92cd9b1584445/README.md"
+  ]
+}

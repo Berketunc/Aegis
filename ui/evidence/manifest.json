@@ -1,0 +1,292 @@
+{
+ "note": "Demo evidence. Real photos: Wikimedia Commons, uploaded before 2022, open licences (author + licence shown in the console). AI images: supplied by the team; place them as described in demo/fetch_evidence.py. Images are not committed.",
+ "photos": {
+  "D01": {
+   "kind": "real",
+   "title": "File:The end for the Laguna. (14160350996).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:The_end_for_the_Laguna._(14160350996).jpg",
+   "author": "Riley from Christchurch, New Zealand",
+   "license": "CC BY 2.0",
+   "license_url": "https://creativecommons.org/licenses/by/2.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2018-07-01",
+   "shows": "Silver estate, rear bumper pushed in"
+  },
+  "D02": {
+   "kind": "real",
+   "title": "File:KeyedPaintOnCar.JPG",
+   "page_url": "https://commons.wikimedia.org/wiki/File:KeyedPaintOnCar.JPG",
+   "author": "Athol Mullen",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2008-04-21",
+   "shows": "Keyed scratch along a door"
+  },
+  "D03": {
+   "kind": "real",
+   "title": "File:FEMA - 44376 - truck windshield with hail damage in OK.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:FEMA_-_44376_-_truck_windshield_with_hail_damage_in_OK.jpg",
+   "author": "Win Henderson",
+   "license": "Public domain",
+   "license_url": "",
+   "source": "Wikimedia Commons",
+   "uploaded": "2010-05-29",
+   "shows": "Windscreen with a stone-strike star crack"
+  },
+  "D04": {
+   "kind": "real",
+   "title": "File:Crashed bug rear.JPG",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Crashed_bug_rear.JPG",
+   "author": "Bukk",
+   "license": "Public domain",
+   "license_url": "",
+   "source": "Wikimedia Commons",
+   "uploaded": "2009-12-10",
+   "shows": "VW Beetle with crumpled rear wing"
+  },
+  "D05": {
+   "kind": "real",
+   "title": "File:Automovel-farol-roto-farol-ileso.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Automovel-farol-roto-farol-ileso.jpg",
+   "author": "Garsd",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2012-08-10",
+   "shows": "Renault Twingo with a smashed headlamp"
+  },
+  "D06": {
+   "kind": "real",
+   "title": "File:Front bumper broken.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Front_bumper_broken.jpg",
+   "author": "Tiia Monto",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2018-05-25",
+   "shows": "Blue saloon, front bumper torn off"
+  },
+  "D07": {
+   "kind": "ai",
+   "title": "AI-generated front-end crash (supplied by the team)",
+   "page_url": "",
+   "author": "AI-generated",
+   "license": "Licence unverified · not redistributed",
+   "license_url": "",
+   "source": "Supplied by the team",
+   "local": true,
+   "shows": "Silver car, smashed headlamp and front wing"
+  },
+  "D08": {
+   "kind": "real",
+   "title": "File:Scratched Paint (3606242828).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Scratched_Paint_(3606242828).jpg",
+   "author": "daryl_mitchell from Saskatoon, Saskatchewan, Canada",
+   "license": "CC BY-SA 2.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2019-06-22",
+   "shows": "Close-up of scratched paint"
+  },
+  "D09": {
+   "kind": "real",
+   "title": "File:Howth, Co. Dublin - Ireland (5898219627).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Howth,_Co._Dublin_-_Ireland_(5898219627).jpg",
+   "author": "Mic from Reading - Berkshire, United Kingdom",
+   "license": "CC BY 2.0",
+   "license_url": "https://creativecommons.org/licenses/by/2.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2015-03-03",
+   "shows": "Close-up of a dented silver rear bumper"
+  },
+  "D10": {
+   "kind": "real",
+   "title": "File:Broken car front bumper.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Broken_car_front_bumper.jpg",
+   "author": "Santeri Viinamäki",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2017-04-28",
+   "shows": "BMW with a broken front bumper"
+  },
+  "D11": {
+   "kind": "real",
+   "title": "File:Vandalism on a car 2.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Vandalism_on_a_car_2.jpg",
+   "author": "Killarnee",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2020-07-18",
+   "shows": "Smashed windscreen on a dark blue car"
+  },
+  "D12": {
+   "kind": "real",
+   "title": "File:2009 Kia Sedona LX, Rear Left, 09-17-2020.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:2009_Kia_Sedona_LX,_Rear_Left,_09-17-2020.jpg",
+   "author": "SsmIntrigue",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2020-09-26",
+   "shows": "Kia Sedona with rear-left damage"
+  },
+  "D13": {
+   "kind": "real",
+   "title": "File:Ouch! (2995755079).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Ouch!_(2995755079).jpg",
+   "author": "allen watkin from London, UK",
+   "license": "CC BY-SA 2.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/2.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2014-04-07",
+   "shows": "Peugeot with crumpled front wing"
+  },
+  "D14": {
+   "kind": "real",
+   "title": "File:Damaged automobiles after a collision, Oude Pekela (2019) 01.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Damaged_automobiles_after_a_collision,_Oude_Pekela_(2019)_01.jpg",
+   "author": "Donald Trung Quoc Don (Chữ Hán: 徵國單) - Wikimedia Commons - © CC BY-SA 4.0 International.(Want to use this image?)Origina",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2019-11-09",
+   "shows": "Dark car, rear quarter and bumper scraped"
+  },
+  "D15": {
+   "kind": "real",
+   "title": "File:VW Crafter corner damage detail, Oban, June 2020.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:VW_Crafter_corner_damage_detail,_Oban,_June_2020.jpg",
+   "author": "Blood Red Sandman",
+   "license": "CC BY 4.0",
+   "license_url": "https://creativecommons.org/licenses/by/4.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2020-06-18",
+   "shows": "VW Crafter van, broken headlamp corner"
+  },
+  "D16": {
+   "kind": "real",
+   "title": "File:Some cars are not designed to survive a summer in Queensland due to hail.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Some_cars_are_not_designed_to_survive_a_summer_in_Queensland_due_to_hail.jpg",
+   "author": "Chris Olszewski",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2020-12-23",
+   "shows": "Audi bonnet covered in hail dents"
+  },
+  "D17": {
+   "kind": "real",
+   "title": "File:Unfallflucht-hit-and-run.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Unfallflucht-hit-and-run.jpg",
+   "author": "Opihuck",
+   "license": "CC BY 3.0",
+   "license_url": "https://creativecommons.org/licenses/by/3.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2012-12-26",
+   "shows": "VW Golf with a dented rear door"
+  },
+  "D18": {
+   "kind": "ai",
+   "title": "AI-edited damage on a real van photo (supplied by the team)",
+   "page_url": "",
+   "author": "AI-edited example",
+   "license": "Licence unverified · not redistributed",
+   "license_url": "",
+   "source": "Supplied by the team",
+   "local": true,
+   "crop": "right_half",
+   "shows": "Ford Transit Courier with AI-added front bumper and grille damage"
+  },
+  "D19": {
+   "kind": "real",
+   "title": "File:Auffahrunfall - Frontschaden.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Auffahrunfall_-_Frontschaden.jpg",
+   "author": "M. Prinz",
+   "license": "CC BY-SA 3.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2018-06-08",
+   "shows": "BMW Z4 with front-end damage"
+  },
+  "D20": {
+   "kind": "real",
+   "title": "File:Damaged automobiles after a collision, Oude Pekela (2019) 02.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Damaged_automobiles_after_a_collision,_Oude_Pekela_(2019)_02.jpg",
+   "author": "Donald Trung Quoc Don (Chữ Hán: 徵國單) - Wikimedia Commons - © CC BY-SA 4.0 International.(Want to use this image?)Origina",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2019-11-09",
+   "shows": "Silver Peugeot, scuffed front wing and alloy"
+  },
+  "D22": {
+   "kind": "real",
+   "title": "File:Vandalism on a car 3.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Vandalism_on_a_car_3.jpg",
+   "author": "Killarnee",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2020-07-18",
+   "shows": "Cracked windscreen seen from inside"
+  },
+  "D23": {
+   "kind": "real",
+   "title": "File:Ouch (14419746469).jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Ouch_(14419746469).jpg",
+   "author": "Charlie from United Kingdom",
+   "license": "CC BY 2.0",
+   "license_url": "https://creativecommons.org/licenses/by/2.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2015-03-14",
+   "shows": "Volvo with front bumper and grille damage"
+  },
+  "D24": {
+   "kind": "real",
+   "title": "File:Oh deer!.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Oh_deer!.jpg",
+   "author": "Nyttend",
+   "license": "Public domain",
+   "license_url": "",
+   "source": "Wikimedia Commons",
+   "uploaded": "2017-07-17",
+   "shows": "Acura front corner and headlamp damage"
+  },
+  "D25": {
+   "kind": "real",
+   "title": "File:1994 Ford Mustang GT front-end damage 2017-07-01.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:1994_Ford_Mustang_GT_front-end_damage_2017-07-01.jpg",
+   "author": "Josh Baumgartner",
+   "license": "CC BY-SA 4.0",
+   "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2017-09-17",
+   "shows": "Ford Mustang with crumpled bonnet"
+  },
+  "D27": {
+   "kind": "real",
+   "title": "File:Zdiby, automobil.jpg",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Zdiby,_automobil.jpg",
+   "author": "Dezidor",
+   "license": "CC BY 3.0",
+   "license_url": "https://creativecommons.org/licenses/by/3.0",
+   "source": "Wikimedia Commons",
+   "uploaded": "2011-03-12",
+   "shows": "Small hatchback with front damage in snow"
+  },
+  "D28": {
+   "kind": "real",
+   "title": "File:Puerto Rico — San Juan — Honda Ridgeline (white).JPG",
+   "page_url": "https://commons.wikimedia.org/wiki/File:Puerto_Rico_%E2%80%94_San_Juan_%E2%80%94_Honda_Ridgeline_(white).JPG",
+   "author": "User:Mattes",
+   "license": "CC BY 2.0 de",
+   "license_url": "https://creativecommons.org/licenses/by/2.0/de/deed.en",
+   "source": "Wikimedia Commons",
+   "uploaded": "2016-06-13",
+   "shows": "White Honda pickup, rear wheel-arch damage"
+  }
+ }
+}

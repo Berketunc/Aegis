@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "input": "synthetic plumbing fixture",
+  "evidence_id": "EV-31fa38750e2dd55b58ed9613be684e7b9a4d8067e8780eabcb51602b3c76af0c",
+  "sha256_verified": true,
+  "encrypted_original_verified": true,
+  "crops_verified": true,
+  "upload_preprocess_ms": 139.339,
+  "scope": "one upload; no detector or latency percentile validation"
+}

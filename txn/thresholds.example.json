@@ -1,0 +1,6 @@
+{
+  "version": "t-dev",
+  "tau_red": 0.85,
+  "tau_amber": 0.60,
+  "note": "Placeholder until A fits t-1 on LinuxONE scores (plan.md section 7.7). Point THRESHOLDS_PATH at A's real file, e.g. eval/thresholds_t-0.json."
+}

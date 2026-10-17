@@ -1,0 +1,5 @@
+clmi.db*
+CLMIPOL
+CLMIPOL.exe
+__pycache__/
+.pytest_cache/

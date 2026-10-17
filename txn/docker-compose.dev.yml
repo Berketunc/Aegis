@@ -1,0 +1,26 @@
+# Gateway + stub risk service. From the repo root:
+#   docker compose -f txn/docker-compose.dev.yml up --build
+# Then, from your laptop:  ssh -i key.pem -L 8080:localhost:8080 linux1@<IP>  ->  http://localhost:8080
+# To use B's real risk service, point RISK_URL at it and drop the risk-stub service.
+services:
+  gateway:
+    build: { context: .., dockerfile: txn/Dockerfile }
+    environment:
+      RISK_URL: http://risk-stub:9000
+      RISK_SECRET: ${RISK_SECRET:-dev-shared-secret}
+      HMAC_KEY: ${HMAC_KEY:-dev-only-change-me}
+      THRESHOLDS_PATH: /app/txn/thresholds.example.json
+      GRANITE_URL: ${GRANITE_URL:-}
+    ports:
+      - "127.0.0.1:8080:8080"   # loopback only: reached through the SSH tunnel, never public
+    volumes:
+      - clmi-data:/data
+      - ../ui:/app/ui:ro
+    depends_on: [risk-stub]
+  risk-stub:
+    build: { context: .., dockerfile: txn/Dockerfile.stub }
+    environment:
+      RISK_SECRET: ${RISK_SECRET:-dev-shared-secret}
+    # no ports: only reachable on the compose network
+volumes:
+  clmi-data:
