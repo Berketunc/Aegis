@@ -34,8 +34,20 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from risk_service.config import read_thresholds  # noqa: E402
-from risk_service.precompute import PREPROCESS_VERSION  # noqa: E402
+from risk_service.config import read_thresholds  # noqa: E402  (stdlib only)
+
+
+def preprocess_version() -> str:
+    """Read PREPROCESS_VERSION from precompute.py without importing it: the VM host has no NumPy."""
+    import ast
+    tree = ast.parse((ROOT / "risk_service" / "precompute.py").read_text(encoding="utf-8"))
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == "PREPROCESS_VERSION" for t in node.targets):
+            return ast.literal_eval(node.value)
+    raise RuntimeError("PREPROCESS_VERSION not found in risk_service/precompute.py")
+
+
+PREPROCESS_VERSION = preprocess_version()
 
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_STD = [0.229, 0.224, 0.225]
