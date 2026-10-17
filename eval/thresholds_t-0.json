@@ -1,0 +1,18 @@
+{
+  "version": "t-0",
+  "model_version": "det-r18-v4",
+  "agg": "mean",
+  "tau_red": 0.7539149522781372,
+  "tau_amber": 0.5801219940185547,
+  "fitted_on": "val reals, Modal FP32",
+  "n_val_real": 638,
+  "temperature": 0.676082968711853,
+  "note": "Preliminary: fitted on Modal FP32 scores. Replace with t-1 fitted on LinuxONE scores (train/fit_thresholds_linuxone.py).",
+  "preprocess": {
+    "short_side": 640,
+    "no_upscale": true,
+    "crop": 224,
+    "crops": "centre + 2 grid cells",
+    "aggregation": "mean of 3 logits"
+  }
+}

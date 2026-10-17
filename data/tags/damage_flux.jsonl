@@ -1,0 +1,500 @@
+{"id": "flux_000001", "p_damage": 0.895, "p_scene_ok": 0.9937, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000002", "p_damage": 0.9363, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000003", "p_damage": 0.9021, "p_scene_ok": 0.9947, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000004", "p_damage": 0.9552, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000005", "p_damage": 0.9484, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000006", "p_damage": 0.296, "p_scene_ok": 0.9917, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000007", "p_damage": 0.9416, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000008", "p_damage": 0.9409, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000009", "p_damage": 0.024, "p_scene_ok": 0.9639, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000010", "p_damage": 0.9596, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000011", "p_damage": 0.9324, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000012", "p_damage": 0.9025, "p_scene_ok": 0.832, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000013", "p_damage": 0.9743, "p_scene_ok": 1.0, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000014", "p_damage": 0.5424, "p_scene_ok": 0.9675, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000015", "p_damage": 0.8769, "p_scene_ok": 0.9988, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000016", "p_damage": 0.9184, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000017", "p_damage": 0.9482, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000018", "p_damage": 0.8166, "p_scene_ok": 0.9996, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000019", "p_damage": 0.966, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000020", "p_damage": 0.6702, "p_scene_ok": 0.9911, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000021", "p_damage": 0.1199, "p_scene_ok": 0.866, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000022", "p_damage": 0.7825, "p_scene_ok": 0.9989, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000023", "p_damage": 0.9381, "p_scene_ok": 0.9973, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000024", "p_damage": 0.7419, "p_scene_ok": 0.9997, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000025", "p_damage": 0.774, "p_scene_ok": 0.9996, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000026", "p_damage": 0.932, "p_scene_ok": 0.9954, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000027", "p_damage": 0.92, "p_scene_ok": 0.9997, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000028", "p_damage": 0.9812, "p_scene_ok": 0.9142, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000029", "p_damage": 0.9847, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000030", "p_damage": 0.98, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000031", "p_damage": 0.9636, "p_scene_ok": 0.9996, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000032", "p_damage": 0.9428, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000033", "p_damage": 0.9728, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000034", "p_damage": 0.8747, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000035", "p_damage": 0.9371, "p_scene_ok": 0.9994, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000036", "p_damage": 0.8924, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000037", "p_damage": 0.8756, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000038", "p_damage": 0.9566, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000039", "p_damage": 0.9736, "p_scene_ok": 0.9984, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000040", "p_damage": 0.8132, "p_scene_ok": 0.9999, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000041", "p_damage": 0.9102, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000042", "p_damage": 0.8103, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000043", "p_damage": 0.7033, "p_scene_ok": 0.9454, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000044", "p_damage": 0.8782, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000045", "p_damage": 0.1315, "p_scene_ok": 0.9828, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000046", "p_damage": 0.8013, "p_scene_ok": 0.9983, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000047", "p_damage": 0.8873, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000048", "p_damage": 0.7841, "p_scene_ok": 0.9967, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000049", "p_damage": 0.7991, "p_scene_ok": 0.9976, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000050", "p_damage": 0.2367, "p_scene_ok": 0.8931, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000051", "p_damage": 0.2268, "p_scene_ok": 0.9593, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000052", "p_damage": 0.8983, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000053", "p_damage": 0.4963, "p_scene_ok": 0.9971, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000054", "p_damage": 0.9464, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000055", "p_damage": 0.9747, "p_scene_ok": 0.9987, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000056", "p_damage": 0.9552, "p_scene_ok": 1.0, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000057", "p_damage": 0.6727, "p_scene_ok": 0.9119, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "flux_000058", "p_damage": 0.9445, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000059", "p_damage": 0.6773, "p_scene_ok": 0.7956, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000060", "p_damage": 0.4697, "p_scene_ok": 0.999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000061", "p_damage": 0.5683, "p_scene_ok": 0.9979, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000062", "p_damage": 0.9652, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000063", "p_damage": 0.2311, "p_scene_ok": 0.7223, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000064", "p_damage": 0.2311, "p_scene_ok": 0.4475, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000065", "p_damage": 0.982, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000066", "p_damage": 0.6626, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000067", "p_damage": 0.8958, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000068", "p_damage": 0.8737, "p_scene_ok": 0.7533, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "flux_000069", "p_damage": 0.9373, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000070", "p_damage": 0.9313, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000071", "p_damage": 0.9569, "p_scene_ok": 0.9989, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000072", "p_damage": 0.8435, "p_scene_ok": 1.0, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000073", "p_damage": 0.9506, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000074", "p_damage": 0.9821, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000075", "p_damage": 0.8234, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000076", "p_damage": 0.6926, "p_scene_ok": 0.9986, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000077", "p_damage": 0.268, "p_scene_ok": 0.9585, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000078", "p_damage": 0.9655, "p_scene_ok": 0.999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000079", "p_damage": 0.9532, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000080", "p_damage": 0.9604, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000081", "p_damage": 0.9657, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000082", "p_damage": 0.9116, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000083", "p_damage": 0.9282, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000084", "p_damage": 0.1835, "p_scene_ok": 0.9134, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000085", "p_damage": 0.937, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000086", "p_damage": 0.9492, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000087", "p_damage": 0.9625, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000088", "p_damage": 0.9905, "p_scene_ok": 0.9988, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000089", "p_damage": 0.9651, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000090", "p_damage": 0.9477, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000091", "p_damage": 0.9219, "p_scene_ok": 0.9991, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000092", "p_damage": 0.3211, "p_scene_ok": 0.5682, "scene_top": "a photo of a toy car", "scene_hard_reject": false}
+{"id": "flux_000093", "p_damage": 0.092, "p_scene_ok": 0.7426, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000094", "p_damage": 0.8154, "p_scene_ok": 0.9859, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000095", "p_damage": 0.9469, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000096", "p_damage": 0.977, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000097", "p_damage": 0.9312, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000098", "p_damage": 0.9842, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000099", "p_damage": 0.8479, "p_scene_ok": 0.796, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000100", "p_damage": 0.2855, "p_scene_ok": 0.9187, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "flux_000101", "p_damage": 0.9421, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000102", "p_damage": 0.9567, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000103", "p_damage": 0.9165, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000104", "p_damage": 0.0541, "p_scene_ok": 0.8562, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000105", "p_damage": 0.8406, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000106", "p_damage": 0.9755, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000107", "p_damage": 0.8964, "p_scene_ok": 0.9989, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000108", "p_damage": 0.659, "p_scene_ok": 0.9973, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000109", "p_damage": 0.9669, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000110", "p_damage": 0.8898, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000111", "p_damage": 0.9156, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000112", "p_damage": 0.8404, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000113", "p_damage": 0.9004, "p_scene_ok": 0.9994, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000114", "p_damage": 0.2022, "p_scene_ok": 0.7067, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000115", "p_damage": 0.3667, "p_scene_ok": 0.5368, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000116", "p_damage": 0.9207, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000117", "p_damage": 0.9296, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000118", "p_damage": 0.9283, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000119", "p_damage": 0.9526, "p_scene_ok": 0.9946, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000120", "p_damage": 0.437, "p_scene_ok": 0.0239, "scene_top": "a photo of a toy car", "scene_hard_reject": false}
+{"id": "flux_000121", "p_damage": 0.9978, "p_scene_ok": 0.9987, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000122", "p_damage": 0.9098, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000123", "p_damage": 0.7855, "p_scene_ok": 0.8692, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000124", "p_damage": 0.9472, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000125", "p_damage": 0.8178, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000126", "p_damage": 0.951, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000127", "p_damage": 0.9776, "p_scene_ok": 0.9988, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000128", "p_damage": 0.9152, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000129", "p_damage": 0.4937, "p_scene_ok": 0.9021, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000130", "p_damage": 0.6857, "p_scene_ok": 0.4618, "scene_top": "a photo of a toy car", "scene_hard_reject": false}
+{"id": "flux_000131", "p_damage": 0.9818, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000132", "p_damage": 0.9421, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000133", "p_damage": 0.987, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000134", "p_damage": 0.9552, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000135", "p_damage": 0.9669, "p_scene_ok": 0.9979, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000136", "p_damage": 0.0914, "p_scene_ok": 0.9321, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000137", "p_damage": 0.895, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000138", "p_damage": 0.5637, "p_scene_ok": 0.7298, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "flux_000139", "p_damage": 0.9488, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000140", "p_damage": 0.979, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000141", "p_damage": 0.9617, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000142", "p_damage": 0.4729, "p_scene_ok": 0.4892, "scene_top": "a photo of a toy car", "scene_hard_reject": false}
+{"id": "flux_000143", "p_damage": 0.9436, "p_scene_ok": 0.9989, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000144", "p_damage": 0.9661, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000145", "p_damage": 0.9376, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000146", "p_damage": 0.3315, "p_scene_ok": 0.4374, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000147", "p_damage": 0.9353, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000148", "p_damage": 0.8442, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000149", "p_damage": 0.9629, "p_scene_ok": 1.0, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000150", "p_damage": 0.9322, "p_scene_ok": 0.9988, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000151", "p_damage": 0.3642, "p_scene_ok": 0.9784, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000152", "p_damage": 0.9644, "p_scene_ok": 1.0, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000153", "p_damage": 0.981, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000154", "p_damage": 0.917, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000155", "p_damage": 0.8677, "p_scene_ok": 0.9994, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000156", "p_damage": 0.914, "p_scene_ok": 0.9957, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000157", "p_damage": 0.907, "p_scene_ok": 0.9944, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000158", "p_damage": 0.5466, "p_scene_ok": 0.9575, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000159", "p_damage": 0.8375, "p_scene_ok": 0.9993, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000160", "p_damage": 0.9357, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000161", "p_damage": 0.9537, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000162", "p_damage": 0.97, "p_scene_ok": 0.714, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000163", "p_damage": 0.8678, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000164", "p_damage": 0.8831, "p_scene_ok": 0.9979, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000165", "p_damage": 0.5811, "p_scene_ok": 0.9997, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000166", "p_damage": 0.9308, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000167", "p_damage": 0.8467, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000168", "p_damage": 0.7924, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000169", "p_damage": 0.971, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000170", "p_damage": 0.9753, "p_scene_ok": 0.9983, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000171", "p_damage": 0.9531, "p_scene_ok": 0.9996, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000172", "p_damage": 0.8847, "p_scene_ok": 0.9964, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000173", "p_damage": 0.8585, "p_scene_ok": 0.8257, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000174", "p_damage": 0.9379, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000175", "p_damage": 0.7365, "p_scene_ok": 0.355, "scene_top": "a photo of a toy car", "scene_hard_reject": false}
+{"id": "flux_000176", "p_damage": 0.9795, "p_scene_ok": 1.0, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000177", "p_damage": 0.9301, "p_scene_ok": 0.9941, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000178", "p_damage": 0.8269, "p_scene_ok": 1.0, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000179", "p_damage": 0.9072, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000180", "p_damage": 0.9563, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000181", "p_damage": 0.9749, "p_scene_ok": 0.9868, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000182", "p_damage": 0.1616, "p_scene_ok": 0.9624, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "flux_000183", "p_damage": 0.9934, "p_scene_ok": 0.9987, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000184", "p_damage": 0.945, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000185", "p_damage": 0.9657, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000186", "p_damage": 0.9586, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000187", "p_damage": 0.9541, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000188", "p_damage": 0.1896, "p_scene_ok": 0.9067, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000189", "p_damage": 0.9219, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000190", "p_damage": 0.9896, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000191", "p_damage": 0.9839, "p_scene_ok": 0.9949, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000192", "p_damage": 0.9757, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000193", "p_damage": 0.9759, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000194", "p_damage": 0.8533, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000195", "p_damage": 0.9078, "p_scene_ok": 0.9992, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000196", "p_damage": 0.9665, "p_scene_ok": 0.9331, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000197", "p_damage": 0.9387, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000198", "p_damage": 0.915, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000199", "p_damage": 0.8644, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000200", "p_damage": 0.9187, "p_scene_ok": 0.9994, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000201", "p_damage": 0.8741, "p_scene_ok": 0.9994, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000202", "p_damage": 0.6954, "p_scene_ok": 0.6782, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000203", "p_damage": 0.0935, "p_scene_ok": 0.8537, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000204", "p_damage": 0.9537, "p_scene_ok": 0.9389, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000205", "p_damage": 0.9047, "p_scene_ok": 0.9997, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000206", "p_damage": 0.0499, "p_scene_ok": 0.2764, "scene_top": "a photo of a toy car", "scene_hard_reject": false}
+{"id": "flux_000207", "p_damage": 0.9485, "p_scene_ok": 0.9926, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000208", "p_damage": 0.9629, "p_scene_ok": 0.9995, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000209", "p_damage": 0.95, "p_scene_ok": 0.9951, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000210", "p_damage": 0.3255, "p_scene_ok": 0.0579, "scene_top": "a photo of a bus or lorry", "scene_hard_reject": false}
+{"id": "flux_000211", "p_damage": 0.5947, "p_scene_ok": 0.4604, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000212", "p_damage": 0.9507, "p_scene_ok": 0.9995, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000213", "p_damage": 0.8256, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000214", "p_damage": 0.4583, "p_scene_ok": 0.2593, "scene_top": "a photo of a toy car", "scene_hard_reject": false}
+{"id": "flux_000215", "p_damage": 0.5092, "p_scene_ok": 0.8148, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "flux_000216", "p_damage": 0.4946, "p_scene_ok": 0.9596, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000217", "p_damage": 0.8398, "p_scene_ok": 0.9997, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000218", "p_damage": 0.5303, "p_scene_ok": 0.7862, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000219", "p_damage": 0.9131, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000220", "p_damage": 0.5984, "p_scene_ok": 0.8243, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000221", "p_damage": 0.9306, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000222", "p_damage": 0.9585, "p_scene_ok": 1.0, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000223", "p_damage": 0.995, "p_scene_ok": 0.9993, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000224", "p_damage": 0.976, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000225", "p_damage": 0.6573, "p_scene_ok": 0.9707, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000226", "p_damage": 0.9808, "p_scene_ok": 1.0, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000227", "p_damage": 0.0553, "p_scene_ok": 0.9326, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000228", "p_damage": 0.6956, "p_scene_ok": 0.9931, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000229", "p_damage": 0.9662, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000230", "p_damage": 0.9466, "p_scene_ok": 0.9907, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000231", "p_damage": 0.9217, "p_scene_ok": 0.9997, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000232", "p_damage": 0.8735, "p_scene_ok": 0.9997, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000233", "p_damage": 0.6636, "p_scene_ok": 0.9968, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000234", "p_damage": 0.628, "p_scene_ok": 0.9991, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000235", "p_damage": 0.8907, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000236", "p_damage": 0.9965, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000237", "p_damage": 0.9218, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000238", "p_damage": 0.843, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000239", "p_damage": 0.986, "p_scene_ok": 0.9996, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000240", "p_damage": 0.1001, "p_scene_ok": 0.9015, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000241", "p_damage": 0.7844, "p_scene_ok": 0.9996, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000242", "p_damage": 0.9305, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000243", "p_damage": 0.7914, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000244", "p_damage": 0.9504, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000245", "p_damage": 0.9408, "p_scene_ok": 0.9995, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000246", "p_damage": 0.9647, "p_scene_ok": 0.9993, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000247", "p_damage": 0.9746, "p_scene_ok": 0.9994, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000248", "p_damage": 0.8421, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000249", "p_damage": 0.941, "p_scene_ok": 0.9995, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000250", "p_damage": 0.9434, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000251", "p_damage": 0.9751, "p_scene_ok": 0.9994, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000252", "p_damage": 0.9038, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000253", "p_damage": 0.9274, "p_scene_ok": 1.0, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000254", "p_damage": 0.9056, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000255", "p_damage": 0.8366, "p_scene_ok": 0.959, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "flux_000256", "p_damage": 0.9887, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000257", "p_damage": 0.9763, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000258", "p_damage": 0.6391, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000259", "p_damage": 0.6478, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000260", "p_damage": 0.9954, "p_scene_ok": 0.9997, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000261", "p_damage": 0.5728, "p_scene_ok": 0.9997, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000262", "p_damage": 0.9408, "p_scene_ok": 0.9981, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000263", "p_damage": 0.0859, "p_scene_ok": 0.692, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000264", "p_damage": 0.8504, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000265", "p_damage": 0.9322, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000266", "p_damage": 0.7941, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000267", "p_damage": 0.8197, "p_scene_ok": 0.9769, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000268", "p_damage": 0.9164, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000269", "p_damage": 0.886, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000270", "p_damage": 0.1739, "p_scene_ok": 0.9305, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000271", "p_damage": 0.9107, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000272", "p_damage": 0.1732, "p_scene_ok": 0.7209, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000273", "p_damage": 0.9703, "p_scene_ok": 0.992, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000274", "p_damage": 0.1799, "p_scene_ok": 0.2527, "scene_top": "a photo of a toy car", "scene_hard_reject": false}
+{"id": "flux_000275", "p_damage": 0.9595, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000276", "p_damage": 0.7418, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000277", "p_damage": 0.9379, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000278", "p_damage": 0.9744, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000279", "p_damage": 0.9635, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000280", "p_damage": 0.6296, "p_scene_ok": 0.998, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000281", "p_damage": 0.9593, "p_scene_ok": 0.9994, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000282", "p_damage": 0.9159, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000283", "p_damage": 0.931, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000284", "p_damage": 0.9929, "p_scene_ok": 0.9978, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000285", "p_damage": 0.8986, "p_scene_ok": 0.9993, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000286", "p_damage": 0.9572, "p_scene_ok": 0.9986, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000287", "p_damage": 0.9733, "p_scene_ok": 0.9385, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000288", "p_damage": 0.9769, "p_scene_ok": 1.0, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000289", "p_damage": 0.9632, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000290", "p_damage": 0.8099, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000291", "p_damage": 0.6251, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000292", "p_damage": 0.9529, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000293", "p_damage": 0.0716, "p_scene_ok": 0.0938, "scene_top": "a photo of a bus or lorry", "scene_hard_reject": false}
+{"id": "flux_000294", "p_damage": 0.9573, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000295", "p_damage": 0.8805, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000296", "p_damage": 0.9704, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000297", "p_damage": 0.9509, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000298", "p_damage": 0.886, "p_scene_ok": 0.9993, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000299", "p_damage": 0.852, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000300", "p_damage": 0.3408, "p_scene_ok": 0.9587, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000301", "p_damage": 0.9379, "p_scene_ok": 0.9782, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000302", "p_damage": 0.9838, "p_scene_ok": 0.9986, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000303", "p_damage": 0.8775, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000304", "p_damage": 0.5627, "p_scene_ok": 0.8421, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000305", "p_damage": 0.9398, "p_scene_ok": 0.9996, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000306", "p_damage": 0.9773, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000307", "p_damage": 0.8936, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000308", "p_damage": 0.3598, "p_scene_ok": 0.7951, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000309", "p_damage": 0.9713, "p_scene_ok": 0.9995, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000310", "p_damage": 0.8662, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000311", "p_damage": 0.9264, "p_scene_ok": 0.9588, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000312", "p_damage": 0.9694, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000313", "p_damage": 0.9084, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000314", "p_damage": 0.9118, "p_scene_ok": 0.9972, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000315", "p_damage": 0.9646, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000316", "p_damage": 0.0514, "p_scene_ok": 0.7371, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000317", "p_damage": 0.9446, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000318", "p_damage": 0.8551, "p_scene_ok": 0.9997, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000319", "p_damage": 0.8873, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000320", "p_damage": 0.9791, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000321", "p_damage": 0.9621, "p_scene_ok": 0.9986, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000322", "p_damage": 0.6846, "p_scene_ok": 0.9237, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000323", "p_damage": 0.9418, "p_scene_ok": 0.9993, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000324", "p_damage": 0.9285, "p_scene_ok": 0.982, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000325", "p_damage": 0.9604, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000326", "p_damage": 0.9711, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000327", "p_damage": 0.8301, "p_scene_ok": 0.9979, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000328", "p_damage": 0.9029, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000329", "p_damage": 0.9627, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000330", "p_damage": 0.8891, "p_scene_ok": 0.9334, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000331", "p_damage": 0.7832, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000332", "p_damage": 0.9035, "p_scene_ok": 0.9992, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000333", "p_damage": 0.9358, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000334", "p_damage": 0.053, "p_scene_ok": 0.0478, "scene_top": "a photo of a toy car", "scene_hard_reject": false}
+{"id": "flux_000335", "p_damage": 0.8319, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000336", "p_damage": 0.996, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000337", "p_damage": 0.9188, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000338", "p_damage": 0.9363, "p_scene_ok": 0.9909, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000339", "p_damage": 0.7847, "p_scene_ok": 0.7625, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "flux_000340", "p_damage": 0.8904, "p_scene_ok": 0.9992, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000341", "p_damage": 0.8902, "p_scene_ok": 0.9993, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000342", "p_damage": 0.9315, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000343", "p_damage": 0.9653, "p_scene_ok": 0.9994, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000344", "p_damage": 0.9697, "p_scene_ok": 0.9996, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000345", "p_damage": 0.1314, "p_scene_ok": 0.9472, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000346", "p_damage": 0.8352, "p_scene_ok": 0.998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000347", "p_damage": 0.9744, "p_scene_ok": 0.9957, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000348", "p_damage": 0.9711, "p_scene_ok": 0.6992, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000349", "p_damage": 0.3649, "p_scene_ok": 0.9765, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000350", "p_damage": 0.6541, "p_scene_ok": 0.9993, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000351", "p_damage": 0.4172, "p_scene_ok": 0.9272, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "flux_000352", "p_damage": 0.7379, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000353", "p_damage": 0.804, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000354", "p_damage": 0.9768, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000355", "p_damage": 0.9441, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000356", "p_damage": 0.9592, "p_scene_ok": 0.9995, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000357", "p_damage": 0.5238, "p_scene_ok": 0.9756, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "flux_000358", "p_damage": 0.5729, "p_scene_ok": 0.9917, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000359", "p_damage": 0.9568, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000360", "p_damage": 0.0404, "p_scene_ok": 0.0102, "scene_top": "a photo of a bus or lorry", "scene_hard_reject": false}
+{"id": "flux_000361", "p_damage": 0.9754, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000362", "p_damage": 0.9757, "p_scene_ok": 0.9997, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000363", "p_damage": 0.9116, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000364", "p_damage": 0.9811, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000365", "p_damage": 0.9198, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000366", "p_damage": 0.9568, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000367", "p_damage": 0.6947, "p_scene_ok": 0.9978, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000368", "p_damage": 0.958, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000369", "p_damage": 0.6499, "p_scene_ok": 0.7211, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000370", "p_damage": 0.4114, "p_scene_ok": 0.4916, "scene_top": "a photo of a bus or lorry", "scene_hard_reject": false}
+{"id": "flux_000371", "p_damage": 0.9209, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000372", "p_damage": 0.9562, "p_scene_ok": 0.9585, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000373", "p_damage": 0.0651, "p_scene_ok": 0.7412, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000374", "p_damage": 0.2671, "p_scene_ok": 0.8626, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000375", "p_damage": 0.9445, "p_scene_ok": 0.9764, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000376", "p_damage": 0.9616, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000377", "p_damage": 0.8612, "p_scene_ok": 0.9706, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000378", "p_damage": 0.8226, "p_scene_ok": 0.9997, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000379", "p_damage": 0.9432, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000380", "p_damage": 0.9655, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000381", "p_damage": 0.9047, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000382", "p_damage": 0.9529, "p_scene_ok": 0.9996, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000383", "p_damage": 0.9711, "p_scene_ok": 0.9993, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000384", "p_damage": 0.9233, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000385", "p_damage": 0.9805, "p_scene_ok": 0.9999, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000386", "p_damage": 0.9202, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000387", "p_damage": 0.8763, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000388", "p_damage": 0.9716, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000389", "p_damage": 0.9339, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000390", "p_damage": 0.9072, "p_scene_ok": 0.9992, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000391", "p_damage": 0.3788, "p_scene_ok": 0.1102, "scene_top": "a photo of a toy car", "scene_hard_reject": false}
+{"id": "flux_000392", "p_damage": 0.913, "p_scene_ok": 0.9955, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000393", "p_damage": 0.6259, "p_scene_ok": 0.9911, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000394", "p_damage": 0.9811, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000395", "p_damage": 0.4712, "p_scene_ok": 0.8332, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000396", "p_damage": 0.9716, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000397", "p_damage": 0.9228, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000398", "p_damage": 0.9048, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000399", "p_damage": 0.961, "p_scene_ok": 0.9989, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000400", "p_damage": 0.0656, "p_scene_ok": 0.9742, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000401", "p_damage": 0.3578, "p_scene_ok": 0.6953, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "flux_000402", "p_damage": 0.9697, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000403", "p_damage": 0.9349, "p_scene_ok": 0.9994, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000404", "p_damage": 0.7717, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000405", "p_damage": 0.6864, "p_scene_ok": 0.9995, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000406", "p_damage": 0.3235, "p_scene_ok": 0.9304, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000407", "p_damage": 0.5521, "p_scene_ok": 0.8296, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000408", "p_damage": 0.9861, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000409", "p_damage": 0.9062, "p_scene_ok": 0.9993, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000410", "p_damage": 0.7608, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000411", "p_damage": 0.5694, "p_scene_ok": 0.6397, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000412", "p_damage": 0.9169, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000413", "p_damage": 0.9398, "p_scene_ok": 0.7038, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000414", "p_damage": 0.5443, "p_scene_ok": 0.9925, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000415", "p_damage": 0.6091, "p_scene_ok": 0.0772, "scene_top": "a photo of a bus or lorry", "scene_hard_reject": false}
+{"id": "flux_000416", "p_damage": 0.9529, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000417", "p_damage": 0.8842, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000418", "p_damage": 0.8283, "p_scene_ok": 0.9966, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000419", "p_damage": 0.4764, "p_scene_ok": 0.5301, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000420", "p_damage": 0.9633, "p_scene_ok": 0.9995, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000421", "p_damage": 0.9111, "p_scene_ok": 0.9649, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000422", "p_damage": 0.9752, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000423", "p_damage": 0.8571, "p_scene_ok": 0.9991, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000424", "p_damage": 0.9733, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000425", "p_damage": 0.9066, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000426", "p_damage": 0.6072, "p_scene_ok": 0.5126, "scene_top": "a photo of a toy car", "scene_hard_reject": false}
+{"id": "flux_000427", "p_damage": 0.8801, "p_scene_ok": 0.9984, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000428", "p_damage": 0.8992, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000429", "p_damage": 0.8284, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000430", "p_damage": 0.9078, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000431", "p_damage": 0.8899, "p_scene_ok": 0.9997, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000432", "p_damage": 0.9503, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000433", "p_damage": 0.9532, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000434", "p_damage": 0.868, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000435", "p_damage": 0.9792, "p_scene_ok": 0.9558, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000436", "p_damage": 0.9516, "p_scene_ok": 0.9999, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000437", "p_damage": 0.8964, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000438", "p_damage": 0.904, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000439", "p_damage": 0.9805, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000440", "p_damage": 0.9937, "p_scene_ok": 0.9772, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000441", "p_damage": 0.5795, "p_scene_ok": 0.9716, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000442", "p_damage": 0.8871, "p_scene_ok": 0.9997, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000443", "p_damage": 0.9125, "p_scene_ok": 0.9982, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000444", "p_damage": 0.9458, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000445", "p_damage": 0.7413, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000446", "p_damage": 0.8951, "p_scene_ok": 0.9989, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000447", "p_damage": 0.8693, "p_scene_ok": 0.9854, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000448", "p_damage": 0.3377, "p_scene_ok": 0.9635, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000449", "p_damage": 0.0532, "p_scene_ok": 0.5104, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000450", "p_damage": 0.3522, "p_scene_ok": 0.9913, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000451", "p_damage": 0.9696, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000452", "p_damage": 0.8748, "p_scene_ok": 0.9978, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000453", "p_damage": 0.8219, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000454", "p_damage": 0.1554, "p_scene_ok": 0.8868, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000455", "p_damage": 0.8011, "p_scene_ok": 0.9992, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000456", "p_damage": 0.9344, "p_scene_ok": 0.8212, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000457", "p_damage": 0.9915, "p_scene_ok": 1.0, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000458", "p_damage": 0.7123, "p_scene_ok": 0.772, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000459", "p_damage": 0.8454, "p_scene_ok": 0.9175, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000460", "p_damage": 0.8939, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000461", "p_damage": 0.9477, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000462", "p_damage": 0.4045, "p_scene_ok": 0.4056, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000463", "p_damage": 0.9304, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000464", "p_damage": 0.9134, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000465", "p_damage": 0.9155, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000466", "p_damage": 0.7775, "p_scene_ok": 0.6861, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "flux_000467", "p_damage": 0.9676, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000468", "p_damage": 0.9441, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000469", "p_damage": 0.8843, "p_scene_ok": 1.0, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000470", "p_damage": 0.9092, "p_scene_ok": 0.9999, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000471", "p_damage": 0.8171, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000472", "p_damage": 0.9622, "p_scene_ok": 0.9971, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000473", "p_damage": 0.9608, "p_scene_ok": 0.9997, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000474", "p_damage": 0.8628, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000475", "p_damage": 0.2623, "p_scene_ok": 0.882, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "flux_000476", "p_damage": 0.8633, "p_scene_ok": 1.0, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000477", "p_damage": 0.9567, "p_scene_ok": 0.998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000478", "p_damage": 0.9375, "p_scene_ok": 0.9989, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000479", "p_damage": 0.9734, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000480", "p_damage": 0.1467, "p_scene_ok": 0.7703, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000481", "p_damage": 0.486, "p_scene_ok": 0.7405, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "flux_000482", "p_damage": 0.8526, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000483", "p_damage": 0.6262, "p_scene_ok": 0.9905, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000484", "p_damage": 0.6258, "p_scene_ok": 0.9997, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000485", "p_damage": 0.9679, "p_scene_ok": 1.0, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000486", "p_damage": 0.4795, "p_scene_ok": 0.7882, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "flux_000487", "p_damage": 0.993, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000488", "p_damage": 0.9918, "p_scene_ok": 0.9998, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000489", "p_damage": 0.9881, "p_scene_ok": 1.0, "scene_top": "a close-up photo of a dented car body panel", "scene_hard_reject": false}
+{"id": "flux_000490", "p_damage": 0.0435, "p_scene_ok": 0.3348, "scene_top": "a photo of a toy car", "scene_hard_reject": false}
+{"id": "flux_000491", "p_damage": 0.5541, "p_scene_ok": 0.087, "scene_top": "a photo of a toy car", "scene_hard_reject": false}
+{"id": "flux_000492", "p_damage": 0.9414, "p_scene_ok": 0.9992, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000493", "p_damage": 0.9339, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000494", "p_damage": 0.602, "p_scene_ok": 0.9996, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000495", "p_damage": 0.8502, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000496", "p_damage": 0.9794, "p_scene_ok": 0.8744, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000497", "p_damage": 0.6919, "p_scene_ok": 0.9933, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000498", "p_damage": 0.9719, "p_scene_ok": 0.9997, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000499", "p_damage": 0.9854, "p_scene_ok": 0.9977, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "flux_000500", "p_damage": 0.9189, "p_scene_ok": 0.8668, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}

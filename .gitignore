@@ -1,8 +1,13 @@
+# Python
 __pycache__/
 *.py[cod]
 .pytest_cache/
 .venv/
+venv/
+*.egg-info/
 .cache/
+
+# Runtime state, private bundles and secrets (never commit)
 .runtime/
 .deliverables/
 .env
@@ -10,13 +15,44 @@ __pycache__/
 !.env.example
 *.pem
 *.key
-*.pth
-*.pt
-*.gguf
+secrets/
+
+# Datasets and images: never commit images, only manifests
+CarDD_release/
+data/raw/
+data/real/
+data/fake/
+data/dataset/
+data/images/
+data/masters/
+demo_assets/
+logs/
+*.jpg
+*.jpeg
+*.png
+*.webp
+!evidence/**/*.png
+!evidence/**/*.jpg
+!eval/charts/*.png
+
+# Model weights and compiled artifacts
+models/
 *.onnx
+*.pt
+*.pth
+*.safetensors
+*.gguf
 *.so
+*.ckpt
 *.npy
 *.npz
-data/raw/
-data/images/
+
+# Local databases
+*.sqlite
+*.sqlite3
+*.db
+
+# OS / editor
 .DS_Store
+.idea/
+.vscode/
