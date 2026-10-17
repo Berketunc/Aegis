@@ -26,8 +26,10 @@ original key. Neither gateway nor Granite receives the evidence encryption key.
 
 The launcher builds all requested images before replacing its owned containers.
 The gateway image compiles `CLMIPOL.cbl` natively with GnuCOBOL during the build.
-The gateway alone publishes `127.0.0.1:8080`; the risk and Granite services remain
-on the internal Docker network. Gateway data persists in `.runtime/gateway`.
+The gateway alone publishes `127.0.0.1:8080`. Because Docker does not publish ports
+for containers created on an internal network, the gateway is created on the small
+`aegis-edge` bridge and then connected to `aegis-internal`; the risk and Granite
+services remain internal-only. Gateway data persists in `.runtime/gateway`.
 
 The smoke script checks actual COBOL GREEN/RED/fail-safe examples, then uploads
 a synthetic PNG through the gateway to the real risk service. It submits a

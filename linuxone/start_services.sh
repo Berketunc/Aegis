@@ -83,13 +83,23 @@ if "$with_granite"; then
 fi
 
 if "$with_gateway"; then
+  # Docker does not NAT published ports for containers created on an --internal
+  # network, so the loopback publish silently went nowhere. The gateway is created
+  # on a small ordinary bridge for its 127.0.0.1:8080 publish and then joined to the
+  # internal network, where it reaches aegis-risk and aegis-granite by name. The VM
+  # firewall still exposes nothing but SSH; the risk and Granite containers stay
+  # internal-only.
+  edge=aegis-edge
+  if ! "${docker_command[@]}" network inspect "$edge" >/dev/null 2>&1; then
+    "${docker_command[@]}" network create "$edge" >/dev/null
+  fi
   replace_owned_container aegis-gateway
   gateway_mounts=()
   if [[ -d "$project_dir/ui" ]]; then
     gateway_mounts+=(--mount "type=bind,source=$project_dir/ui,target=/app/ui,readonly")
   fi
   "${docker_command[@]}" run -d --name aegis-gateway --restart unless-stopped \
-    --label aegis.owner=person-b --network "$network" \
+    --label aegis.owner=person-b --network "$edge" \
     --user "$(id -u):$(id -g)" \
     --env-file "$runtime_dir/gateway.env" \
     --publish 127.0.0.1:8080:8080 \
@@ -97,7 +107,8 @@ if "$with_gateway"; then
     --mount "type=bind,source=$runtime_dir/models,target=/models,readonly" \
     "${gateway_mounts[@]}" \
     aegis-gateway:person-b >/dev/null
-  echo "Gateway: http://127.0.0.1:8080 (SSH tunnel only); risk failures remain AMBER."
+  "${docker_command[@]}" network connect "$network" aegis-gateway
+  echo "Gateway: http://127.0.0.1:8080 on the VM (reach it through an SSH tunnel); risk failures remain AMBER."
 fi
 
 echo "Risk service: http://aegis-risk:8000 on Docker network aegis-internal"
