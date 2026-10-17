@@ -36,14 +36,36 @@ replay uses the same claim, reads the journal and verifies the pseudonymised
 view. It leaves one synthetic evidence object and one fictional claim per run.
 It waits for startup, so an immediate connection refusal is retried.
 
-The new gateway build, COBOL executable and smoke still need VM verification.
+The user subsequently ran this deployment on LinuxONE. The risk image
+`81aca95619cb` and gateway image `8499ca369faa` built successfully. Debian's
+s390x GnuCOBOL 3.2 compiled `CLMIPOL.cbl`; its build-time GREEN example and
+the smoke script's GREEN/RED/AMBER examples passed. The
+[`gateway smoke result`](../eval/gateway_smoke.json) confirms real upload,
+replay, journal and pseudonymised-view checks for `CLM-000001`.
+The claim returned AMBER with `THRESHOLDS_UNAVAILABLE` in one measured round
+trip of 10.446 ms. No trained detector ran, and no percentile was established.
+
 Local tests exercise both real ASGI applications, durable egress preparation,
 timeouts, threshold mismatches, replay and concurrent duplicate submissions.
-Local COBOL tests skip because `cobc` is unavailable. No VM result is inferred
-from a local unit test.
+Local COBOL tests still skip because the Mac has no `cobc`; the VM smoke above
+proves its explicit cases, not the full native parity suite.
 
 Integration validation on 17 October: **114 tests passed, 23 COBOL tests
 skipped**. Shell syntax, Python compilation and patch whitespace checks passed.
+
+To run the previously skipped native policy/gateway cases on the VM using the
+actual built image, from the repository directory:
+
+```bash
+sudo docker run --rm --network none \
+  --user "$(id -u):$(id -g)" \
+  --mount "type=bind,source=$PWD/txn/tests,target=/app/txn/tests,readonly" \
+  --entrypoint python3 aegis-gateway:person-b \
+  -m pytest /app/txn/tests/test_policy.py /app/txn/tests/test_gateway.py -q -p no:cacheprovider
+```
+
+These isolated tests use controlled risk fixtures and real GnuCOBOL. They do not
+change the running gateway's database or pretend to validate A's detector.
 
 For status, run `bash linuxone/service_status.sh` separately. Until A's files
 arrive, the expected state is upload ready and privacy ready, with detector and

@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "scope": "synthetic gateway plumbing; no detector accuracy or latency percentile validation",
+  "claim_id": "CLM-000001",
+  "band": "AMBER",
+  "reasons": [
+    "THRESHOLDS_UNAVAILABLE"
+  ],
+  "cobol_smoke_verified": true,
+  "upload_verified": true,
+  "idempotency_verified": true,
+  "journal_verified": true,
+  "pseudonymised_view_verified": true,
+  "single_claim_round_trip_ms": 10.446
+}
