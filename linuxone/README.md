@@ -2,9 +2,11 @@
 
 These files implement the platform side of the plan. Docker, PyTorch CPU and a
 small NNPA linear-layer inference have been demonstrated on the team's LinuxONE
-VM. The stock ResNet benchmark completed on that VM on 17 October 2026;
-the service containers still need VM validation. No stock classifier is used
-as a claim-photo detector.
+VM. The stock ResNet benchmark completed on that VM on 17 October 2026.
+The risk image also built successfully after installing the native OpenSSL
+build dependencies (UBI 10 packages, OpenSSL 3.5.8). The first immediate health
+check could not connect; process health and uploads still need VM verification.
+No stock classifier is used as a claim-photo detector.
 
 Verified results from the user-supplied VM output are saved in
 [`eval/stock_resnet18.json`](../eval/stock_resnet18.json) and explained in
@@ -61,6 +63,9 @@ Before the trained model, thresholds and privacy adapter are supplied, uploads
 can work but `/risk/score` returns HTTP 503. `/health` reports the missing
 dependencies. The gateway must translate a failed or timed-out score call into
 AMBER. See `risk_service/README.md` for the API and model manifest contract.
+The status script waits up to 30 seconds for the HTTP listener to start, then
+reports readiness. An HTTP response with `ready: false` is different from a
+connection failure; the status command returns nonzero for either case.
 
 ## Required handoffs
 
