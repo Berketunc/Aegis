@@ -1,0 +1,7 @@
+# Keep the event image's architecture-specific torch / torch_nnpa builds.
+fastapi>=0.115,<1
+uvicorn>=0.30,<1
+python-multipart>=0.0.18,<1
+numpy>=1.26,<3
+Pillow>=10.4,<13
+cryptography>=43,<51
