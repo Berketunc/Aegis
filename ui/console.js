@@ -72,8 +72,8 @@
   };
   const REASON = {
     NONE: ["No signal crossed a threshold.", "ok"],
-    AI_SCORE_ABOVE_RED: ["Detector score above the red threshold, set so that the intended 1% validation false-positive cap.", "crit"],
-    AI_SCORE_ABOVE_AMBER: ["Detector score above the amber threshold (target 5% validation false-positive cap).", "warn"],
+    AI_SCORE_ABOVE_RED: ["Detector score above the red threshold, which is set so that at most 1% of genuine photos reach it.", "crit"],
+    AI_SCORE_ABOVE_AMBER: ["Detector score above the amber threshold, which is set so that at most 5% of genuine photos reach it.", "warn"],
     DUPLICATE_PHOTO: ["The same photo (perceptual-hash match) was already used on a different claim.", "crit"],
     EDITING_SOFTWARE_TAG: ["The photo's metadata names an editing or generation tool.", "warn"],
     RISK_SERVICE_UNAVAILABLE: ["Fail-safe: the risk service didn't answer within 300 ms, so the claim was held for review instead of approved.", "warn"],
@@ -971,7 +971,7 @@
           '<div class="card"><div class="card-h"><h2>Screening decision</h2><span class="small faint">' + (state.mode === "live" ? "Before commit " : "Demo decision ") + esc(fmtMs(t.total == null ? t.precommit_total : t.total)) + ' ms</span></div><div class="card-b">' +
             '<p class="decision-line">' + esc(OUTCOME[c.band]) + "</p>" + reasonsHtml +
             '<h3 style="margin:16px 0 2px">Calibrated AI-generation score <span class="num" style="float:right">' + esc(fmtScore(c.aiScore)) + "</span></h3>" + meter +
-            '<p class="small faint" style="margin-top:6px">One signal, not proof. The target validation false-positive cap is 1% for RED; A’s LinuxONE evaluation must verify it.</p>' +
+            '<p class="small faint" style="margin-top:6px">One signal, not proof. Thresholds are set on genuine photos: at most 1% reach RED and 5% reach AMBER on validation.</p>' +
           "</div></div>" +
           '<div class="card"><div class="card-h"><h2>Evidence</h2><span class="small faint">' + c.photos.length + " photo" + (c.photos.length === 1 ? "" : "s") + '</span></div><div class="card-b"><div class="evidence">' +
             (photo
