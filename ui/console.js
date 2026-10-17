@@ -195,6 +195,14 @@
     return out;
   }
 
+  function absorbHealth(h) {
+    state.health = h;
+    // Live thresholds come from the gateway's config (A's eval/thresholds_<version>.json), never from demo data.
+    if (h && typeof h.tau_red === "number" && typeof h.tau_amber === "number") {
+      state.thresholds = { version: h.thresholds_version, tau_red: h.tau_red, tau_amber: h.tau_amber, low_res_short_side: h.low_res_short_side };
+    }
+  }
+
   const Live = {
     lastSeq: 0,
     async init() {
@@ -204,7 +212,7 @@
         const res = await fetch(API + "/health", { signal: ctrl.signal });
         const h = await res.json();
         if (!h || h.txn !== "CLMI") throw new Error("not CLMI");
-        state.health = h;
+        absorbHealth(h);
         return true;
       } finally { clearTimeout(t); }
     },
@@ -213,7 +221,7 @@
       await this.ingest(rows.slice().reverse());
     },
     async poll() {
-      state.health = await api("/health");
+      absorbHealth(await api("/health"));
       const rows = await api("/journal?limit=200");
       const fresh = rows.filter((r) => r.seq > this.lastSeq).reverse();
       if (!fresh.length) return { added: [], notes: [] };
@@ -808,6 +816,7 @@
     const all = Array.from(state.claims.values());
     const reasonsPresent = Array.from(new Set(all.flatMap((c) => c.reasons))).filter((r) => r !== "NONE").sort();
     const matchStatus = (c) => q.status === "all" || (q.status === "open" ? isOpen(c) : !isOpen(c));
+    const hiddenByStatus = all.filter((c) => !matchStatus(c)).length;
     const matchAssignee = (c) => !q.assignee || (q.assignee === "me" ? caseOf(c).assignee === state.role : !caseOf(c).assignee);
     const text = q.q.trim().toLowerCase();
     const matchText = (c) => !text || [c.id, c.record && c.record.incident && c.record.incident.description, c.record && c.record.policy_number, c.damageLabel, DAMAGE[c.record && c.record.damage_category]]
@@ -851,7 +860,11 @@
           '<td><div class="desc-cell" title="' + esc(desc) + '">' + tokHtml(desc, c) + "</div></td>" +
           "<td>" + scoreCell(c) + "</td><td>" + signalIcons(c) + "</td><td>" + statusChip(c) + '</td><td class="small">' + esc(assigneeName(k.assignee)) + '</td><td class="small">' + slaCell(c) + "</td></tr>";
       }).join("") : '<tr><td colspan="9"><div class="empty">' + (state.claims.size ? "No claims match these filters." : "No claims have arrived yet. They appear here as soon as the claims system sends them.") + "</div></td></tr>") +
-      '</tbody></table></div><div class="card-f muted">' + rows.length + " of " + all.length + " claims · SLA: RED 4 h, AMBER 24 h from receipt · Case actions are kept in this browser for the demo.</div></div>";
+      '</tbody></table></div><div class="card-f muted">' + rows.length + " of " + all.length + " claims" +
+        (hiddenByStatus ? ' · <strong>' + hiddenByStatus + "</strong> " + (q.status === "open" ? "fast-tracked (GREEN) or closed" : "open") + ' claims are hidden by the status filter · <a href="#" data-showall>Show all</a>' : "") +
+        " · SLA: RED 4 h, AMBER 24 h from receipt · Case actions are kept in this browser for the demo.</div></div>";
+    const showAll = $("[data-showall]", root);
+    if (showAll) showAll.addEventListener("click", (e) => { e.preventDefault(); q.status = "all"; render(); });
 
     $("#f-status", root).value = q.status;
     $("#f-reason", root).value = q.reason;
@@ -1126,6 +1139,9 @@
           '<div class="card-h"><div><h2>Decision ' + esc(d.claim_id) + "</h2><p>" + (d.replayed ? "Same idempotency key: the stored decision was returned, nothing was re-scored." : "Decided inside transaction CLMI on LinuxONE.") + "</p></div>" + band(d.band, true) + "</div>" +
           '<div class="card-b"><p class="decision-line">' + esc(OUTCOME[d.band] || "") + '</p><ul class="reasons">' + reasons + "</ul>" +
           '<h3 style="margin:14px 0 6px">Timings</h3>' + waterfall(d.timings_ms) +
+          (d.band === "GREEN"
+            ? '<div class="callout" style="margin-top:12px">' + ICON.info + '<div><strong>Fast-tracked.</strong> GREEN claims need no human work, so they are not listed under the work queue\u2019s default \u201cOpen cases\u201d filter. Open the case below, search its ID, or <a href="#/queue?band=ALL&status=all">show all claims in the queue</a>. A score below τ amber' + (state.thresholds ? " (" + state.thresholds.tau_amber.toFixed(2) + ")" : "") + " is GREEN by design.</div></div>"
+            : '<div class="callout" style="margin-top:12px">' + ICON.info + '<div><strong>In the work queue.</strong> ' + (d.band === "RED" ? "Referred to an investigator; an SIU investigator can clear or close it." : "Awaiting human review; a claims handler can clear it or refer it to SIU.") + ' <a href="#/queue">Open the queue</a>.</div></div>') +
           '<p class="small faint" style="margin:8px 0 0">Browser round trip ' + esc(fmtMs(httpMs)) + " ms through the SSH tunnel · model " + esc(d.model_version || "–") + " · thresholds " + esc(d.thresholds_version || "–") + " · rule engine " + esc(d.policy_engine || "–") + "</p>" +
           '<div class="btn-row" style="margin-top:14px"><a class="btn" href="#/claims/' + encodeURIComponent(d.claim_id) + '">Open the case</a><button class="btn ghost" type="button" id="submit-again">Submit another</button></div></div>';
         result.hidden = false;
@@ -1152,20 +1168,20 @@
       '<div class="grid cols-2">' +
         '<div class="card"><div class="card-h"><h2>Bands</h2></div><div class="card-b"><div class="table-wrap"><table class="plain"><thead><tr><th>Band</th><th>When</th><th>Outcome</th></tr></thead><tbody>' +
           "<tr><td>" + band("RED") + "</td><td>Score ≥ τ<sub>red</sub>, <strong>or</strong> the same photo was already used on a different claim</td><td>Investigator referral. Never auto-rejected.</td></tr>" +
-          "<tr><td>" + band("AMBER") + "</td><td>τ<sub>amber</sub> ≤ score &lt; τ<sub>red</sub>, <strong>or</strong> metadata names an editing tool, <strong>or</strong> the risk service is unavailable</td><td>Human review</td></tr>" +
+          "<tr><td>" + band("AMBER") + "</td><td>τ<sub>amber</sub> ≤ score &lt; τ<sub>red</sub>, <strong>or</strong> metadata names an editing tool, <strong>or</strong> the risk service is unavailable, <strong>or</strong> score ≥ τ<sub>red</sub> on a low-resolution photo (short side under " + esc(String((T && T.low_res_short_side) || 480)) + " px: the detector is less reliable there, so the score alone cannot refer)</td><td>Human review</td></tr>" +
           "<tr><td>" + band("GREEN") + "</td><td>None of the above</td><td>Fast-tracked</td></tr>" +
         "</tbody></table></div>" +
         '<div class="callout" style="margin-top:12px">' + ICON.info + "<div>Every matching reason is reported and the band is the most severe one. Missing camera metadata and C2PA presence are information only and never change the band.</div></div></div></div>" +
         '<div class="card"><div class="card-h"><h2>Thresholds</h2><span class="pill">' + esc(tv || "–") + '</span></div><div class="card-b"><dl class="kv">' +
           "<dt>τ red</dt><dd>" + (T ? '<span class="num">' + T.tau_red.toFixed(2) + "</span>" : "From the thresholds config") + ' <span class="faint">· target validation false-positive cap ≤ 1%</span></dd>' +
           "<dt>τ amber</dt><dd>" + (T ? '<span class="num">' + T.tau_amber.toFixed(2) + "</span>" : "From the thresholds config") + ' <span class="faint">· target validation false-positive cap ≤ 5%</span></dd>' +
-          "<dt>Fitted on</dt><dd>A must fit and validate thresholds on the deployed LinuxONE detector scores</dd>" +
+          "<dt>Fitted on</dt><dd>" + (state.mode === "live" ? "Validation real photos: τ red = the score 1% of genuine photos exceed, τ amber = the score 5% exceed (version " + esc(tv || "–") + "). A score below τ amber is GREEN by design, even if it is not near zero." : "A must fit and validate thresholds on the deployed LinuxONE detector scores") + "</dd>" +
           "<dt>Reported by</dt><dd>False-positive rate per real-photo subgroup (phone photos, compressed images, each source)</dd>" +
         "</dl></div></div>" +
       "</div>" +
       '<div class="grid cols-main" style="margin-top:16px">' +
         '<div class="card"><div class="card-h"><div><h2>CLMIPOL.cbl</h2><p>The decision rule is real COBOL, compiled with GnuCOBOL on LinuxONE. In production it runs inside CICS transaction CLMI on z/OS.</p></div></div><div class="card-b"><pre class="code">' + esc(
-          "           IF IN-RISK-OK = 0\n               MOVE \"RISK_SERVICE_UNAVAILABLE\" TO WS-NEW-REASON\n               MOVE 1 TO WS-NEW-SEV\n               PERFORM ADD-REASON\n           ELSE\n               IF IN-DUP = 1\n                   MOVE \"DUPLICATE_PHOTO\" TO WS-NEW-REASON\n                   MOVE 2 TO WS-NEW-SEV\n                   PERFORM ADD-REASON\n               END-IF\n               IF IN-SCORE >= IN-TAU-RED\n                   MOVE \"AI_SCORE_ABOVE_RED\" TO WS-NEW-REASON\n                   MOVE 2 TO WS-NEW-SEV\n                   PERFORM ADD-REASON\n               ELSE\n                   IF IN-SCORE >= IN-TAU-AMBER\n                       MOVE \"AI_SCORE_ABOVE_AMBER\" TO WS-NEW-REASON\n                       MOVE 1 TO WS-NEW-SEV\n                       PERFORM ADD-REASON\n                   END-IF\n               END-IF\n               IF IN-SWTAG = 1\n                   MOVE \"EDITING_SOFTWARE_TAG\" TO WS-NEW-REASON\n                   MOVE 1 TO WS-NEW-SEV\n                   PERFORM ADD-REASON\n               END-IF\n           END-IF") + "</pre></div></div>" +
+          "           IF IN-RISK-OK = 0\n               MOVE \"RISK_SERVICE_UNAVAILABLE\" TO WS-NEW-REASON\n               MOVE 1 TO WS-NEW-SEV\n               PERFORM ADD-REASON\n           ELSE\n               IF IN-DUP = 1\n                   MOVE \"DUPLICATE_PHOTO\" TO WS-NEW-REASON\n                   MOVE 2 TO WS-NEW-SEV\n                   PERFORM ADD-REASON\n               END-IF\n               IF IN-SCORE >= IN-TAU-RED AND IN-LOWRES = 1\n                   MOVE \"AI_SCORE_ABOVE_RED\" TO WS-NEW-REASON\n                   MOVE 1 TO WS-NEW-SEV\n                   PERFORM ADD-REASON\n                   MOVE \"LOW_RESOLUTION_EVIDENCE\" TO WS-NEW-REASON\n                   MOVE 1 TO WS-NEW-SEV\n                   PERFORM ADD-REASON\n               ELSE\n               IF IN-SCORE >= IN-TAU-RED\n                   MOVE \"AI_SCORE_ABOVE_RED\" TO WS-NEW-REASON\n                   MOVE 2 TO WS-NEW-SEV\n                   PERFORM ADD-REASON\n               ELSE\n                   IF IN-SCORE >= IN-TAU-AMBER\n                       MOVE \"AI_SCORE_ABOVE_AMBER\" TO WS-NEW-REASON\n                       MOVE 1 TO WS-NEW-SEV\n                       PERFORM ADD-REASON\n                   END-IF\n               END-IF\n               IF IN-SWTAG = 1\n                   MOVE \"EDITING_SOFTWARE_TAG\" TO WS-NEW-REASON\n                   MOVE 1 TO WS-NEW-SEV\n                   PERFORM ADD-REASON\n               END-IF\n           END-IF") + "</pre></div></div>" +
         '<div class="stack"><div class="card"><div class="card-h"><h2>Guarantees</h2></div><div class="card-b"><ul class="reasons">' +
           [["Nothing is rejected automatically.", "RED means a person investigates, in line with UK GDPR Article 22."],
            ["Errors never approve a claim.", "Risk-service timeout (300 ms), rule failure or unreadable thresholds all give AMBER."],
@@ -1300,7 +1316,12 @@
   }
   function wire() {
     window.addEventListener("hashchange", onNavigate);
-    $("#role").addEventListener("change", (e) => { setRole(e.target.value); toast("Signed in as " + esc(state.users[state.role].name) + " · " + esc(state.users[state.role].role)); render(); });
+    $("#role").addEventListener("change", (e) => {
+      setRole(e.target.value);
+      toast("Signed in as " + esc(state.users[state.role].name) + " · " + esc(state.users[state.role].role) + "<br><span style=\"opacity:.8\">" +
+        (state.role === "siu" ? "Can clear or close RED and referred cases, and reveal a claimant\u2019s identity (journaled)." : "Can assign, request evidence, clear AMBER cases and refer to SIU. Cannot reveal identity or close RED cases.") + "</span>");
+      render();
+    });
     $("#search-form").addEventListener("submit", (e) => {
       e.preventDefault();
       const v = $("#search").value.trim();

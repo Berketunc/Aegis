@@ -137,10 +137,12 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
     @app.get("/health")
     async def health() -> dict[str, Any]:
         try:
-            tv = settings.load_thresholds().version
+            th = settings.load_thresholds()
+            tv, tau_red, tau_amber = th.version, th.tau_red, th.tau_amber
         except (OSError, ValueError, KeyError):
-            tv = "unavailable"
-        return {"status": "ok", "txn": TXN, "thresholds_version": tv,
+            tv, tau_red, tau_amber = "unavailable", None, None
+        return {"status": "ok", "txn": TXN, "thresholds_version": tv, "tau_red": tau_red, "tau_amber": tau_amber,
+                "low_res_short_side": settings.low_res_short_side,
                 "policy_engine": resolve_engine(settings.policy_engine, settings.clmipol_bin)}
 
     @app.post("/evidence")
