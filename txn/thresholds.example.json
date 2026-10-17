@@ -1,0 +1,6 @@
+{
+  "version": "t-0",
+  "tau_red": 0.85,
+  "tau_amber": 0.60,
+  "note": "Placeholder until A fits t-1 on LinuxONE scores (plan.md section 7.7). Point THRESHOLDS_PATH at the real file."
+}
