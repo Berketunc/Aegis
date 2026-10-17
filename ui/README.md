@@ -21,6 +21,12 @@ Static HTML/CSS/JS with no build step and no external requests. The CLMI gateway
 - **Live:** if `/health` answers as CLMI, the console reads the gateway: `/journal` (claim list and audit), `/claims/{id}/views` (pseudonymised record, egress payload), `/claims/{id}` (Granite note), `/claims/{id}/heatmap` (if present). It polls every 5 s and announces new claims.
 - **Demo:** otherwise (or with `?demo=1`) it shows the 28 fictional claims in `data.js`, with simulated results and a "Demo data" banner throughout.
 
+  To try the site with no LinuxONE connection at all, serve this folder with any static server; it detects the missing gateway and runs in demo mode, and the submit page then simulates decisions in the browser:
+
+  ```bash
+  python3 -m http.server 8080 --directory ui     # then open http://localhost:8080
+  ```
+
 ## Pre-filling the live system
 
 `demo/feed_claims.py` stands in for the insurer's claims system and sends the same 28 claims through the real gateway, so the bands are decided by the real COBOL rule:

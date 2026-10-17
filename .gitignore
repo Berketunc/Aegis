@@ -56,3 +56,6 @@ models/
 .DS_Store
 .idea/
 .vscode/
+
+# Local image-generation scratch (AI demo photos are uploaded through the console, not committed)
+output/

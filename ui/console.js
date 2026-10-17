@@ -310,15 +310,22 @@
       state.thresholds = D.thresholds;
       const T = D.thresholds;
       const now = Date.now();
-      const byKey = {};
+      this.byKey = {};
       const list = D.claims.slice().sort((a, b) => b.offset_min - a.offset_min);
       list.forEach((d) => {
         const idx = D.claims.indexOf(d);
         const id = "CLM-" + String(101 + idx).padStart(6, "0");
+        this.materialise(d, id, D, T, now);
+      });
+      state.journal.sort((a, b) => a.ts.localeCompare(b.ts) || a.seq - b.seq);
+    },
+    materialise(d, id, D, T, now) {
+      {
+        const byKey = this.byKey;
         const R = rng(d.key);
         const vault = {};
         const gaz = [["PERSON", d.claimant.name], ["EMAIL", d.claimant.email], ["PHONE", d.claimant.phone], ["POLICY", d.policy_number]];
-        const date = new Date(now - d.incident.date_offset_days * 864e5).toISOString().slice(0, 10);
+        const date = d.incident.date || new Date(now - d.incident.date_offset_days * 864e5).toISOString().slice(0, 10);
         const original = { policy_number: d.policy_number, claimant: Object.assign({}, d.claimant), incident: { date, description: d.incident.description }, damage_category: d.damage_category };
         const record = {
           policy_number: tokenFor("POLICY", d.policy_number, vault),
@@ -370,8 +377,46 @@
           this.push(t + 7000 + R() * 4000, id, "PII_SECOND_PASS", { tokens_added: [] });
           this.push(t + 9000 + R() * 4000, id, "NOTE", { status: "ready" });
         }
+        return c;
+      }
+    },
+    userSeq: 0,
+    submitted: {},   // "name:size" of uploaded files -> demo key of the first claim that used it
+    simulate(input, files) {
+      // Browser-only stand-in for the gateway when no LinuxONE connection exists: no detector runs.
+      // The score comes from the file name (fake/ai -> high, edit/inflat -> amber, otherwise low),
+      // the same photo submitted twice is a duplicate, and the band comes from the CLMIPOL twin above.
+      const D = window.AEGIS_DEMO, T = state.thresholds || D.thresholds, now = Date.now();
+      const key = "U" + (++this.userSeq);
+      const sigs = files.map((f) => f.name + ":" + f.size);
+      const dupKey = sigs.map((x) => this.submitted[x]).find(Boolean) || null;
+      const name = files.map((f) => f.name.toLowerCase()).join(" ");
+      const R = rng("upload:" + sigs.join("|"));
+      const ai = /fake|generated|synthetic|\bai[-_ .]/.test(name) ? 0.86 + R() * 0.13
+        : /edit|inflat|retouch|photoshop|gimp/.test(name) ? T.tau_amber + R() * (T.tau_red - T.tau_amber) * 0.9
+        : R() * 0.25;
+      const d = {
+        key, offset_min: 0, channel: "Manual submission (simulated)", policy_number: input.policy_number,
+        claimant: { name: input.name, email: input.email || "", phone: input.phone || "" },
+        incident: { date: input.date, date_offset_days: 0, description: input.description },
+        damage_category: input.damage_category, photos: files.length, ai_score: +ai.toFixed(3),
+        exif_present: R() > 0.25, software_tag: /gimp|photoshop/.test(name) ? "GIMP 2.10" : null,
+        duplicate_of: dupKey, outage: false,
+      };
+      const id = "CLM-" + String(101 + D.claims.length + this.userSeq).padStart(6, "0");
+      const c = this.materialise(d, id, D, T, now);
+      c.photos.forEach((p, i) => {
+        if (!files[i]) return;
+        p.name = files[i].name;
+        if (!(dupKey && i === 0)) EVID_BY_ID[p.evidence_id] = { file: "", url: URL.createObjectURL(files[i]), title: files[i].name, kind: "upload", license: "uploaded in this browser", license_url: "", source: "Manual submission (simulated)" };
       });
+      sigs.forEach((x) => { if (!this.submitted[x]) this.submitted[x] = key; });
       state.journal.sort((a, b) => a.ts.localeCompare(b.ts) || a.seq - b.seq);
+      state.fresh.add(id);
+      setTimeout(() => state.fresh.delete(id), 3000);
+      updateNav();
+      return { claim_id: id, band: c.band, reasons: c.reasons, model_version: c.modelVersion, thresholds_version: c.thresholdsVersion,
+               policy_engine: "CLMIPOL twin (simulated in browser)", timings_ms: c.timings, replayed: false, simulated: true };
     },
     push(ms, claim_id, event, payload) {
       state.journal.push({ seq: ++this.seq, ts: new Date(ms).toISOString(), txn: "CLMI", claim_id, event, payload_json: payload });
@@ -423,7 +468,7 @@
     for (const p of c.photos || []) { const e = EVID_BY_ID[p.evidence_id]; if (e) return e; }
     return null;
   }
-  function photoUrl(e) { return "evidence/" + encodeURIComponent(e.file); }
+  function photoUrl(e) { return e.url || "evidence/" + encodeURIComponent(e.file); }
   function creditHtml(e) {
     const title = esc((e.title || "").replace(/^File:/, ""));
     return '<p class="credit">' + (e.kind === "ai" ? "AI-generated image" : "Photo") + ": " + (e.page_url ? '<a href="' + esc(e.page_url) + '" target="_blank" rel="noopener">' + title + "</a>" : title) +
@@ -1060,35 +1105,25 @@
     const live = state.mode === "live";
     const key = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + Math.random().toString(16).slice(2)); // idempotency key, fixed for this form
     const today = new Date().toISOString().slice(0, 10);
-    const n4 = () => String(Math.floor(1000 + Math.random() * 9000));
-    // Fictional persona pre-filled so a demo only needs a photo. Everything is editable.
-    const PERSONAS = [
-      ["Alex Doe", "alex.doe@example.com", "07700 900123", "bumper", "Reversed into a bollard in a supermarket car park; rear bumper pushed in and the paint is cracked."],
-      ["Priya Shah", "priya.shah@example.com", "07700 900218", "scratch", "Trolley scraped along the passenger door outside a retail park, leaving a long scratch."],
-      ["Sam Okafor", "sam.okafor@example.com", "07700 900341", "windscreen", "Stone strike on the motorway; the impact point has cracked across the windscreen."],
-      ["Morgan Lee", "morgan.lee@example.com", "07700 900455", "lamp", "Clipped a gate post leaving the driveway; the nearside headlamp is smashed."],
-      ["Jamie Kowalski", "jamie.k@example.com", "07700 900562", "dent", "Hail overnight left several dents across the bonnet and roof."],
-    ];
-    const persona = PERSONAS[Math.floor(Math.random() * PERSONAS.length)];
     root.innerHTML =
       '<div class="page-head"><div><h1>Submit a claim manually</h1><p>Stands in for the insurer’s claims system: the photo goes to the evidence store, then the claim runs through transaction CLMI on IBM Z and comes back with a band in real time.</p></div></div>' +
-      (live ? "" : '<div class="callout" style="margin-bottom:16px">' + ICON.info + "<div>Not connected to the CLMI gateway, so claims can’t be submitted from here. Open the console through the SSH tunnel to LinuxONE.</div></div>") +
+      (live ? "" : '<div class="callout" style="margin-bottom:16px">' + ICON.info + "<div><strong>Demo mode.</strong> Not connected to the CLMI gateway, so the decision is simulated in this browser with the same rule as CLMIPOL: no detector runs and nothing is stored. File names containing <code>fake</code> score high and <code>edit</code> scores amber; submitting the same photo twice is a duplicate. Connect through the SSH tunnel to LinuxONE for real screening.</div></div>") +
       '<div class="grid cols-main">' +
-        '<div class="card"><div class="card-h"><div><h2>Claim</h2><p>Pre-filled with a fictional persona so you only need to add a photo; edit anything you like. Personal data is pseudonymised by the gateway before anything is stored or scored.</p></div></div>' +
+        '<div class="card"><div class="card-h"><div><h2>Claim</h2><p>Fictional personas only. Personal data is pseudonymised by the gateway before anything is stored or scored.</p></div></div>' +
           '<div class="card-b"><form id="submit-form" novalidate>' +
             '<div class="form-grid">' +
-              '<label class="field"><span>Policy number</span><input class="ctl" name="policy_number" required maxlength="40" value="PN-' + n4() + "-" + n4() + '"></label>' +
+              '<label class="field"><span>Policy number</span><input class="ctl" name="policy_number" required maxlength="40" placeholder="PN-4471-0098"></label>' +
               '<label class="field"><span>Incident date</span><input class="ctl" type="date" name="date" required value="' + today + '"></label>' +
-              '<label class="field"><span>Claimant name</span><input class="ctl" name="name" required maxlength="200" value="' + esc(persona[0]) + '"></label>' +
-              '<label class="field"><span>Email</span><input class="ctl" type="email" name="email" maxlength="200" value="' + esc(persona[1]) + '"></label>' +
-              '<label class="field"><span>Phone</span><input class="ctl" type="tel" name="phone" maxlength="40" value="' + esc(persona[2]) + '"></label>' +
-              '<label class="field"><span>Damage category</span><select class="ctl" name="damage_category">' + Object.keys(DAMAGE).map((k) => '<option value="' + k + '"' + (k === persona[3] ? " selected" : "") + ">" + esc(DAMAGE[k]) + "</option>").join("") + "</select></label>" +
+              '<label class="field"><span>Claimant name</span><input class="ctl" name="name" required maxlength="200" placeholder="Alex Doe"></label>' +
+              '<label class="field"><span>Email</span><input class="ctl" type="email" name="email" maxlength="200" placeholder="alex@example.com"></label>' +
+              '<label class="field"><span>Phone</span><input class="ctl" type="tel" name="phone" maxlength="40" placeholder="07700 900123"></label>' +
+              '<label class="field"><span>Damage category</span><select class="ctl" name="damage_category">' + Object.keys(DAMAGE).map((k) => '<option value="' + k + '">' + esc(DAMAGE[k]) + "</option>").join("") + "</select></label>" +
             "</div>" +
-            '<label class="field"><span>Incident description</span><textarea name="description" rows="4" required maxlength="4000">' + esc(persona[4]) + '</textarea></label>' +
+            '<label class="field"><span>Incident description</span><textarea name="description" rows="4" required maxlength="4000" placeholder="Reversed into a bollard in a supermarket car park; rear bumper pushed in."></textarea></label>' +
             '<label class="field"><span>Damage photos (JPEG or PNG, up to 8, 15 MB each)</span><input class="ctl" type="file" name="photos" accept="image/jpeg,image/png" multiple required></label>' +
             '<div class="thumbs" id="submit-thumbs"></div>' +
-            '<div class="btn-row" style="margin-top:14px;align-items:center"><button class="btn" type="submit" id="submit-btn"' + (live ? "" : " disabled") + '>Screen this claim</button><span class="small muted" id="submit-status"></span></div>' +
-            '<p class="small faint" style="margin:10px 0 0">Idempotency key <code>' + esc(key) + "</code>: submitting this form twice returns the same claim and decision.</p>" +
+            '<div class="btn-row" style="margin-top:14px;align-items:center"><button class="btn" type="submit" id="submit-btn">' + (live ? "Screen this claim" : "Screen this claim (simulated)") + '</button><span class="small muted" id="submit-status"></span></div>' +
+            '<p class="small faint" style="margin:10px 0 0">' + (live ? "Idempotency key <code>" + esc(key) + "</code>: submitting this form twice returns the same claim and decision." : "Simulated submissions live only in this browser tab.") + "</p>" +
           "</form></div></div>" +
         '<div class="stack">' +
           '<div class="card" id="submit-result" hidden></div>' +
@@ -1113,7 +1148,6 @@
     });
     form.addEventListener("submit", async (evt) => {
       evt.preventDefault();
-      if (!live) return;
       const files = Array.from(form.elements.photos.files);
       if (!form.reportValidity()) return;
       if (!files.length) { status.textContent = "Add at least one photo."; return; }
@@ -1121,7 +1155,20 @@
       btn.disabled = true;
       const result = $("#submit-result");
       result.hidden = true;
+      const fields = () => ({
+        policy_number: form.elements.policy_number.value.trim(), name: form.elements.name.value.trim(),
+        email: form.elements.email.value.trim(), phone: form.elements.phone.value.trim(), date: form.elements.date.value,
+        description: form.elements.description.value.trim(), damage_category: form.elements.damage_category.value,
+      });
       try {
+        if (!live) {
+          status.textContent = "Simulating…";
+          await new Promise((r) => setTimeout(r, 400));
+          const d = Demo.simulate(fields(), files);
+          status.textContent = "";
+          showResult(d, 0);
+          return;
+        }
         const evidence = [];
         for (let i = 0; i < files.length; i++) {
           status.textContent = "Uploading photo " + (i + 1) + " of " + files.length + "…";
@@ -1143,20 +1190,8 @@
         const d = await api("/claims", { "Content-Type": "application/json" }, { method: "POST", body: JSON.stringify(body) });
         const httpMs = performance.now() - t0;
         status.textContent = "";
-        const reasons = (d.reasons || []).map((r) => '<li class="' + esc((REASON[r] || ["", "info"])[1]) + '">' + ICON[r === "NONE" ? "GREEN" : (REASON[r] || ["", "info"])[1] === "crit" ? "RED" : (REASON[r] || ["", "info"])[1] === "info" ? "info" : "AMBER"] + "<code>" + esc(REASON_SHORT[r] || r) + "</code><p>" + esc((REASON[r] || [r])[0]) + "</p></li>").join("");
-        result.innerHTML =
-          '<div class="card-h"><div><h2>Decision ' + esc(d.claim_id) + "</h2><p>" + (d.replayed ? "Same idempotency key: the stored decision was returned, nothing was re-scored." : "Decided inside transaction CLMI on LinuxONE.") + "</p></div>" + band(d.band, true) + "</div>" +
-          '<div class="card-b"><p class="decision-line">' + esc(OUTCOME[d.band] || "") + '</p><ul class="reasons">' + reasons + "</ul>" +
-          '<h3 style="margin:14px 0 6px">Timings</h3>' + waterfall(d.timings_ms) +
-          (d.band === "GREEN"
-            ? '<div class="callout" style="margin-top:12px">' + ICON.info + '<div><strong>Fast-tracked.</strong> GREEN claims need no human work, so they are not listed under the work queue\u2019s default \u201cOpen cases\u201d filter. Open the case below, search its ID, or <a href="#/queue?band=ALL&status=all">show all claims in the queue</a>. A score below τ amber' + (state.thresholds ? " (" + state.thresholds.tau_amber.toFixed(2) + ")" : "") + " is GREEN by design.</div></div>"
-            : '<div class="callout" style="margin-top:12px">' + ICON.info + '<div><strong>In the work queue.</strong> ' + (d.band === "RED" ? "Referred to an investigator; an SIU investigator can clear or close it." : "Awaiting human review; a claims handler can clear it or refer it to SIU.") + ' <a href="#/queue">Open the queue</a>.</div></div>') +
-          '<p class="small faint" style="margin:8px 0 0">Browser round trip ' + esc(fmtMs(httpMs)) + " ms through the SSH tunnel · model " + esc(d.model_version || "–") + " · thresholds " + esc(d.thresholds_version || "–") + " · rule engine " + esc(d.policy_engine || "–") + "</p>" +
-          '<div class="btn-row" style="margin-top:14px"><a class="btn" href="#/claims/' + encodeURIComponent(d.claim_id) + '">Open the case</a><button class="btn ghost" type="button" id="submit-again">Submit another</button></div></div>';
-        result.hidden = false;
-        $("#submit-again").addEventListener("click", () => { location.hash = "#/submit"; render(); });
+        showResult(d, httpMs);
         try { await Live.poll(); updateNav(); } catch (e) { /* the 5 s poll will catch up */ }
-        result.scrollIntoView({ behavior: "smooth", block: "start" });
       } catch (e) {
         const msg = e instanceof ApiError ? (e.status ? "Gateway answered " + e.status + ": " + e.message : e.message) : String(e);
         status.textContent = "";
@@ -1164,6 +1199,21 @@
         result.hidden = false;
       } finally {
         btn.disabled = false;
+      }
+      function showResult(d, httpMs) {
+        const reasons = (d.reasons || []).map((r) => '<li class="' + esc((REASON[r] || ["", "info"])[1]) + '">' + ICON[r === "NONE" ? "GREEN" : (REASON[r] || ["", "info"])[1] === "crit" ? "RED" : (REASON[r] || ["", "info"])[1] === "info" ? "info" : "AMBER"] + "<code>" + esc(REASON_SHORT[r] || r) + "</code><p>" + esc((REASON[r] || [r])[0]) + "</p></li>").join("");
+        result.innerHTML =
+          '<div class="card-h"><div><h2>Decision ' + esc(d.claim_id) + "</h2><p>" + (d.simulated ? "Simulated in this browser (demo mode): no detector ran." : d.replayed ? "Same idempotency key: the stored decision was returned, nothing was re-scored." : "Decided inside transaction CLMI on LinuxONE.") + "</p></div>" + band(d.band, true) + "</div>" +
+          '<div class="card-b"><p class="decision-line">' + esc(OUTCOME[d.band] || "") + '</p><ul class="reasons">' + reasons + "</ul>" +
+          '<h3 style="margin:14px 0 6px">Timings</h3>' + waterfall(d.timings_ms) +
+          (d.band === "GREEN"
+            ? '<div class="callout" style="margin-top:12px">' + ICON.info + '<div><strong>Fast-tracked.</strong> GREEN claims need no human work, so they are not listed under the work queue\u2019s default \u201cOpen cases\u201d filter. Open the case below, search its ID, or <a href="#/queue?band=ALL&status=all">show all claims in the queue</a>. A score below τ amber' + (state.thresholds ? " (" + state.thresholds.tau_amber.toFixed(2) + ")" : "") + " is GREEN by design.</div></div>"
+            : '<div class="callout" style="margin-top:12px">' + ICON.info + '<div><strong>In the work queue.</strong> ' + (d.band === "RED" ? "Referred to an investigator; an SIU investigator can clear or close it." : "Awaiting human review; a claims handler can clear it or refer it to SIU.") + ' <a href="#/queue">Open the queue</a>.</div></div>') +
+          '<p class="small faint" style="margin:8px 0 0">' + (d.simulated ? "Simulated timings" : "Browser round trip " + esc(fmtMs(httpMs)) + " ms through the SSH tunnel") + " · model " + esc(d.model_version || "–") + " · thresholds " + esc(d.thresholds_version || "–") + " · rule engine " + esc(d.policy_engine || "–") + "</p>" +
+          '<div class="btn-row" style="margin-top:14px"><a class="btn" href="#/claims/' + encodeURIComponent(d.claim_id) + '">Open the case</a><button class="btn ghost" type="button" id="submit-again">Submit another</button></div></div>';
+        result.hidden = false;
+        $("#submit-again").addEventListener("click", () => { location.hash = "#/submit"; render(); });
+        result.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     });
   }

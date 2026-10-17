@@ -80,6 +80,8 @@ uv venv --python 3.11 .venv && uv pip install --python .venv/bin/python -r txn/r
 .venv/bin/uvicorn txn.gateway.app:app --port 8080            # console at http://localhost:8080, with ?demo=1 for offline demo data
 ```
 
+**Just the website, no gateway:** `python3 -m http.server 8080 --directory ui` and open http://localhost:8080. The console detects the missing gateway and runs in demo mode with 28 fictional claims; the submit page simulates decisions in the browser.
+
 Training and evaluation run on Modal: `train/train_modal.py`, `train/clip_probe_modal.py`, `train/eval_modal.py`, `train/export_onnx.py`; data pipeline in `data/`.
 
 ## What is real and what is simulated
