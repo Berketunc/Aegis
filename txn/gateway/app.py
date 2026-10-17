@@ -393,6 +393,14 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
     ui = Path(settings.ui_dir)
     if ui.is_dir():
         app.mount("/", StaticFiles(directory=ui, html=True), name="ui")
+
+    @app.middleware("http")
+    async def no_stale_console(request: Request, call_next):
+        # The console is edited during the event and served from a bind mount; a
+        # cached console.js next to a fresh index.html silently breaks routing.
+        response = await call_next(request)
+        response.headers.setdefault("Cache-Control", "no-cache")
+        return response
     return app
 
 
