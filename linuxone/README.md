@@ -4,8 +4,11 @@ These files implement the platform side of the plan. Docker, PyTorch CPU and a
 small NNPA linear-layer inference have been demonstrated on the team's LinuxONE
 VM. The stock ResNet benchmark completed on that VM on 17 October 2026.
 The risk image also built successfully after installing the native OpenSSL
-build dependencies (UBI 10 packages, OpenSSL 3.5.8). The first immediate health
-check could not connect; process health and uploads still need VM verification.
+build dependencies (UBI 10 packages, OpenSSL 3.5.8). After startup, the user
+verified the container was up and Uvicorn reported startup complete. The saved
+[`health response`](../eval/risk_service_health.json) confirms encrypted storage
+initialization and `upload_ready: true`; an actual upload remains to be verified
+on the VM. Full scoring remains unready while A/C artifacts are absent.
 No stock classifier is used as a claim-photo detector.
 
 Verified results from the user-supplied VM output are saved in
@@ -66,6 +69,17 @@ AMBER. See `risk_service/README.md` for the API and model manifest contract.
 The status script waits up to 30 seconds for the HTTP listener to start, then
 reports readiness. An HTTP response with `ready: false` is different from a
 connection failure; the status command returns nonzero for either case.
+
+To verify uploads using a synthetic image, from the repository on the VM:
+
+```bash
+sudo docker exec -i aegis-risk python3 - < linuxone/smoke_upload.py
+```
+
+This checks the actual authenticated HTTP upload, SHA-256, AES-GCM round-trip
+and cached three-crop array without printing credentials or image bytes. It
+leaves one synthetic evidence object in storage, reused on repeat runs. One
+upload does not establish the preprocessing p95 or detector accuracy.
 
 ## Required handoffs
 

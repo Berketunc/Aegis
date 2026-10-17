@@ -1,0 +1,24 @@
+{
+  "status": "not_ready",
+  "ready": false,
+  "upload_ready": true,
+  "model": {
+    "ready": false,
+    "version": null,
+    "device": "cpu",
+    "artifact_sha256": null,
+    "error": "model_load_or_warmup_failed"
+  },
+  "privacy": {
+    "ready": false,
+    "error": "privacy_adapter_load_failed"
+  },
+  "thresholds_version": null,
+  "evidence_storage": {
+    "ready": true,
+    "original_encryption": "AES-256-GCM",
+    "error": null
+  },
+  "preprocessing_version": "rgb-short640-bicubic-centre-grid25-75-v1",
+  "granite": {"configured": false}
+}
