@@ -133,8 +133,11 @@ header as the risk service, while its environment key is `RISK_SHARED_SECRET`.
   plan's PyTorch fallback and does not claim zDLC compilation.
 * Model accuracy, parity, thresholds, final latency and concurrency results
   remain unmeasured until the real detector and gateway are integrated.
-* Heatmaps are not implemented. Gateway-to-Granite queue integration is tested;
-  real Granite inference still needs its compatible local GGUF and VM validation.
+* Heatmaps are implemented end to end (`risk_service/heatmap.py`, gateway
+  `POST /claims/{id}/heatmap`) and unit-tested, but have never run against a
+  trained model; `/health` keeps `heatmap.batch16_validated: false` until they do.
+  Gateway-to-Granite queue integration is tested; real Granite inference still
+  needs the provisioned GGUF and the VM smoke run (`linuxone/RUNBOOK.md`).
 * The real CICS production design is outside this platform implementation.
 
 ## Sources

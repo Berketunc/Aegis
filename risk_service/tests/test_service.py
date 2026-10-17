@@ -1,6 +1,7 @@
 import base64
 from io import BytesIO
 import json
+import time
 from pathlib import Path
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
@@ -110,6 +111,9 @@ def test_no_fake_scoring_while_model_missing(service):
     response = client.post("/risk/score", headers=HEADERS, json={"claim_id": "CLM-one", "description": "dent", "evidence": [{"evidence_id": evidence_id}]})
     assert response.status_code == 503
     assert "ai_score" not in response.text
+    heatmap = client.post(f"/evidence/{evidence_id}/heatmap", headers=HEADERS, json={"claim_id": "CLM-one"})
+    assert heatmap.status_code == 503
+    assert "patch_scores" not in heatmap.text
 
 
 def test_authentication_and_invalid_upload(service):
@@ -214,3 +218,29 @@ def test_unconfigured_detector_does_not_import_torch():
     detector = Detector(None)
     assert detector.ready is False
     assert detector.error == "model_not_configured"
+
+
+def test_heatmap_api_requires_auth_scored_evidence_and_returns_only_grid_signals(service):
+    app, client = service
+    # Explicit test-only detector method. Actual deployment still requires A's
+    # artifact and a successful model-load/warm-up, never this test double.
+    app.state.detector.ready = True
+    app.state.detector.version = "test-grid-model"
+    app.state.detector.score_grid = lambda crops: [0.4] * 16
+    evidence_id = upload(client)
+    path = f"/evidence/{evidence_id}/heatmap"
+    assert client.post(path, json={"claim_id": "CLM-one"}).status_code == 401
+    assert client.post(path, headers=HEADERS, json={"claim_id": "CLM-one"}).status_code == 404
+    app.state.index.check_and_register("CLM-one", [evidence_id])
+    submitted = client.post(path, headers=HEADERS, json={"claim_id": "CLM-one"})
+    assert submitted.status_code == 202
+    deadline = time.monotonic() + 2
+    while time.monotonic() < deadline:
+        job = client.get(submitted.json()["poll_url"], headers=HEADERS).json()
+        if job["status"] in {"succeeded", "failed"}:
+            break
+        time.sleep(0.01)
+    assert job["status"] == "succeeded"
+    assert job["result"]["patch_scores"] == [[0.4] * 4 for _ in range(4)]
+    assert job["result"]["model_version"] == "test-grid-model"
+    assert "image" not in job["result"]

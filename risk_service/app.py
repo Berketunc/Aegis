@@ -15,6 +15,7 @@ from starlette.concurrency import run_in_threadpool
 from .config import Settings, read_thresholds
 from .detector import Detector
 from .dup import EvidenceIndex
+from .heatmap import HeatmapQueue, QueueFull
 from .precompute import InvalidImage, PREPROCESS_VERSION
 from .privacy import PrivacyAdapter
 from .storage import EvidenceStore, load_encryption_key
@@ -32,6 +33,10 @@ class RiskRequest(BaseModel):
     evidence: list[EvidenceReference] = Field(min_length=1, max_length=8)
     privacy_context: dict = Field(default_factory=dict)
     policy_token: str | None = Field(default=None, max_length=100)
+
+
+class HeatmapRequest(BaseModel):
+    claim_id: str = Field(min_length=1, max_length=100, pattern=r"^[A-Za-z0-9_.:-]+$")
 
 
 def elapsed(start):
@@ -66,7 +71,9 @@ def create_app(settings: Settings | None = None):
         except Exception:
             app.state.thresholds = None
         app.state.workers = ThreadPoolExecutor(max_workers=4, thread_name_prefix="aegis-risk")
+        app.state.heatmaps = HeatmapQueue(app.state.store, app.state.index, app.state.detector)
         yield
+        app.state.heatmaps.close()
         app.state.workers.shutdown(wait=True, cancel_futures=True)
 
     app = FastAPI(title="AEGIS internal risk service", version="0.1.0", lifespan=lifespan)
@@ -99,6 +106,8 @@ def create_app(settings: Settings | None = None):
                                  "error": state.storage_error},
             "preprocessing_version": PREPROCESS_VERSION,
             "granite": {"configured": False},
+            "heatmap": {"implemented": True, "model_ready": state.detector.ready,
+                        "batch16_validated": state.detector.batch16_validated},
         }
 
     @app.post("/evidence", dependencies=[Depends(authenticate)])
@@ -181,8 +190,8 @@ def create_app(settings: Settings | None = None):
             logger.error("Risk scoring failed")
             raise HTTPException(503, "Risk processing unavailable") from None
         ai_score = max(item["ai_score"] for item in predictions)
-        # The gateway alone assigns GREEN/AMBER/RED. This is eligibility only;
-        # no background job is claimed until the Granite service is connected.
+        # The gateway alone assigns GREEN/AMBER/RED and queues Granite after
+        # commit. Heatmaps are requested separately and never alter the band.
         eligible = ai_score >= state.thresholds["tau_amber"] or bool(matches) or bool(flags["software_tag"])
         return {
             "claim_id": request.claim_id,
@@ -193,11 +202,31 @@ def create_app(settings: Settings | None = None):
                         "duplicate_matches": matches, "evidence_scores": predictions},
             "egress_payload_id": private["egress_payload_id"],
             "redacted_record": private["redacted_record"],
-            "async": {"eligible": eligible, "status": "not_configured"},
+            "async": {"eligible": eligible, "status": "gateway_managed", "heatmap": "on_request"},
             "timings_ms": {"privacy": privacy_ms, "load_crops": round(load_ms, 3),
                            "inference": round(inference_ms, 3), "metadata": metadata_ms,
                            "dup": duplicate_ms, "total": elapsed(start)},
         }
+
+    @app.post("/evidence/{evidence_id}/heatmap", status_code=202, dependencies=[Depends(authenticate)])
+    def submit_heatmap(evidence_id: str, request: HeatmapRequest):
+        state = app.state
+        if not state.store or not state.detector.ready:
+            raise HTTPException(503, "Trained detector unavailable for heatmap")
+        if not state.index.get(evidence_id) or not state.index.belongs_to_claim(request.claim_id, evidence_id):
+            raise HTTPException(404, "Evidence was not scored for that claim")
+        try:
+            job = state.heatmaps.submit(request.claim_id, evidence_id)
+        except QueueFull:
+            raise HTTPException(429, "Heatmap queue is full") from None
+        return {**job, "poll_url": "/heatmaps/" + job["job_id"]}
+
+    @app.get("/heatmaps/{job_id}", dependencies=[Depends(authenticate)])
+    def get_heatmap(job_id: str):
+        result = app.state.heatmaps.get(job_id)
+        if not result:
+            raise HTTPException(404, "Heatmap job was not found or expired")
+        return result
 
     return app
 

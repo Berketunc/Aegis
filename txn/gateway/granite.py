@@ -161,7 +161,8 @@ async def run_job(*, client: httpx.AsyncClient, granite_url: str, timeout_s: flo
     prompts_dir remains accepted for caller compatibility. Prompt files are loaded only
     by the local Granite runtime, never rendered with claimant-controlled text here.
     """
-    out: dict[str, Any] = {"status": "unavailable", "note": None, "pii_added": [], "vault": [], "redacted": None}
+    out: dict[str, Any] = {"status": "unavailable", "privacy_review_status": "unavailable",
+                           "note": None, "pii_added": [], "vault": [], "redacted": None}
     if decision.get("band") not in {"AMBER", "RED"}:
         return out
     description = redacted.get("incident", {}).get("description", "")
@@ -176,6 +177,7 @@ async def run_job(*, client: httpx.AsyncClient, granite_url: str, timeout_s: flo
             found = parse_pii(result, description)
             if found is None:
                 raise ValueError("PII second pass returned invalid findings")
+            out["privacy_review_status"] = "reviewed"
             if found:
                 description, vault = apply_pii(description, found, key)
                 updated = copy.deepcopy(redacted)

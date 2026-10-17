@@ -56,6 +56,10 @@ class ClaimIn(BaseModel):
     damage_category: str | None = Field(default=None, max_length=40)
 
 
+class HeatmapSelection(BaseModel):
+    evidence_id: str | None = Field(default=None, max_length=100)
+
+
 def _redact_claim(claim: ClaimIn, key: bytes) -> tuple[dict[str, Any], list[tuple[str, str, str]]]:
     """Pseudonymised record for storage and display. The vault keeps token -> value for authorised re-linking."""
     gaz = {"name": claim.claimant.name, "email": claim.claimant.email or "",
@@ -186,6 +190,7 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
         if prior:
             db.record_replay(conn, prior["claim_id"], key)
             return {**prior, "idempotency_key": key, "replayed": True,
+                    "privacy_review": db.get_privacy_review(conn, prior["claim_id"]),
                     "replay_timings_ms": {"total": round((time.perf_counter() - t0) * 1000, 1)}}
 
         claim_id = db.reserve_claim_id(conn)
@@ -251,6 +256,14 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
         decision = {"claim_id": claim_id, "band": band, "reasons": reasons,
                     "model_version": risk.model_version if risk else None,
                     "thresholds_version": thresholds_version, "policy_engine": engine}
+        request_granite = bool(settings.granite_url and band in {"AMBER", "RED"} and risk is not None)
+        if request_granite:
+            privacy_status, privacy_reason = "pending", "second_pass_queued"
+        elif settings.granite_url and band in {"AMBER", "RED"}:
+            privacy_status, privacy_reason = "unavailable", "risk_signals_unavailable"
+        else:
+            privacy_status = "rules_only"
+            privacy_reason = "not_requested_green" if settings.granite_url else "granite_disabled"
 
         # 6. SYNCPOINT. Stored/journal timings explicitly stop before commit.
         # The HTTP response adds measured commit and complete request latency.
@@ -263,20 +276,23 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
         try:
             db.commit_decision(conn, claim_id=claim_id, idem_key=key, redacted=redacted, vault=vault,
                                decision=decision, signals=signals, egress_id=f"EG-{claim_id[4:]}",
-                               egress_payload=egress_payload, egress_dropped=egress_dropped)
+                               egress_payload=egress_payload, egress_dropped=egress_dropped,
+                               privacy_status=privacy_status, privacy_reason=privacy_reason)
         except db.DuplicateKey:
             prior = db.find_by_key(conn, key)
             db.record_replay(conn, prior["claim_id"], key)
             return {**prior, "idempotency_key": key, "replayed": True,
+                    "privacy_review": db.get_privacy_review(conn, prior["claim_id"]),
                     "replay_timings_ms": {"total": round((time.perf_counter() - t0) * 1000, 1)}}
         response_timings = {**decision["timings_ms"],
                             "commit": round((time.perf_counter() - commit_start) * 1000, 1),
                             "total": round((time.perf_counter() - t0) * 1000, 1)}
 
         # 8. Granite after the decision, only when a signal crossed AMBER.
-        if settings.granite_url and band in ("AMBER", "RED") and risk is not None:
+        if request_granite:
             background.add_task(_granite_job, claim_id, redacted, decision, signals or {})
-        return {**decision, "timings_ms": response_timings, "idempotency_key": key, "replayed": False}
+        return {**decision, "timings_ms": response_timings, "idempotency_key": key, "replayed": False,
+                "privacy_review": db.get_privacy_review(conn, claim_id)}
 
     async def _granite_job(claim_id: str, redacted: dict[str, Any], decision: dict[str, Any],
                            signals: dict[str, Any]) -> None:
@@ -285,7 +301,7 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
                                     shared_secret=settings.risk_secret,
                                     key=settings.hmac_key, redacted=redacted, decision=decision, signals=signals)
         db.save_note(app.state.conn, claim_id, out["status"], out["note"], out["pii_added"], out["vault"],
-                     out["redacted"])
+                     out["redacted"], privacy_status=out.get("privacy_review_status"))
 
     @app.get("/claims/{claim_id}")
     async def get_claim(claim_id: str) -> dict[str, Any]:
@@ -296,7 +312,7 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
         if note is None:
             note = {"status": "pending" if decision["band"] != "GREEN" and settings.granite_url else "not_requested",
                     "note": None}
-        return {**decision, "adjuster_note": note}
+        return {**decision, "adjuster_note": note, "privacy_review": db.get_privacy_review(app.state.conn, claim_id)}
 
     @app.get("/claims/{claim_id}/views")
     async def views(claim_id: str, x_role: str = Header(default="adjuster")) -> dict[str, Any]:
@@ -306,12 +322,67 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
         if record is None:
             raise HTTPException(404, "no such claim")
         out: dict[str, Any] = {"claim_id": claim_id, "role": x_role, "pseudonymised": record,
-                               "egress": db.get_egress(conn, claim_id), "original": None}
+                               "egress": db.get_egress(conn, claim_id), "original": None,
+                               "privacy_review": db.get_privacy_review(conn, claim_id)}
         if x_role == "authorised":
-            tokens = sorted(set(re.findall(r"\b[A-Z]+_[0-9a-f]{8}\b", str(record))))
-            out["original"] = _relink(record, db.vault_lookup(conn, tokens))
+            private_record = db.get_claim(conn, claim_id, include_quarantined=True)
+            tokens = sorted(set(re.findall(r"\b[A-Z]+_[0-9a-f]{8}\b", str(private_record))))
+            out["original"] = _relink(private_record, db.vault_lookup(conn, tokens))
             db.journal(conn, claim_id, "VIEW_ORIGINAL", {"role": x_role})
         return out
+
+    @app.post("/claims/{claim_id}/heatmap", status_code=202)
+    async def submit_heatmap(claim_id: str, selection: HeatmapSelection | None = None):
+        decision = db.get_decision(app.state.conn, claim_id)
+        if decision is None:
+            raise HTTPException(404, "no such claim")
+        if decision["band"] not in {"AMBER", "RED"}:
+            raise HTTPException(409, "heatmap is only requested for review claims")
+        record = db.get_claim(app.state.conn, claim_id, include_quarantined=True)
+        evidence_ids = record.get("evidence", [])
+        evidence_id = selection.evidence_id if selection and selection.evidence_id else (evidence_ids[0] if evidence_ids else None)
+        if evidence_id is None or evidence_id not in evidence_ids:
+            raise HTTPException(400, "evidence does not belong to claim")
+        try:
+            response = await asyncio.wait_for(app.state.http.post(
+                f"{settings.risk_url.rstrip('/')}/evidence/{evidence_id}/heatmap",
+                headers={"X-Risk-Secret": settings.risk_secret}, json={"claim_id": claim_id}, timeout=3.0,
+            ), timeout=3.0)
+            if response.status_code in {404, 429, 503}:
+                raise HTTPException(response.status_code, "heatmap unavailable")
+            response.raise_for_status()
+            job = response.json()
+            if (response.status_code != 202 or not isinstance(job, dict)
+                    or not re.fullmatch(r"HM-[0-9a-f]{24}", job.get("job_id", ""))
+                    or job.get("status") not in {"queued", "running", "succeeded"}
+                    or job.get("claim_id") != claim_id or job.get("evidence_id") != evidence_id):
+                raise ValueError("Invalid heatmap acknowledgement")
+        except (httpx.HTTPError, ValueError, TypeError, TimeoutError):
+            raise HTTPException(503, "heatmap unavailable") from None
+        return {"job_id": job["job_id"], "claim_id": claim_id, "evidence_id": evidence_id,
+                "status": job["status"], "poll_url": f"/claims/{claim_id}/heatmap/{job['job_id']}"}
+
+    @app.get("/claims/{claim_id}/heatmap/{job_id}")
+    async def get_heatmap(claim_id: str, job_id: str):
+        if db.get_decision(app.state.conn, claim_id) is None:
+            raise HTTPException(404, "no such claim")
+        if not re.fullmatch(r"HM-[0-9a-f]{24}", job_id):
+            raise HTTPException(404, "heatmap was not found")
+        try:
+            response = await asyncio.wait_for(app.state.http.get(
+                f"{settings.risk_url.rstrip('/')}/heatmaps/{job_id}",
+                headers={"X-Risk-Secret": settings.risk_secret}, timeout=3.0,
+            ), timeout=3.0)
+            if response.status_code == 404:
+                raise HTTPException(404, "heatmap was not found or expired")
+            response.raise_for_status()
+            job = response.json()
+            if (not isinstance(job, dict) or job.get("job_id") != job_id or job.get("claim_id") != claim_id
+                    or job.get("status") not in {"queued", "running", "succeeded", "failed"}):
+                raise ValueError("Invalid heatmap result")
+        except (httpx.HTTPError, ValueError, TypeError, TimeoutError):
+            raise HTTPException(503, "heatmap unavailable") from None
+        return job
 
     @app.get("/journal")
     async def journal(claim_id: str | None = None, limit: int = 200) -> list[dict[str, Any]]:

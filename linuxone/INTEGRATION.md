@@ -132,4 +132,8 @@ the optional second pass runs after the decision and is not a guarantee that
 no identifier was ever stored. No external AI calls are configured.
 
 Actual Granite inference, tokens/second and memory remain unmeasured until
-the model is available. Heatmaps remain unimplemented.
+the model is available. Heatmap code is integrated (risk worker plus gateway
+pass-through routes) but unvalidated without a trained model.
+
+The ordered list of everything still to run on the VM is in
+[`RUNBOOK.md`](RUNBOOK.md).

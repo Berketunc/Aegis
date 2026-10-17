@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import asyncio
 import contextlib
+import hashlib
+import importlib.metadata
 import json
 import logging
 import os
@@ -15,11 +17,11 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Annotated, Any, Literal
 
-from fastapi import Depends, FastAPI, Header, HTTPException
+from fastapi import Depends, FastAPI, Header, HTTPException, Response
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field, StrictStr, ValidationError
 
-LOG = logging.getLogger("aegis.granite")
+LOG = logging.getLogger("uvicorn.error.aegis_granite")
 NOTE_DISCLAIMER = (
     "The detector score is one signal, not proof; this note is advisory and does not change the band."
 )
@@ -165,10 +167,18 @@ class GraniteRuntime:
         self.settings = settings
         self.model: Any = None
         self.prompts: dict[str, str] = {}
+        self.identity: dict[str, Any] | None = None
 
     def load(self) -> None:
         from llama_cpp import Llama
 
+        digest = hashlib.sha256()
+        with Path(self.settings.model_path).open("rb") as stream:
+            if stream.read(8) != bytes.fromhex("4747554600000003"):
+                raise ValueError("Granite requires a big-endian GGUF v3 asset")
+            stream.seek(0)
+            for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+                digest.update(chunk)
         self.prompts = {
             "pii": Path(self.settings.pii_prompt_path).read_text(encoding="utf-8").strip(),
             "note": Path(self.settings.note_prompt_path).read_text(encoding="utf-8").strip(),
@@ -188,8 +198,13 @@ class GraniteRuntime:
         if self.settings.chat_format:
             options["chat_format"] = self.settings.chat_format
         self.model = Llama(**options)
-        LOG.info("Granite loaded local GGUF %s; threads=%s context=%s", self.settings.model_path,
-                 self.settings.threads, self.settings.context)
+        self.identity = {"filename": Path(self.settings.model_path).name, "sha256": digest.hexdigest(),
+                         "size_bytes": Path(self.settings.model_path).stat().st_size,
+                         "byte_order": "big", "gguf_version": 3,
+                         "llama_cpp_python_version": importlib.metadata.version("llama_cpp_python"),
+                         "threads": self.settings.threads, "context": self.settings.context}
+        LOG.info("Granite loaded local GGUF %s; sha256=%s threads=%s context=%s", self.settings.model_path,
+                 digest.hexdigest(), self.settings.threads, self.settings.context)
 
     def generate(self, kind: str, payload: dict[str, Any]) -> dict[str, Any]:
         if self.model is None:
@@ -267,14 +282,15 @@ class JobService:
         self.active_job: str | None = None
         self.stopping = False
 
-    def prune(self) -> None:
+    def prune(self, reserve_slot: bool = False) -> None:
         now = time.monotonic()
         expired = [key for key, job in self.jobs.items()
                    if job.status in {"succeeded", "failed"}
                    and now - job.created_at >= self.settings.job_retention_seconds]
         for key in expired:
             del self.jobs[key]
-        while len(self.jobs) >= self.settings.max_retained_jobs:
+        target = self.settings.max_retained_jobs - int(reserve_slot)
+        while len(self.jobs) > target:
             completed = next((key for key, job in self.jobs.items()
                               if job.status in {"succeeded", "failed"}), None)
             if completed is None:
@@ -284,7 +300,7 @@ class JobService:
     def submit(self, kind: str, body: ClaimJob) -> Job:
         if not self.ready:
             raise HTTPException(503, "LOCAL_GRANITE_NOT_READY")
-        self.prune()
+        self.prune(reserve_slot=True)
         job = Job("LLM-" + secrets.token_hex(12), kind, body.claim_id, body.model_dump())
         try:
             self.queue.put_nowait(job)
@@ -367,7 +383,8 @@ def create_app(settings: Settings | None = None, runtime: GraniteRuntime | None 
             status_code=200 if service.ready else 503,
             content={"status": "ready" if service.ready else "unready", "model_loaded": service.ready,
                      "runtime": "local_llama_cpp", "queue_depth": service.queue.qsize(),
-                     "in_flight": int(service.active_job is not None), "configuration_errors": service.errors},
+                     "in_flight": int(service.active_job is not None), "configuration_errors": service.errors,
+                     "model_identity": getattr(service.runtime, "identity", None)},
         )
 
     @app.post("/pii", status_code=202, dependencies=[Depends(authenticate)])
@@ -390,14 +407,18 @@ def create_app(settings: Settings | None = None, runtime: GraniteRuntime | None 
         status = job.error["http_status"] if job.error else 200
         return JSONResponse(status_code=status, content=job.public(), headers={"Cache-Control": "no-store"})
 
-    @app.delete("/jobs/{job_id}", status_code=204, dependencies=[Depends(authenticate)])
-    async def forget_job(job_id: str) -> None:
+    # response_model=None is required: with `from __future__ import annotations` a
+    # `-> None` annotation is read as NoneType and FastAPI refuses a 204 body model.
+    @app.delete("/jobs/{job_id}", status_code=204, response_model=None,
+                dependencies=[Depends(authenticate)])
+    async def forget_job(job_id: str) -> Response:
         job = service.jobs.get(job_id)
         if job is None:
             raise HTTPException(404, "JOB_NOT_FOUND_OR_EXPIRED")
         if job.status in {"queued", "running"}:
             raise HTTPException(409, "JOB_STILL_ACTIVE")
         del service.jobs[job_id]
+        return Response(status_code=204, headers={"Cache-Control": "no-store"})
 
     return app
 

@@ -13,10 +13,11 @@ typed queued Granite requests and the `--with-gateway` launcher. The original
 
 ## 1. State on 17 Oct 2026
 
-- All of C's code is written and **passes 91 tests locally on Windows** (Python 3.11 + GnuCOBOL 3.2 from MSYS2), including 19 COBOL-vs-Python parity cases and gateway tests that run on the real COBOL binary.
+- All of C's code is written. It passed 91 tests on Windows (Python 3.11 + GnuCOBOL 3.2), and after the B/C merge the selected policy/gateway suites passed **67 tests natively on LinuxONE** inside the gateway image, including all 23 COBOL cases (`eval/native_gateway_tests.json`).
 - A live smoke run (stub risk service + gateway as real uvicorn processes, COBOL engine) gave the expected bands at about 42–50 ms per claim on Windows. The fail-safe returned AMBER at about 350 ms.
-- **Nothing is committed.** Files are untracked in the working tree: `txn/`, `privacy/`, `llm/prompts/`, `eval/rai.md`. Make a branch before committing (the repo is on `main`).
-- **Not yet run:** anything on LinuxONE/s390x, `docker build`, the real risk service (B), real Granite (B), real thresholds (A).
+- C's files are committed on `codex/person-b-platform` (merged from `PERSON_C`).
+- **Run on LinuxONE so far:** `docker build` of the gateway image with native GnuCOBOL, the gateway smoke against B's real risk service (`eval/gateway_smoke.json`, degraded AMBER because thresholds are absent), and the native test suites.
+- **Not yet run:** real Granite inference, the fail-safe smoke with a saved report, the full-HTTP latency benchmark, and any scored claim (needs A's model and `t-1`). See `linuxone/RUNBOOK.md`.
 
 ## 2. File map (C owns these; don't move them without updating imports)
 
@@ -122,7 +123,7 @@ Set real secrets with environment variables (don't commit them): `RISK_SECRET` (
 - [ ] Ask D to link `txn/README.md` from the root README (production CICS design + real-vs-emulated).
 
 **Not built (by design or deferred)**
-- Heatmap: the gateway has **no heatmap route**. If the UI needs it through the gateway, add a pass-through to B's endpoint.
+- Heatmap: the gateway now has pass-through routes `POST /claims/{id}/heatmap` and `GET /claims/{id}/heatmap/{job_id}` to B's worker (AMBER/RED only). Without a trained model they return 503.
 - Claude fallback for Granite (plan §10.2): not implemented. If needed, add it in `granite._complete` and send only the pseudonymised prompt, labelled as a stand-in.
 - The production CICS COBOL program (COULD tier) isn't written; only the design is in `txn/README.md`.
 - Pending Granite jobs live in memory (FastAPI `BackgroundTasks`) and are lost if the container restarts. Acceptable for the demo.

@@ -52,7 +52,8 @@ Columns: score, τ_red, τ_amber (all ×10000), duplicate flag, software-tag fla
 
 - **Rules on the decision path (milliseconds):** regex + gazetteer for names (from the form, including first/last name alone), email, UK phone, postcode, vehicle registration, policy number, National Insurance number, Luhn-checked card numbers and dates of birth.
 - **Pseudonymise, don't delete:** `KIND_` + first 8 hex of `HMAC-SHA256(key, kind|normalised value)`, e.g. `PERSON_7f3a91c2`. Deterministic, so investigators can link records without seeing identities. The token→value vault is a separate table; in production the key lives in IBM Z crypto hardware.
-- **Only pseudonymised data is stored, journaled, sent to the risk service or shown to adjusters.** `GET /claims/{id}/views` shows "who sees what": adjusters get the pseudonymised record; only `X-Role: authorised` re-links identity, and every such view is journaled (`VIEW_ORIGINAL`).
+- **Rules are a first pass, not a guarantee of complete PII removal.** The token vault contains identity values and the private claim record can contain missed identifiers. Views report `privacy_review.status` and `description_released`. Pending/unavailable Granite review withholds description and damage-category free text from adjusters and current egress payloads. Successful PII review releases reviewed text even if note generation subsequently fails. GREEN and Granite-disabled deployments explicitly report `rules_only`.
+- `X-Role: authorised` explicitly reveals the private record and journals `VIEW_ORIGINAL`. The role header and console role selector are demo controls, not production authentication. Keep the gateway on SSH-accessible loopback. The SQLite vault and crop cache are sensitive local files; only evidence originals have application-level AES-GCM encryption.
 - **Egress allowlist:** the egress payload is built by *copying* named fields (redacted description, damage category, band, score, non-identifying flags) and re-scanned for PII. Everything else is dropped by construction. Each payload is stored and journaled.
 - The detector still reads the **original** image: redaction would destroy the pixel traces it relies on. Privacy controls govern who sees personal data, not what the detector sees.
 
@@ -64,7 +65,7 @@ Granite runs only for AMBER/RED claims, after the decision is committed, so **it
 
 Guardrails: the claim text is fenced as untrusted data, and attempts to close the fence are neutralised. Output is schema- and length-checked and re-scanned for PII; anything that fails becomes "note unavailable". One job runs at a time.
 
-**Contract with the Granite service:** `POST {GRANITE_URL}/pii` and `POST {GRANITE_URL}/note` with `{"prompt": str, "max_tokens": int}` → `{"text": str}`.
+**Contract with Granite:** authenticated `X-Risk-Secret`, typed JSON bodies to `POST /pii` (`claim_id`, `description`, `context`) and `POST /note` (`claim_id`, `redacted_record`, `signals`). Accepted work returns HTTP 202 with `job_id`; poll `GET /jobs/{job_id}` on the configured local service. PII review precedes note submission, under a bounded overall deadline. See [`llm/README.md`](../llm/README.md) for exact schemas. Raw prompts are not an API contract.
 
 ## API
 
@@ -74,6 +75,8 @@ Guardrails: the claim text is fenced as untrusted data, and attempts to close th
 | POST | `/claims` | plan.md §14 body plus optional `idempotency_key` (UUID made by the UI when the form opens; the `Idempotency-Key` header also works) → decision JSON |
 | GET | `/claims/{id}` | decision + adjuster note status |
 | GET | `/claims/{id}/views` | pseudonymised record, egress payload, original (authorised only) |
+| POST | `/claims/{id}/heatmap` | optional AMBER/RED patch-map job; no model returns 503 |
+| GET | `/claims/{id}/heatmap/{job_id}` | poll the claim’s advisory 4×4 patch-score job |
 | GET | `/journal?claim_id=` | append-only journal (evidence screenshot) |
 | GET | `/health` | thresholds version, active policy engine |
 
@@ -102,7 +105,11 @@ cobc -x -o txn/CLMIPOL txn/CLMIPOL.cbl
 docker compose -f txn/docker-compose.dev.yml up --build                # gateway on 127.0.0.1:8080 only
 ```
 
-Main settings: `RISK_URL`, `RISK_SECRET` (sent as `X-Shared-Secret`), `RISK_TIMEOUT_MS` (300), `THRESHOLDS_PATH`, `POLICY_ENGINE` (`auto`/`cobol`/`python`), `CLMIPOL_BIN`, `HMAC_KEY`, `GRANITE_URL`, `DB_PATH`, `UI_DIR`. See `gateway/config.py`.
+Main settings: `RISK_URL`, `RISK_SECRET` (canonical `X-Risk-Secret`; legacy `X-Shared-Secret` also sent for the labelled development stub), `RISK_TIMEOUT_MS` (300), `THRESHOLDS_PATH`, `POLICY_ENGINE` (`auto`/`cobol`/`python`), `CLMIPOL_BIN`, `HMAC_KEY`, `GRANITE_URL`, `DB_PATH`, `UI_DIR`. See `gateway/config.py`.
+
+The example response above illustrates a fresh POST. `timings_ms.total` includes the database commit. Stored decisions and journal rows use `precommit_total`; GET/replay cannot recover the original post-commit time. Replays add their own `replay_timings_ms`. Measure full HTTP latency with `linuxone/benchmark_gateway.py`.
+
+For LinuxONE use `bash linuxone/start_services.sh --with-gateway` and [`linuxone/INTEGRATION.md`](../linuxone/INTEGRATION.md). The development Compose stack uses synthetic scores and example thresholds, not trained-detector evidence.
 
 ## Production design: CICS on z/OS
 

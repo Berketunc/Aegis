@@ -59,6 +59,12 @@ CREATE TABLE IF NOT EXISTS notes (
     pii_added_json TEXT,
     ts             TEXT NOT NULL
 );
+CREATE TABLE IF NOT EXISTS privacy_reviews (
+    claim_id TEXT PRIMARY KEY REFERENCES claims(claim_id),
+    status TEXT NOT NULL CHECK(status IN ('rules_only','pending','reviewed','unavailable')),
+    reason TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS journal (
     seq          INTEGER PRIMARY KEY AUTOINCREMENT,
     ts           TEXT NOT NULL,
@@ -85,6 +91,15 @@ def connect(path: str) -> sqlite3.Connection:
     conn.execute("PRAGMA journal_mode=WAL")
     conn.execute("PRAGMA foreign_keys=ON")
     conn.executescript(SCHEMA)
+    # Existing demo records had only the deterministic first pass. Do not label
+    # them as model-reviewed during an upgrade.
+    conn.execute("INSERT OR IGNORE INTO privacy_reviews SELECT claim_id, 'rules_only', 'legacy_rules_only', ? FROM claims", (now(),))
+    # In-memory background tasks cannot resume after this one-worker process
+    # restarts. Preserve quarantine and report their interrupted status honestly.
+    interrupted = [row[0] for row in conn.execute("SELECT claim_id FROM privacy_reviews WHERE status='pending'")]
+    conn.execute("UPDATE privacy_reviews SET status='unavailable', reason='worker_restarted', updated_at=? WHERE status='pending'", (now(),))
+    for claim_id in interrupted:
+        journal(conn, claim_id, "PRIVACY_REVIEW_UNAVAILABLE", {"reason": "worker_restarted"})
     return conn
 
 
@@ -150,11 +165,13 @@ class DuplicateKey(Exception):
 
 def commit_decision(conn: sqlite3.Connection, *, claim_id: str, idem_key: str, redacted: dict[str, Any],
                     vault: list[tuple[str, str, str]], decision: dict[str, Any], signals: dict[str, Any] | None,
-                    egress_id: str, egress_payload: dict[str, Any], egress_dropped: list[str]) -> None:
+                    egress_id: str, egress_payload: dict[str, Any], egress_dropped: list[str],
+                    privacy_status: str = "rules_only", privacy_reason: str = "granite_disabled") -> None:
     """SYNCPOINT: everything for one claim commits atomically."""
     conn.execute("BEGIN IMMEDIATE")
     try:
         conn.execute("INSERT INTO claims VALUES (?,?,?,?)", (claim_id, idem_key, _dumps(redacted), now()))
+        conn.execute("INSERT INTO privacy_reviews VALUES (?,?,?,?)", (claim_id, privacy_status, privacy_reason, now()))
         conn.executemany("INSERT OR IGNORE INTO token_vault VALUES (?,?,?)", vault)
         conn.execute("INSERT INTO decisions VALUES (?,?,?,?,?,?,?,?)", (
             claim_id, decision["band"], _dumps(decision["reasons"]), decision.get("model_version"),
@@ -162,10 +179,17 @@ def commit_decision(conn: sqlite3.Connection, *, claim_id: str, idem_key: str, r
             _dumps(signals) if signals is not None else None, _dumps(decision["timings_ms"])))
         journal(conn, claim_id, "DECISION", {k: decision[k] for k in (
             "band", "reasons", "model_version", "thresholds_version", "policy_engine", "timings_ms")})
+        publishable = dict(egress_payload)
+        dropped = list(egress_dropped)
+        if privacy_status in {"pending", "unavailable"}:
+            for field in ("description_redacted", "damage_category"):
+                if field in publishable:
+                    publishable.pop(field)
+                    dropped.append(field)
         conn.execute("INSERT INTO egress VALUES (?,?,?,?,?)",
-                     (egress_id, claim_id, _dumps(egress_payload), _dumps(egress_dropped), now()))
-        journal(conn, claim_id, "EGRESS", {"egress_id": egress_id, "fields": sorted(egress_payload),
-                                           "dropped": egress_dropped})
+                     (egress_id, claim_id, _dumps(publishable), _dumps(sorted(set(dropped))), now()))
+        journal(conn, claim_id, "EGRESS", {"egress_id": egress_id, "fields": sorted(publishable),
+                                           "dropped": sorted(set(dropped)), "privacy_review": privacy_status})
         conn.execute("COMMIT")
     except sqlite3.IntegrityError as e:
         conn.execute("ROLLBACK")
@@ -183,27 +207,42 @@ def record_replay(conn: sqlite3.Connection, claim_id: str, idem_key: str) -> Non
 
 def save_note(conn: sqlite3.Connection, claim_id: str, status: str, note: str | None,
               pii_added: list[str], vault: list[tuple[str, str, str]],
-              redacted: dict[str, Any] | None) -> None:
+              redacted: dict[str, Any] | None, privacy_status: str | None = None) -> None:
     """After-decision update from Granite. Never touches the decision; journaled as new rows."""
     conn.execute("BEGIN IMMEDIATE")
     try:
+        review_status = privacy_status or ("reviewed" if status == "ready" or redacted is not None else "unavailable")
+        if review_status not in {"reviewed", "unavailable"}:
+            raise ValueError("Invalid privacy review result")
         conn.executemany("INSERT OR IGNORE INTO token_vault VALUES (?,?,?)", vault)
         if redacted is not None:
             conn.execute("UPDATE claims SET redacted_json = ? WHERE claim_id = ?", (_dumps(redacted), claim_id))
-            # Apply newly found identifiers to the current egress view too.
-            # This is a local payload update; no external request is made.
-            current = conn.execute("SELECT payload_json, dropped_json FROM egress WHERE claim_id = ?", (claim_id,)).fetchone()
-            if current is not None:
-                payload = json.loads(current[0])
-                payload["description_redacted"] = redacted.get("incident", {}).get("description", "")
-                payload, dropped = build_egress(payload)
-                dropped = sorted(set(json.loads(current[1])) | set(dropped))
-                conn.execute("UPDATE egress SET payload_json = ?, dropped_json = ?, ts = ? WHERE claim_id = ?",
-                             (_dumps(payload), _dumps(dropped), now(), claim_id))
-                journal(conn, claim_id, "EGRESS_PII_UPDATED", {"fields": sorted(payload), "dropped": dropped})
+        conn.execute("INSERT OR REPLACE INTO privacy_reviews VALUES (?,?,?,?)", (
+            claim_id, review_status, "model_second_pass" if review_status == "reviewed" else "second_pass_unavailable", now()))
+        # A reviewed description can be released even when note formatting fails.
+        # A failed PII pass leaves description/category out of the egress payload.
+        current = conn.execute("SELECT payload_json, dropped_json FROM egress WHERE claim_id = ?", (claim_id,)).fetchone()
+        if current is not None:
+            payload = json.loads(current[0])
+            dropped = set(json.loads(current[1]))
+            if review_status == "reviewed":
+                row = conn.execute("SELECT redacted_json FROM claims WHERE claim_id = ?", (claim_id,)).fetchone()
+                reviewed_record = json.loads(row[0])
+                payload["description_redacted"] = reviewed_record.get("incident", {}).get("description", "")
+                payload["damage_category"] = reviewed_record.get("damage_category")
+                payload, fresh_dropped = build_egress(payload)
+                dropped = sorted((dropped - {"description_redacted", "damage_category"}) | set(fresh_dropped))
+                event = "EGRESS_PII_UPDATED" if redacted is not None else "EGRESS_PRIVACY_RELEASED"
+                journal(conn, claim_id, event, {"fields": sorted(payload), "dropped": dropped})
+            else:
+                for field in ("description_redacted", "damage_category"):
+                    payload.pop(field, None)
+                    dropped.add(field)
+            conn.execute("UPDATE egress SET payload_json = ?, dropped_json = ?, ts = ? WHERE claim_id = ?",
+                         (_dumps(payload), _dumps(sorted(dropped)), now(), claim_id))
         conn.execute("INSERT OR REPLACE INTO notes VALUES (?,?,?,?,?)",
                      (claim_id, status, note, _dumps(pii_added), now()))
-        journal(conn, claim_id, "PII_SECOND_PASS", {"tokens_added": pii_added})
+        journal(conn, claim_id, "PII_SECOND_PASS", {"tokens_added": pii_added, "status": review_status})
         journal(conn, claim_id, "NOTE", {"status": status})
         conn.execute("COMMIT")
     except BaseException:
@@ -211,9 +250,21 @@ def save_note(conn: sqlite3.Connection, claim_id: str, status: str, note: str | 
         raise
 
 
-def get_claim(conn: sqlite3.Connection, claim_id: str) -> dict[str, Any] | None:
+def get_privacy_review(conn: sqlite3.Connection, claim_id: str) -> dict[str, Any]:
+    row = conn.execute("SELECT status, reason FROM privacy_reviews WHERE claim_id = ?", (claim_id,)).fetchone()
+    status, reason = (row["status"], row["reason"]) if row else ("rules_only", "legacy_rules_only")
+    return {"status": status, "reason": reason, "description_released": status in {"rules_only", "reviewed"}}
+
+
+def get_claim(conn: sqlite3.Connection, claim_id: str, *, include_quarantined: bool = False) -> dict[str, Any] | None:
     row = conn.execute("SELECT redacted_json FROM claims WHERE claim_id = ?", (claim_id,)).fetchone()
-    return json.loads(row[0]) if row else None
+    if row is None:
+        return None
+    record = json.loads(row[0])
+    if not include_quarantined and not get_privacy_review(conn, claim_id)["description_released"]:
+        record.get("incident", {})["description"] = None
+        record["damage_category"] = None
+    return record
 
 
 def get_note(conn: sqlite3.Connection, claim_id: str) -> dict[str, Any] | None:
@@ -226,7 +277,11 @@ def get_egress(conn: sqlite3.Connection, claim_id: str) -> dict[str, Any] | None
                        (claim_id,)).fetchone()
     if not row:
         return None
-    return {"egress_id": row[0], "payload": json.loads(row[1]), "dropped": json.loads(row[2])}
+    payload = json.loads(row[1])
+    if not get_privacy_review(conn, claim_id)["description_released"]:
+        payload.pop("description_redacted", None)
+        payload.pop("damage_category", None)
+    return {"egress_id": row[0], "payload": payload, "dropped": json.loads(row[2])}
 
 
 def vault_lookup(conn: sqlite3.Connection, tokens: list[str]) -> dict[str, str]:

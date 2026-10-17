@@ -57,6 +57,11 @@ class EvidenceIndex:
             row = db.execute("SELECT * FROM evidence WHERE evidence_id=?", (evidence_id,)).fetchone()
         return dict(row) if row else None
 
+    def belongs_to_claim(self, claim_id, evidence_id):
+        with self.connect() as db:
+            return db.execute("SELECT 1 FROM claim_evidence WHERE claim_id=? AND evidence_id=?",
+                              (claim_id, evidence_id)).fetchone() is not None
+
     def check_and_register(self, claim_id, evidence_ids, policy_token=None):
         """One atomic check+registration avoids concurrent claims missing each other.
 

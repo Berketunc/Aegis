@@ -76,6 +76,9 @@ def test_actual_gateway_upload_and_missing_model_fail_safe(tmp_path, monkeypatch
         assert result["thresholds_version"] == "t-integration-1"
         assert result["model_version"] is None
         assert result["timings_ms"]["risk"] < 600
+        heatmap = client.post(f"/claims/{result['claim_id']}/heatmap")
+        assert heatmap.status_code == 503
+        assert "patch_scores" not in heatmap.text
         sent = transport.risk_requests[0]
         for raw in ["Alex", "Doe", "07700", "alex@example.com", "PN-4471-0098"]:
             assert raw not in json.dumps(sent)

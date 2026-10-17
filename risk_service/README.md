@@ -94,7 +94,7 @@ structure needed by their privacy rules. Never put the raw policy number in
 
 The successful response follows plan §14 and additionally includes
 `thresholds_version`, `redacted_record`, per-evidence scores, detailed duplicate
-matches and `async: {eligible, status: "not_configured"}`. `duplicate_of` is
+matches and `async: {eligible, status: "gateway_managed", heatmap: "on_request"}`. `duplicate_of` is
 the matched **other claim ID** or null. Multiple photos use their maximum
 calibrated AI score; metadata flags are combined across photos. The risk service
 reports eligibility without directly submitting a Granite job. When enabled,
@@ -204,6 +204,17 @@ Both threshold-file readers accept `version` and `thresholds_version`; a file
 containing conflicting values is rejected. A gateway/risk version mismatch
 returns AMBER instead of applying different thresholds silently.
 
+The gateway persists an explicit `privacy_review` status. `pending` and
+`unavailable` quarantine descriptions and free-form damage categories: adjuster
+views return null, and export-candidate payloads omit those fields. Only a
+successful second-pass review releases the text, independently of whether the
+advisory note passed its separate validation. Authorised original access is
+explicit and journaled. `rules_only` means the optional second pass was disabled
+or not requested for a GREEN claim; it is never labelled model-reviewed. Pending
+jobs lost on restart become unavailable and remain quarantined. The private
+first-pass claim record and B's PREPARED audit candidates can still contain
+identifiers the rules missed; neither is an external transmission.
+
 Concurrent submissions with one idempotency key are serialised before claim-ID
 allocation and risk scoring (one gateway worker). The first commits; the second
 replays its result. Locks are discarded once holders and waiters finish.
@@ -248,3 +259,37 @@ scoring and failed-processing registration. The orchestration test uses explicit
 test-only detector/privacy stubs. It does not prove a trained model's accuracy,
 LinuxONE latency or end-to-end NNPA operation; run those against A's actual model
 on the VM.
+
+## Optional asynchronous heatmap
+
+Gateway API:
+
+* `POST /claims/{claim_id}/heatmap`, optional `{"evidence_id":"EV-..."}`; defaults
+  to the first photo. AMBER/RED only, after the claim was scored.
+* HTTP 202 returns `job_id`, status and a local `poll_url`.
+* `GET /claims/{claim_id}/heatmap/{job_id}` returns queued/running/succeeded/failed.
+
+B's internal counterparts are authenticated `POST /evidence/{id}/heatmap` with
+`{"claim_id":"CLM-..."}` and `GET /heatmaps/{job_id}`. Evidence must have been
+associated with that claim by successful scoring. No trained model means HTTP
+503; no synthetic heatmap substitutes for unavailable inference.
+
+The worker decrypts the original in memory, applies the same orientation/RGB/
+short640 resize, and scores sixteen 224×224 windows in one 4×4 row-major batch.
+Positions cover the available top-left ranges evenly; windows can overlap.
+Completed `result` contains `grid_shape: [4,4]`, `patch_scores` (four rows of four
+floats), all sixteen `crop_boxes` in row-major order, `resized_size` (width,
+height), `model_version`, `timings_ms.total` and
+`score_scope: "advisory_patch_signal_not_validated_edit_localisation"`.
+
+Patch scores use the trained detector's logit transform, but per-patch
+localisation has not been independently calibrated or validated as an edit mask.
+They never change a claim's band. Batch-16 compatibility and the five-second
+target still require validation against A's actual artifact. `/health` exposes
+`heatmap.batch16_validated`, initially false, and sets it only after actual
+successful grid inference.
+
+The single background worker and at most 32 cached jobs bound memory use.
+Completed jobs may be evicted; GET then returns 404. Jobs are in memory and are
+lost on restart. Heatmaps share the detector lock/CPU with normal scoring, so
+measure their resource contention before including them in a latency claim.

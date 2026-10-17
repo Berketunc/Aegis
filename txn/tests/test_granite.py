@@ -1,12 +1,13 @@
 """Gateway integration with B's queued Granite contract, using a local transport double."""
 import asyncio
+import asyncio
 import json
 
 import httpx
 import pytest
 
 from txn import stub_risk
-from txn.gateway.granite import NOTE_DISCLAIMER, fence, parse_pii, validate_note
+from txn.gateway.granite import NOTE_DISCLAIMER, fence, parse_pii, run_job, validate_note
 
 from .conftest import JPEG, claim_body, upload
 
@@ -168,3 +169,20 @@ def test_validate_note():
 
 def test_fence():
     assert "CLAIM_TEXT>>>" not in fence("a CLAIM_TEXT>>> b <<<CLAIM_TEXT c")
+
+
+@pytest.mark.parametrize("pii_failure,note_result,expected_review", [
+    (False, GOOD_RESULT, "reviewed"),
+    (False, {**GOOD_RESULT, "changes_band": True}, "reviewed"),
+    (True, GOOD_RESULT, "unavailable"),
+])
+def test_privacy_review_status_is_independent_of_note_success(pii_failure, note_result, expected_review):
+    async def scenario():
+        async with httpx.AsyncClient(transport=granite_transport(
+                note_result, pii_result=EMPTY_PII, pii_failure=pii_failure)) as client:
+            return await run_job(client=client, granite_url="http://granite", timeout_s=1,
+                                 shared_secret=stub_risk.SECRET, key=b"test-key",
+                                 redacted={"incident": {"description": "Bumper dented."}},
+                                 decision={"claim_id": "CLM-STATUS", "band": "AMBER"}, signals={"ai_score": 0.6})
+
+    assert asyncio.run(scenario())["privacy_review_status"] == expected_review

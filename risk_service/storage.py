@@ -10,7 +10,7 @@ import threading
 import numpy as np
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
-from .precompute import PREPROCESS_VERSION, PHASH_VERSION, prepare_image
+from .precompute import PREPROCESS_VERSION, PHASH_VERSION, prepare_image, heatmap_crops
 
 
 def load_encryption_key(value: str) -> bytes:
@@ -72,3 +72,10 @@ class EvidenceStore:
         if crops.shape != (3, 3, 224, 224) or crops.dtype != np.uint8:
             raise ValueError("Stored crops have an incompatible shape or dtype")
         return crops
+
+    def load_heatmap_crops(self, record):
+        encrypted = (self.root / "objects" / record["sha256"] / "original.aesgcm").read_bytes()
+        if not encrypted.startswith(b"AEGIS1\x00"):
+            raise ValueError("Unknown evidence encryption format")
+        raw = self.cipher.decrypt(encrypted[7:19], encrypted[19:], record["sha256"].encode())
+        return heatmap_crops(raw)

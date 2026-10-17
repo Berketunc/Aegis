@@ -23,6 +23,27 @@ class PreparedImage:
     crop_boxes: list
 
 
+def heatmap_crops(raw: bytes):
+    """Cover the oriented, short640 image with a 4×4 grid of 224 px windows.
+
+    Windows overlap where needed; no full image is downsampled to 224 pixels.
+    Originals have already passed upload decoding limits before this is called.
+    """
+    with Image.open(BytesIO(raw)) as source:
+        rgb = ImageOps.exif_transpose(source).convert("RGB")
+        width, height = rgb.size
+        scale = 640 / min(width, height)
+        width, height = max(640, round(width * scale)), max(640, round(height * scale))
+        rgb = rgb.resize((width, height), Image.Resampling.BICUBIC)
+        boxes = []
+        for row in range(4):
+            for column in range(4):
+                left, top = round((width - 224) * column / 3), round((height - 224) * row / 3)
+                boxes.append([left, top, left + 224, top + 224])
+        crops = np.stack([np.asarray(rgb.crop(box), dtype=np.uint8).transpose(2, 0, 1) for box in boxes])
+        return crops, boxes, [width, height]
+
+
 def phash64(image: Image.Image) -> str:
     """64-bit DCT hash, compatible with this service's versioned index only."""
     pixels = np.asarray(image.convert("L").resize((32, 32), Image.Resampling.LANCZOS), dtype=np.float64)

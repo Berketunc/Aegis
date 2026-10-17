@@ -26,6 +26,7 @@ class Detector:
         self.version = None
         self.device = device
         self.artifact_sha256 = None
+        self.batch16_validated = False
         self.lock = threading.Lock()
         self.threads = threads
         if not manifest_path:
@@ -39,9 +40,9 @@ class Detector:
             self.error = "model_load_or_warmup_failed"
 
     def _load(self, manifest_path):
+        manifest = json.loads(manifest_path.read_text())
         import torch
         self.torch = torch
-        manifest = json.loads(manifest_path.read_text())
         if manifest["preprocessing_version"] != PREPROCESS_VERSION:
             raise ValueError("Preprocessing does not match uploaded crops")
         self.version = manifest["model_version"]
@@ -84,8 +85,11 @@ class Detector:
         with torch.inference_mode():
             self._predict(np.zeros((3, 3, 224, 224), dtype=np.uint8))
 
-    def _predict(self, crops):
+    def _logits(self, crops):
         torch = self.torch
+        if crops.ndim != 4 or tuple(crops.shape[1:]) != (3, 224, 224) or crops.dtype != np.uint8:
+            raise ValueError("Expected uint8 NCHW RGB crops")
+        count = crops.shape[0]
         batch = torch.from_numpy(np.ascontiguousarray(crops)).float().div_(255)
         batch = (batch - self.mean) / self.std
         if self.device == "nnpa":
@@ -95,15 +99,20 @@ class Detector:
             raise ValueError("Model must return a tensor of logits")
         output = output.cpu().float()
         if self.output_kind == "binary_logit":
-            if tuple(output.shape) not in {(3,), (3, 1)}:
+            if tuple(output.shape) not in {(count,), (count, 1)}:
                 raise ValueError("Expected one fake-vs-real logit per crop")
-            crop_logits = output.reshape(3)
+            crop_logits = output.reshape(count)
         else:
-            if tuple(output.shape) != (3, 2):
+            if tuple(output.shape) != (count, 2):
                 raise ValueError("Expected [real, fake] logits per crop")
             crop_logits = output[:, 1] - output[:, 0]
         if not bool(torch.isfinite(crop_logits).all()):
             raise ValueError("Model returned non-finite logits")
+        return crop_logits
+
+    def _predict(self, crops):
+        torch = self.torch
+        crop_logits = self._logits(crops)
         mean_logit = float(crop_logits.mean())
         score = float(torch.sigmoid(torch.tensor(mean_logit / self.temperature + self.bias)))
         return {"ai_score": score, "mean_logit": mean_logit}
@@ -113,3 +122,15 @@ class Detector:
             raise DetectorUnavailable(self.error)
         with self.lock, self.torch.inference_mode():
             return self._predict(crops)
+
+    def score_grid(self, crops):
+        """16 patch signals; localisation is advisory, not a calibrated edit mask."""
+        if not self.ready:
+            raise DetectorUnavailable(self.error)
+        if crops.shape[0] != 16:
+            raise ValueError("Heatmap requires a batch of sixteen patches")
+        with self.lock, self.torch.inference_mode():
+            logits = self._logits(crops)
+            scores = self.torch.sigmoid(logits / self.temperature + self.bias).tolist()
+            self.batch16_validated = True
+            return scores
