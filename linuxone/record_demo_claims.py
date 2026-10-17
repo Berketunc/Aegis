@@ -101,7 +101,7 @@ def main() -> int:
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     for r in results:
-        print(f"{r.get('band', r['status']):6} expected {r.get('expected', '-'):6} {Path(r['photo']).name}  {','.join(r.get('reasons', []))}  "
+        print(f"{(r.get('band') or r.get('status')):6} expected {r.get('expected', '-'):6} {Path(r['photo']).name}  {','.join(r.get('reasons', []))}  "
               f"{(r.get('timings_ms') or {}).get('gateway_total', '-')} ms")
     print(("passed" if not failures else f"{failures} not as expected") + f" -> {args.output}")
     return 0 if not failures else 1
