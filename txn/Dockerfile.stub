@@ -1,0 +1,8 @@
+# Stand-in risk service for development, until B's real one is wired in.
+FROM python:3.11-slim
+WORKDIR /app
+COPY txn/requirements.txt txn/requirements.txt
+RUN pip install --no-cache-dir -r txn/requirements.txt
+COPY txn txn
+USER nobody
+CMD ["uvicorn", "txn.stub_risk:app", "--host", "0.0.0.0", "--port", "9000"]
