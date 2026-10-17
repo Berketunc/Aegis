@@ -1,6 +1,6 @@
 # UI: Aegis claims-integrity console
 
-A console for insurance staff (claims handlers and SIU investigators) to review the results of AI-image screening. Claims arrive **automatically** from the insurer's claims system into transaction `CLMI` on IBM Z; there is no claim-submission page. The console shows what was screened, what was flagged and why, and lets staff work the flagged cases.
+A console for insurance staff (claims handlers and SIU investigators) to review the results of AI-image screening. Claims normally arrive **automatically** from the insurer's claims system into transaction `CLMI` on IBM Z; the `#/submit` page stands in for that system during demos. The console shows what was screened, what was flagged and why, and lets staff work the flagged cases.
 
 Static HTML/CSS/JS with no build step and no external requests. The CLMI gateway serves this folder at `/` (`UI_DIR`), so it works through the SSH tunnel.
 
@@ -9,6 +9,7 @@ Static HTML/CSS/JS with no build step and no external requests. The CLMI gateway
 | `#/dashboard` | KPIs (screened, fast-tracked, awaiting review, with investigators, decision-time p95), volume by band over time, flag reasons, decision-time distribution, "needs attention" list, pipeline status |
 | `#/queue` | Work queue: filter by band, status, reason and assignee; sort by priority, AI score, received time or SLA; open cases first |
 | `#/claims/<id>` | Case view: decision and reasons, score against thresholds, evidence and attention map, pseudonymised claim (SIU can reveal identity, which is journaled), egress payload, case actions and history, Granite note, timing breakdown, audit trail |
+| `#/submit` | Manual claim submission for demos: form plus photo upload, posted to `/evidence` and `/claims` with an idempotency key; shows the band, reasons and timing waterfall and links to the case. Live mode only |
 | `#/audit` | The append-only CLMI journal, plus reviewer actions |
 | `#/policy` | Bands, thresholds, the COBOL rule `CLMIPOL`, guarantees, and what's real vs emulated |
 | `#/system` | Service status, latency p50/p95/p99 per stage against targets, trust-boundary diagram |

@@ -1040,6 +1040,109 @@
     $("#a-q", root).addEventListener("input", (e) => { a.q = e.target.value; clearTimeout(viewAudit.t); viewAudit.t = setTimeout(() => { render(); const f = $("#a-q"); if (f) { f.focus(); f.setSelectionRange(f.value.length, f.value.length); } }, 250); });
   }
 
+
+  // ================================================================ manual claim submission (live gateway only)
+  function viewSubmit(root) {
+    setCrumbs([{ label: "Submit claim" }]);
+    const live = state.mode === "live";
+    const key = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + Math.random().toString(16).slice(2)); // idempotency key, fixed for this form
+    const today = new Date().toISOString().slice(0, 10);
+    const n4 = () => String(Math.floor(1000 + Math.random() * 9000));
+    root.innerHTML =
+      '<div class="page-head"><div><h1>Submit a claim manually</h1><p>Stands in for the insurer’s claims system: the photo goes to the evidence store, then the claim runs through transaction CLMI on IBM Z and comes back with a band in real time.</p></div></div>' +
+      (live ? "" : '<div class="callout" style="margin-bottom:16px">' + ICON.info + "<div>Not connected to the CLMI gateway, so claims can’t be submitted from here. Open the console through the SSH tunnel to LinuxONE.</div></div>") +
+      '<div class="grid cols-main">' +
+        '<div class="card"><div class="card-h"><div><h2>Claim</h2><p>Fictional personas only. Personal data is pseudonymised by the gateway before anything is stored or scored.</p></div></div>' +
+          '<div class="card-b"><form id="submit-form" novalidate>' +
+            '<div class="form-grid">' +
+              '<label class="field"><span>Policy number</span><input class="ctl" name="policy_number" required maxlength="40" value="PN-' + n4() + "-" + n4() + '"></label>' +
+              '<label class="field"><span>Incident date</span><input class="ctl" type="date" name="date" required value="' + today + '"></label>' +
+              '<label class="field"><span>Claimant name</span><input class="ctl" name="name" required maxlength="200" placeholder="Alex Doe"></label>' +
+              '<label class="field"><span>Email</span><input class="ctl" type="email" name="email" maxlength="200" placeholder="alex@example.com"></label>' +
+              '<label class="field"><span>Phone</span><input class="ctl" type="tel" name="phone" maxlength="40" placeholder="07700 900123"></label>' +
+              '<label class="field"><span>Damage category</span><select class="ctl" name="damage_category">' + Object.keys(DAMAGE).map((k) => '<option value="' + k + '">' + esc(DAMAGE[k]) + "</option>").join("") + "</select></label>" +
+            "</div>" +
+            '<label class="field"><span>Incident description</span><textarea name="description" rows="4" required maxlength="4000" placeholder="Reversed into a bollard in a supermarket car park; rear bumper pushed in."></textarea></label>' +
+            '<label class="field"><span>Damage photos (JPEG or PNG, up to 8, 15 MB each)</span><input class="ctl" type="file" name="photos" accept="image/jpeg,image/png" multiple required></label>' +
+            '<div class="thumbs" id="submit-thumbs"></div>' +
+            '<div class="btn-row" style="margin-top:14px;align-items:center"><button class="btn" type="submit" id="submit-btn"' + (live ? "" : " disabled") + '>Screen this claim</button><span class="small muted" id="submit-status"></span></div>' +
+            '<p class="small faint" style="margin:10px 0 0">Idempotency key <code>' + esc(key) + "</code>: submitting this form twice returns the same claim and decision.</p>" +
+          "</form></div></div>" +
+        '<div class="stack">' +
+          '<div class="card" id="submit-result" hidden></div>' +
+          '<div class="card"><div class="card-h"><h2>What happens</h2></div><div class="card-b"><ol class="steps">' +
+            "<li><strong>Upload.</strong> Each photo is decoded, cropped and hashed once, and the original is encrypted at rest.</li>" +
+            "<li><strong>Transaction CLMI.</strong> The gateway pseudonymises the form, calls the risk service with a 300 ms deadline and runs the COBOL rule.</li>" +
+            "<li><strong>Band.</strong> GREEN is fast-tracked, AMBER goes to review, RED to an investigator. Nothing is rejected automatically.</li>" +
+            "<li><strong>After the decision.</strong> AMBER and RED claims get a Granite note and a heatmap, off the decision path.</li>" +
+          "</ol></div></div>" +
+        "</div>" +
+      "</div>";
+
+    const form = $("#submit-form"), status = $("#submit-status"), btn = $("#submit-btn"), thumbs = $("#submit-thumbs");
+    form.elements.photos.addEventListener("change", () => {
+      thumbs.replaceChildren();
+      Array.from(form.elements.photos.files).slice(0, 8).forEach((f) => {
+        const img = document.createElement("img");
+        img.alt = f.name; img.title = f.name + " · " + Math.round(f.size / 1024) + " KB";
+        img.src = URL.createObjectURL(f);
+        thumbs.appendChild(img);
+      });
+    });
+    form.addEventListener("submit", async (evt) => {
+      evt.preventDefault();
+      if (!live) return;
+      const files = Array.from(form.elements.photos.files);
+      if (!form.reportValidity()) return;
+      if (!files.length) { status.textContent = "Add at least one photo."; return; }
+      if (files.length > 8) { status.textContent = "At most 8 photos per claim."; return; }
+      btn.disabled = true;
+      const result = $("#submit-result");
+      result.hidden = true;
+      try {
+        const evidence = [];
+        for (let i = 0; i < files.length; i++) {
+          status.textContent = "Uploading photo " + (i + 1) + " of " + files.length + "…";
+          const fd = new FormData();
+          fd.append("file", files[i], files[i].name);
+          const up = await api("/evidence", {}, { method: "POST", body: fd });
+          evidence.push({ evidence_id: up.evidence_id });
+        }
+        status.textContent = "Screening inside transaction CLMI…";
+        const body = {
+          idempotency_key: key,
+          policy_number: form.elements.policy_number.value.trim(),
+          claimant: { name: form.elements.name.value.trim(), email: form.elements.email.value.trim() || null, phone: form.elements.phone.value.trim() || null },
+          incident: { date: form.elements.date.value, description: form.elements.description.value.trim() },
+          damage_category: form.elements.damage_category.value,
+          evidence,
+        };
+        const t0 = performance.now();
+        const d = await api("/claims", { "Content-Type": "application/json" }, { method: "POST", body: JSON.stringify(body) });
+        const httpMs = performance.now() - t0;
+        status.textContent = "";
+        const reasons = (d.reasons || []).map((r) => '<li class="' + esc((REASON[r] || ["", "info"])[1]) + '">' + ICON[r === "NONE" ? "GREEN" : (REASON[r] || ["", "info"])[1] === "crit" ? "RED" : (REASON[r] || ["", "info"])[1] === "info" ? "info" : "AMBER"] + "<code>" + esc(REASON_SHORT[r] || r) + "</code><p>" + esc((REASON[r] || [r])[0]) + "</p></li>").join("");
+        result.innerHTML =
+          '<div class="card-h"><div><h2>Decision ' + esc(d.claim_id) + "</h2><p>" + (d.replayed ? "Same idempotency key: the stored decision was returned, nothing was re-scored." : "Decided inside transaction CLMI on LinuxONE.") + "</p></div>" + band(d.band, true) + "</div>" +
+          '<div class="card-b"><p class="decision-line">' + esc(OUTCOME[d.band] || "") + '</p><ul class="reasons">' + reasons + "</ul>" +
+          '<h3 style="margin:14px 0 6px">Timings</h3>' + waterfall(d.timings_ms) +
+          '<p class="small faint" style="margin:8px 0 0">Browser round trip ' + esc(fmtMs(httpMs)) + " ms through the SSH tunnel · model " + esc(d.model_version || "–") + " · thresholds " + esc(d.thresholds_version || "–") + " · rule engine " + esc(d.policy_engine || "–") + "</p>" +
+          '<div class="btn-row" style="margin-top:14px"><a class="btn" href="#/claims/' + encodeURIComponent(d.claim_id) + '">Open the case</a><button class="btn ghost" type="button" id="submit-again">Submit another</button></div></div>';
+        result.hidden = false;
+        $("#submit-again").addEventListener("click", () => { location.hash = "#/submit"; render(); });
+        try { await Live.poll(); updateNav(); } catch (e) { /* the 5 s poll will catch up */ }
+        result.scrollIntoView({ behavior: "smooth", block: "start" });
+      } catch (e) {
+        const msg = e instanceof ApiError ? (e.status ? "Gateway answered " + e.status + ": " + e.message : e.message) : String(e);
+        status.textContent = "";
+        result.innerHTML = '<div class="card-h"><h2>Not submitted</h2></div><div class="card-b"><p class="decision-line">' + esc(msg) + '</p><p class="small muted">Nothing was committed. Oversized files are refused before upload (413), non-JPEG/PNG files with 415, and an unavailable evidence store with 503. Fix the input and try again; the idempotency key stays the same.</p></div>';
+        result.hidden = false;
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  }
+
   function viewPolicy(root) {
     setCrumbs([{ label: "Decision policy" }]);
     const T = state.thresholds;
@@ -1150,7 +1253,7 @@
     const root = $("#view");
     const nav = r.view === "claims" ? "queue" : r.view;
     $$("[data-nav]").forEach((a) => a.setAttribute("aria-current", a.dataset.nav === nav ? "page" : "false"));
-    const views = { dashboard: viewDashboard, queue: viewQueue, claims: (el) => viewClaim(el, r.arg), audit: viewAudit, policy: viewPolicy, system: viewSystem };
+    const views = { dashboard: viewDashboard, queue: viewQueue, claims: (el) => viewClaim(el, r.arg), submit: viewSubmit, audit: viewAudit, policy: viewPolicy, system: viewSystem };
     const fn = views[r.view] || viewDashboard;
     const done = fn(root, r.query);
     Promise.resolve(done).then(() => {

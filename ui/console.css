@@ -352,6 +352,15 @@ dialog h2 { font-size: 1.05rem; margin-bottom: 6px; }
 .field > span { display: block; font-size: .8rem; font-weight: 600; margin-bottom: 4px; }
 .field textarea { width: 100%; font: inherit; color: var(--text); background: var(--layer); border: 1px solid var(--border-strong); border-radius: 6px; padding: 8px 10px; resize: vertical; }
 .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 12px; }
+/* Manual claim submission */
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0 16px; }
+.field input.ctl, .field select.ctl { width: 100%; padding: 8px 10px; font-size: .9rem; }
+.field input[type="file"].ctl { padding: 6px 8px; }
+.thumbs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.thumbs img { width: 96px; height: 72px; object-fit: cover; border-radius: 6px; border: 1px solid var(--border); background: var(--layer-2); }
+.steps { margin: 0; padding-left: 20px; font-size: .88rem; }
+.steps li { margin: 6px 0; color: var(--text-2); }
+.steps li strong { color: var(--text); }
 .toast { position: fixed; right: 20px; bottom: 20px; z-index: 70; background: var(--text); color: var(--bg); padding: 10px 14px; border-radius: 8px; font-size: .86rem; box-shadow: var(--shadow-lg); max-width: min(420px, calc(100% - 40px)); }
 .toast a { color: inherit; text-decoration: underline; }
 .loading { opacity: .55; transition: opacity .2s; }
