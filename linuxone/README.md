@@ -2,8 +2,16 @@
 
 These files implement the platform side of the plan. Docker, PyTorch CPU and a
 small NNPA linear-layer inference have been demonstrated on the team's LinuxONE
-VM. The stock ResNet benchmark and the service containers still need to be run
-on that VM. No stock classifier is used as a claim-photo detector.
+VM. The stock ResNet benchmark completed on that VM on 17 October 2026;
+the service containers still need VM validation. No stock classifier is used
+as a claim-photo detector.
+
+Verified results from the user-supplied VM output are saved in
+[`eval/stock_resnet18.json`](../eval/stock_resnet18.json) and explained in
+[`eval/stock_resnet18.md`](../eval/stock_resnet18.md). For 100 measured runs of
+three crops, CPU p50/p95 were 104.60/109.93 ms and the NNPA device run was
+18.63/20.37 ms. This is approximately 5.62× faster at the median for this stock
+model; it does not establish final detector accuracy or end-to-end latency.
 
 ## Stock-model benchmark
 
