@@ -2,8 +2,7 @@
 
 Everything below is scripted. Run it on the VM, in this order, from the
 repository directory (`~/aegis-person-b` or a fresh clone). Each step says which
-file it produces; commit those files, because the VM has no backups. Only step 0b and the
-scored benchmark in step 3 need A's files.
+file it produces; commit those files, because the VM has no backups. A's files are now in the repository, so every step can run.
 
 Current state: risk, gateway and privacy run on LinuxONE and the degraded
 AMBER path is verified (`eval/gateway_smoke.json`). Granite has never run, the
@@ -19,9 +18,10 @@ bash linuxone/service_status.sh                          # expect upload/privacy
 
 ## 0b. Install A's detector and thresholds (needs A's files)
 
-A's `modal run train/export_onnx.py --run det-r18-v4` leaves `best.pt`,
-`temperature.json`, `export.json` and `parity_*.npz` in `models/det-r18-v4/`.
-Copy that directory to the VM, then:
+`best.pt`, `temperature.json`, `export.json` and `model.onnx` are committed under
+`models/det-r18-v4/` (A force-added them; `.gitignore` otherwise excludes weights).
+The two parity sets are not in Git: copy `parity_val.npz` and `parity_test.npz`
+into `models/det-r18-v4/` on the VM with `scp` before the parity step. Then:
 
 ```bash
 python3 linuxone/install_model.py --run det-r18-v4 --weights models/det-r18-v4/best.pt \

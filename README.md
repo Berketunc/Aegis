@@ -64,7 +64,7 @@ git clone <this repo> && cd Aegis
 bash linuxone/start_services.sh --with-gateway            # risk service + gateway with native GnuCOBOL
 python3 linuxone/install_model.py --run det-r18-v4 --weights models/det-r18-v4/best.pt \
     --temperature models/det-r18-v4/temperature.json --export models/det-r18-v4/export.json \
-    --thresholds eval/thresholds_t-0.json                  # A's trained detector + thresholds
+    --thresholds eval/thresholds_t-0.json                  # A's trained detector (committed under models/) + thresholds
 bash linuxone/start_services.sh --with-gateway --with-granite   # after python3 linuxone/provision_granite.py --download
 bash linuxone/service_status.sh
 ```
