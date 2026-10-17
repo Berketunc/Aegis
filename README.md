@@ -4,7 +4,7 @@
 
 Every photo attached to a motor-insurance claim is screened for AI generation or AI editing *inside the claims transaction*, in real time, with every model running on IBM LinuxONE so customer data never leaves it. Honest claims are fast-tracked. Suspicious ones go to a person, with reasons. Nothing is ever rejected automatically.
 
-Why it matters: UK insurers detected £1.34bn of fraud across 93,900 claims in 2025, 55% of them motor ([ABI via Insurance Business](https://www.insurancebusinessmag.com/uk/news/claims/fewer-fraud-cases-fatter-claims-as-average-scam-hits-14300-592527.aspx)). Insurers report rising use of AI-generated images and the same damage photo re-submitted with a different number plate ([Admiral](https://www.admiral.com/press-office/the-white-lie-effect-1-in-8-admit-exaggerating-insurance-claims-as-untruths-and-ai)). Only 7% of anti-fraud professionals feel more than moderately prepared for it ([ACFE/SAS](https://www.sas.com/en_us/news/press-releases/2026/may/synthetic-images-ai-insurance-fraud.html)).
+Why it matters: UK insurers detected £1.34bn of fraud across 93,900 claims in 2025, 55% of them motor ([ABI via Insurance Business](https://www.insurancebusinessmag.com/uk/news/claims/fewer-fraud-cases-fatter-claims-as-average-scam-hits-14300-592527.aspx)). Allianz UK handled over 34,200 fraud cases worth nearly £174m last year, including a van photo taken from the owner's business social media with a cracked bumper added by AI, and a staged claim whose number plate was changed with AI; over half of UK drivers have posted a photo of their car online ([Allianz UK, June 2026](https://www.allianz.co.uk/news-and-insight/news/posting-car-photos-fuels-fraud.html)). Insurers report rising use of AI-generated images and the same damage photo re-submitted with a different number plate ([Admiral](https://www.admiral.com/press-office/the-white-lie-effect-1-in-8-admit-exaggerating-insurance-claims-as-untruths-and-ai)). Only 7% of anti-fraud professionals feel more than moderately prepared for it ([ACFE/SAS](https://www.sas.com/en_us/news/press-releases/2026/may/synthetic-images-ai-insurance-fraud.html)).
 
 ## What happens to a claim
 
@@ -57,7 +57,7 @@ LinuxONE: stock ResNet-18 on three crops, 100 runs, p50/p95 **104.6/109.9 ms on 
 
 ## Run it
 
-**On the LinuxONE VM** (Ubuntu 22.04, s390x, Docker):
+**On the LinuxONE VM** (Ubuntu 24.04, s390x, Docker):
 
 ```bash
 git clone <this repo> && cd Aegis
@@ -132,4 +132,4 @@ Models: [stabilityai/stable-diffusion-2-inpainting](https://huggingface.co/stabi
 
 Data: [CarDD](https://cardd-ustc.github.io) (non-commercial research licence, used for training and the demo, not redistributed), [Wikimedia Commons](https://commons.wikimedia.org/) photos uploaded before 2022 under CC0, public domain, CC BY or CC BY-SA, with per-file attribution in `data/commons_manifest.csv` and `ui/evidence/manifest.json`. Images are never committed; only manifests.
 
-Method and event resources: [B-Free (CVPR 2025)](https://arxiv.org/abs/2412.17671) for self-conditioned fakes, [UnivFD](https://arxiv.org/abs/2302.10174) for the CLIP probe, the [LinuxONE Community Cloud guides](https://github.com/linuxone-community-cloud/technical-resources), the event's [Jupyter Lab ML image and labs](https://github.com/linuxone-community-cloud/jupyter-lab-ml), [llama.cpp s390x build notes](https://github.com/ggml-org/llama.cpp/blob/master/docs/build-s390x.md). AI coding assistants were used for parts of the code, as the event allows; each team member owns and can explain their part.
+Method and event resources: [B-Free (CVPR 2025)](https://arxiv.org/abs/2412.17671) for self-conditioned fakes, [UnivFD](https://arxiv.org/abs/2302.10174) for the CLIP probe, the [LinuxONE Community Cloud guides](https://github.com/linuxone-community-cloud/technical-resources), the event's [Jupyter Lab ML image and labs](https://github.com/linuxone-community-cloud/jupyter-lab-ml), [llama.cpp s390x build notes](https://github.com/ggml-org/llama.cpp/blob/master/docs/build-s390x.md). AI coding assistants were used for parts of the code, as the event allows; each team member owns and can explain their part. The "AI or real?" door photo in the video was generated with ChatGPT (OpenAI, not open source) as a test image from a generator the detector never saw; Aegis scored it 0.65, AMBER.
