@@ -1,0 +1,8 @@
+{
+  "version": "t-demo",
+  "model_version": "det-r18-v4",
+  "tau_red": 0.55,
+  "tau_amber": 0.30,
+  "fitted_on": "not fitted: hand-picked for a more sensitive demo",
+  "note": "NOT false-positive capped. On A's parity samples these send about 19-20% of genuine photos to review and 2-9% to an investigator, versus 2-7% and 1.5-2% for t-0. Use only if the demo deliberately shows the sensitive setting, and say so. The documented thresholds are eval/thresholds_t-0.json."
+}

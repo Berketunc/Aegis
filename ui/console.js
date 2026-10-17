@@ -1061,21 +1061,30 @@
     const key = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + Math.random().toString(16).slice(2)); // idempotency key, fixed for this form
     const today = new Date().toISOString().slice(0, 10);
     const n4 = () => String(Math.floor(1000 + Math.random() * 9000));
+    // Fictional persona pre-filled so a demo only needs a photo. Everything is editable.
+    const PERSONAS = [
+      ["Alex Doe", "alex.doe@example.com", "07700 900123", "bumper", "Reversed into a bollard in a supermarket car park; rear bumper pushed in and the paint is cracked."],
+      ["Priya Shah", "priya.shah@example.com", "07700 900218", "scratch", "Trolley scraped along the passenger door outside a retail park, leaving a long scratch."],
+      ["Sam Okafor", "sam.okafor@example.com", "07700 900341", "windscreen", "Stone strike on the motorway; the impact point has cracked across the windscreen."],
+      ["Morgan Lee", "morgan.lee@example.com", "07700 900455", "lamp", "Clipped a gate post leaving the driveway; the nearside headlamp is smashed."],
+      ["Jamie Kowalski", "jamie.k@example.com", "07700 900562", "dent", "Hail overnight left several dents across the bonnet and roof."],
+    ];
+    const persona = PERSONAS[Math.floor(Math.random() * PERSONAS.length)];
     root.innerHTML =
       '<div class="page-head"><div><h1>Submit a claim manually</h1><p>Stands in for the insurer’s claims system: the photo goes to the evidence store, then the claim runs through transaction CLMI on IBM Z and comes back with a band in real time.</p></div></div>' +
       (live ? "" : '<div class="callout" style="margin-bottom:16px">' + ICON.info + "<div>Not connected to the CLMI gateway, so claims can’t be submitted from here. Open the console through the SSH tunnel to LinuxONE.</div></div>") +
       '<div class="grid cols-main">' +
-        '<div class="card"><div class="card-h"><div><h2>Claim</h2><p>Fictional personas only. Personal data is pseudonymised by the gateway before anything is stored or scored.</p></div></div>' +
+        '<div class="card"><div class="card-h"><div><h2>Claim</h2><p>Pre-filled with a fictional persona so you only need to add a photo; edit anything you like. Personal data is pseudonymised by the gateway before anything is stored or scored.</p></div></div>' +
           '<div class="card-b"><form id="submit-form" novalidate>' +
             '<div class="form-grid">' +
               '<label class="field"><span>Policy number</span><input class="ctl" name="policy_number" required maxlength="40" value="PN-' + n4() + "-" + n4() + '"></label>' +
               '<label class="field"><span>Incident date</span><input class="ctl" type="date" name="date" required value="' + today + '"></label>' +
-              '<label class="field"><span>Claimant name</span><input class="ctl" name="name" required maxlength="200" placeholder="Alex Doe"></label>' +
-              '<label class="field"><span>Email</span><input class="ctl" type="email" name="email" maxlength="200" placeholder="alex@example.com"></label>' +
-              '<label class="field"><span>Phone</span><input class="ctl" type="tel" name="phone" maxlength="40" placeholder="07700 900123"></label>' +
-              '<label class="field"><span>Damage category</span><select class="ctl" name="damage_category">' + Object.keys(DAMAGE).map((k) => '<option value="' + k + '">' + esc(DAMAGE[k]) + "</option>").join("") + "</select></label>" +
+              '<label class="field"><span>Claimant name</span><input class="ctl" name="name" required maxlength="200" value="' + esc(persona[0]) + '"></label>' +
+              '<label class="field"><span>Email</span><input class="ctl" type="email" name="email" maxlength="200" value="' + esc(persona[1]) + '"></label>' +
+              '<label class="field"><span>Phone</span><input class="ctl" type="tel" name="phone" maxlength="40" value="' + esc(persona[2]) + '"></label>' +
+              '<label class="field"><span>Damage category</span><select class="ctl" name="damage_category">' + Object.keys(DAMAGE).map((k) => '<option value="' + k + '"' + (k === persona[3] ? " selected" : "") + ">" + esc(DAMAGE[k]) + "</option>").join("") + "</select></label>" +
             "</div>" +
-            '<label class="field"><span>Incident description</span><textarea name="description" rows="4" required maxlength="4000" placeholder="Reversed into a bollard in a supermarket car park; rear bumper pushed in."></textarea></label>' +
+            '<label class="field"><span>Incident description</span><textarea name="description" rows="4" required maxlength="4000">' + esc(persona[4]) + '</textarea></label>' +
             '<label class="field"><span>Damage photos (JPEG or PNG, up to 8, 15 MB each)</span><input class="ctl" type="file" name="photos" accept="image/jpeg,image/png" multiple required></label>' +
             '<div class="thumbs" id="submit-thumbs"></div>' +
             '<div class="btn-row" style="margin-top:14px;align-items:center"><button class="btn" type="submit" id="submit-btn"' + (live ? "" : " disabled") + '>Screen this claim</button><span class="small muted" id="submit-status"></span></div>' +
