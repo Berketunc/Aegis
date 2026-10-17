@@ -1,0 +1,17 @@
+{
+  "run": "det-r18-v4",
+  "onnx": "/vol/data/models/det-r18-v4/model.onnx",
+  "opset": 17,
+  "input": "crops [3,3,224,224] float32, ImageNet-normalised",
+  "output": "logits [3,1]; score = sigmoid(mean(logits)/temperature)",
+  "temperature": 0.676082968711853,
+  "preprocess": {
+    "short_side": 640,
+    "no_upscale": true,
+    "crop": 224
+  },
+  "parity_val_n": 300,
+  "parity_test_n": 300,
+  "max_abs_logit_diff_torch_vs_onnxruntime": 1.7940998077392578e-05,
+  "onnx_bytes": 44698595
+}
