@@ -65,7 +65,9 @@ def prepare(root, with_granite=False):
         "AEGIS_MODEL_MANIFEST": "/models/manifest.json",
         "AEGIS_THRESHOLDS_PATH": "/models/thresholds.json",
         "AEGIS_MODEL_DEVICE": "cpu",
-        "AEGIS_TORCH_THREADS": "1",
+        # One thread put three ResNet-18 crops over the gateway's 300 ms deadline on
+        # the VM; the stock benchmark reached ~105 ms with three threads.
+        "AEGIS_TORCH_THREADS": str(max(1, min(4, os.cpu_count() or 1))),
         "AEGIS_PRIVACY_ADAPTER": "risk_service.c_privacy_adapter:process",
         "PYTHONPATH": "/app:/opt/aegis:/models:/integrations",
         "GRANITE_MODEL_PATH": "/models/granite.gguf",
@@ -77,6 +79,7 @@ def prepare(root, with_granite=False):
         values.setdefault(name, value)
     # Migrate only the placeholder values in the original Person B package.
     replacements = {
+        "AEGIS_TORCH_THREADS": ("1", defaults["AEGIS_TORCH_THREADS"]),
         "AEGIS_PRIVACY_ADAPTER": ("privacy_adapter:process", defaults["AEGIS_PRIVACY_ADAPTER"]),
         "GRANITE_PII_PROMPT_PATH": ("/prompts/pii.txt", defaults["GRANITE_PII_PROMPT_PATH"]),
         "GRANITE_NOTE_PROMPT_PATH": ("/prompts/note.txt", defaults["GRANITE_NOTE_PROMPT_PATH"]),

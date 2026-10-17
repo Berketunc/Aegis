@@ -42,7 +42,7 @@ Configuration:
 | `AEGIS_EVIDENCE_KEY_B64` | Base64 encoding of exactly 32 random key bytes |
 | `AEGIS_MODEL_MANIFEST` | Path to A's trained model manifest JSON |
 | `AEGIS_MODEL_DEVICE` | Explicit `cpu` (default) or `nnpa`; no silent device fallback |
-| `AEGIS_TORCH_THREADS` | Torch CPU threads; default `1` |
+| `AEGIS_TORCH_THREADS` | Torch CPU threads; the launcher sets `min(4, nproc)` (one thread exceeded the 300 ms deadline) |
 | `AEGIS_PRIVACY_ADAPTER` | Trusted import path, for example `privacy_adapter:process` |
 | `HMAC_KEY` | Stable secret shared with C's gateway, at least 32 bytes for the built-in adapter |
 | `AEGIS_THRESHOLDS_PATH` | Versioned threshold JSON shared with C's gateway |
