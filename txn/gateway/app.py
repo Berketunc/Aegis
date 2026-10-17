@@ -43,7 +43,7 @@ class Incident(BaseModel):
 
 
 class EvidenceRef(BaseModel):
-    evidence_id: str = Field(max_length=64)
+    evidence_id: str = Field(max_length=100)
 
 
 class ClaimIn(BaseModel):
@@ -52,7 +52,7 @@ class ClaimIn(BaseModel):
     policy_number: str = Field(max_length=40)
     claimant: Claimant
     incident: Incident
-    evidence: list[EvidenceRef] = Field(max_length=10)
+    evidence: list[EvidenceRef] = Field(max_length=8)
     damage_category: str | None = Field(default=None, max_length=40)
 
 
@@ -71,13 +71,17 @@ def _redact_claim(claim: ClaimIn, key: bytes) -> tuple[dict[str, Any], list[tupl
 
     desc, found = redact(claim.incident.description, key, gaz)
     vault.extend((f.token, f.kind, f.value) for f in found)
+    damage_category = claim.damage_category
+    if damage_category:
+        damage_category, found = redact(damage_category, key, gaz)
+        vault.extend((f.token, f.kind, f.value) for f in found)
     record = {
         "policy_number": tok("policy_number", claim.policy_number),
         "claimant": {"name": tok("name", claim.claimant.name), "email": tok("email", claim.claimant.email),
                      "phone": tok("phone", claim.claimant.phone)},
         "incident": {"date": claim.incident.date, "description": desc},
         "evidence": [e.evidence_id for e in claim.evidence],
-        "damage_category": claim.damage_category,
+        "damage_category": damage_category,
     }
     return record, vault
 
@@ -99,6 +103,7 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
     async def lifespan(app: FastAPI):
         app.state.conn = db.connect(settings.db_path)
         app.state.http = httpx.AsyncClient(transport=transport)
+        app.state.claim_locks = {}
         log.info("CLMI up: policy engine=%s", resolve_engine(settings.policy_engine, settings.clmipol_bin))
         yield
         await app.state.http.aclose()
@@ -106,6 +111,24 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
 
     app = FastAPI(title="Claims transaction CLMI", lifespan=lifespan)
     app.state.settings = settings
+
+    @asynccontextmanager
+    async def claim_guard(key: str):
+        # One-worker deployment: dictionary/refcounts are updated without awaits,
+        # so concurrent requests sharing an idempotency key queue before scoring.
+        # Entries survive while a holder or waiter exists and are then removed.
+        entries = app.state.claim_locks
+        entry = entries.get(key)
+        if entry is None:
+            entry = entries[key] = {"lock": asyncio.Lock(), "users": 0}
+        entry["users"] += 1
+        try:
+            async with entry["lock"]:
+                yield
+        finally:
+            entry["users"] -= 1
+            if entry["users"] == 0:
+                entries.pop(key, None)
 
     @app.get("/health")
     async def health() -> dict[str, Any]:
@@ -143,8 +166,13 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
     async def submit_claim(claim: ClaimIn, background: BackgroundTasks,
                            idempotency_key: str | None = Header(default=None)) -> dict[str, Any]:
         t0 = time.perf_counter()
-        conn = app.state.conn
         key = claim.idempotency_key or idempotency_key or str(uuid.uuid4())
+        async with claim_guard(key):
+            return await submit_claim_locked(claim, background, key, t0)
+
+    async def submit_claim_locked(claim: ClaimIn, background: BackgroundTasks,
+                                  key: str, t0: float) -> dict[str, Any]:
+        conn = app.state.conn
 
         # 1. Validate before anything is scored or committed.
         if not claim.evidence:
@@ -157,7 +185,8 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
         prior = db.find_by_key(conn, key)
         if prior:
             db.record_replay(conn, prior["claim_id"], key)
-            return {**prior, "idempotency_key": key, "replayed": True}
+            return {**prior, "idempotency_key": key, "replayed": True,
+                    "replay_timings_ms": {"total": round((time.perf_counter() - t0) * 1000, 1)}}
 
         claim_id = db.reserve_claim_id(conn)
 
@@ -168,7 +197,9 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
         t_risk = time.perf_counter()
         risk = await risk_client.score(app.state.http, settings.risk_url, settings.risk_secret,
                                        settings.risk_timeout_ms, claim_id, redacted["incident"]["description"],
-                                       [{"evidence_id": e} for e in redacted["evidence"]])
+                                       [{"evidence_id": e} for e in redacted["evidence"]],
+                                       privacy_context={"claim_id": claim_id, "damage_category": redacted["damage_category"]},
+                                       policy_token=redacted["policy_number"])
         risk_ms = (time.perf_counter() - t_risk) * 1000
 
         # 5. Decision rule.
@@ -182,12 +213,19 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
             log.error("thresholds config unreadable: %s", settings.thresholds_path)
             thresholds_version, tau_red, tau_amber, thresholds_ok = "unavailable", 0.0, 0.0, False
         if thresholds_ok:
+            threshold_mismatch = bool(risk and risk.thresholds_version is not None
+                                      and risk.thresholds_version != thresholds_version)
+            if threshold_mismatch:
+                risk, sig = None, None
+                log.warning("risk threshold version differs for %s", claim_id)
             pin = PolicyInput(
                 ai_score=sig.ai_score if sig else 0.0, tau_red=tau_red, tau_amber=tau_amber,
                 duplicate=bool(sig and sig.duplicate_of and sig.duplicate_of != claim_id),
                 software_tag=bool(sig and sig.metadata.software_tag), risk_ok=risk is not None)
             result = await asyncio.to_thread(evaluate, pin, settings.policy_engine, settings.clmipol_bin)
             band, reasons, engine = result.band, list(result.reasons), result.engine
+            if threshold_mismatch:
+                reasons.append("THRESHOLDS_VERSION_MISMATCH")
         else:
             band, reasons, engine = "AMBER", ["THRESHOLDS_UNAVAILABLE"], "none"
         if sig:  # informational only: never changes the band
@@ -214,12 +252,14 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
                     "model_version": risk.model_version if risk else None,
                     "thresholds_version": thresholds_version, "policy_engine": engine}
 
-        # 6. SYNCPOINT. Timings are fixed just before commit so they can be stored with the decision.
+        # 6. SYNCPOINT. Stored/journal timings explicitly stop before commit.
+        # The HTTP response adds measured commit and complete request latency.
         total_ms = (time.perf_counter() - t0) * 1000
         decision["timings_ms"] = {"gateway": round(total_ms - risk_ms - policy_ms, 1), "risk": round(risk_ms, 1),
-                                  "policy": round(policy_ms, 1), "total": round(total_ms, 1)}
+                                  "policy": round(policy_ms, 1), "precommit_total": round(total_ms, 1)}
         if risk and risk.timings_ms:
             decision["timings_ms"]["risk_detail"] = risk.timings_ms
+        commit_start = time.perf_counter()
         try:
             db.commit_decision(conn, claim_id=claim_id, idem_key=key, redacted=redacted, vault=vault,
                                decision=decision, signals=signals, egress_id=f"EG-{claim_id[4:]}",
@@ -227,17 +267,22 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
         except db.DuplicateKey:
             prior = db.find_by_key(conn, key)
             db.record_replay(conn, prior["claim_id"], key)
-            return {**prior, "idempotency_key": key, "replayed": True}
+            return {**prior, "idempotency_key": key, "replayed": True,
+                    "replay_timings_ms": {"total": round((time.perf_counter() - t0) * 1000, 1)}}
+        response_timings = {**decision["timings_ms"],
+                            "commit": round((time.perf_counter() - commit_start) * 1000, 1),
+                            "total": round((time.perf_counter() - t0) * 1000, 1)}
 
         # 8. Granite after the decision, only when a signal crossed AMBER.
         if settings.granite_url and band in ("AMBER", "RED") and risk is not None:
             background.add_task(_granite_job, claim_id, redacted, decision, signals or {})
-        return {**decision, "idempotency_key": key, "replayed": False}
+        return {**decision, "timings_ms": response_timings, "idempotency_key": key, "replayed": False}
 
     async def _granite_job(claim_id: str, redacted: dict[str, Any], decision: dict[str, Any],
                            signals: dict[str, Any]) -> None:
         out = await granite.run_job(client=app.state.http, granite_url=settings.granite_url,
                                     timeout_s=settings.granite_timeout_s, prompts_dir=settings.prompts_dir,
+                                    shared_secret=settings.risk_secret,
                                     key=settings.hmac_key, redacted=redacted, decision=decision, signals=signals)
         db.save_note(app.state.conn, claim_id, out["status"], out["note"], out["pii_added"], out["vault"],
                      out["redacted"])

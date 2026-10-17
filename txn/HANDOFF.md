@@ -3,6 +3,14 @@
 For: the agent deploying C's work on the LinuxONE VM and merging it with the rest of the team's code.
 Background: `plan.md` §3 "Person C", §9, §10, §14, §16. Human-facing docs: `txn/README.md`.
 
+**B/C integration update:** C's branch `PERSON_C` at `01e6430` is committed and
+merged locally into Person B's branch. The sections below describe C's original
+handoff snapshot. Current deployment and interface changes are documented in
+[`linuxone/INTEGRATION.md`](../linuxone/INTEGRATION.md): canonical `X-Risk-Secret`,
+full SHA evidence IDs, shared threshold aliases, C's built-in privacy bridge,
+typed queued Granite requests and the `--with-gateway` launcher. The original
+`docker-compose.dev.yml` remains a labelled stub development setup.
+
 ## 1. State on 17 Oct 2026
 
 - All of C's code is written and **passes 91 tests locally on Windows** (Python 3.11 + GnuCOBOL 3.2 from MSYS2), including 19 COBOL-vs-Python parity cases and gateway tests that run on the real COBOL binary.

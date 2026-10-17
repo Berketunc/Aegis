@@ -164,7 +164,8 @@ def create_app(settings: Settings | None = None):
         workers = state.workers
         futures = {
             "inference": workers.submit(inference),
-            "privacy": workers.submit(timed, state.privacy.process, request.description, request.privacy_context),
+            "privacy": workers.submit(timed, state.privacy.process, request.description,
+                                      {**request.privacy_context, "claim_id": request.claim_id}),
             "metadata": workers.submit(timed, metadata),
         }
         try:

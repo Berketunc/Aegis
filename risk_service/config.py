@@ -35,8 +35,11 @@ def read_thresholds(path):
     if not path:
         return None
     config = json.loads(Path(path).read_text())
+    version = config.get("thresholds_version", config.get("version"))
+    if "version" in config and "thresholds_version" in config and config["version"] != config["thresholds_version"]:
+        raise ValueError("Conflicting threshold versions")
     amber, red = float(config["tau_amber"]), float(config["tau_red"])
-    if (not config.get("thresholds_version") or not all(map(math.isfinite, [amber, red]))
+    if (not isinstance(version, str) or not version.strip() or not all(map(math.isfinite, [amber, red]))
             or not 0 <= amber <= red <= 1):
         raise ValueError("Invalid versioned detector thresholds")
-    return {"thresholds_version": config["thresholds_version"], "tau_amber": amber, "tau_red": red}
+    return {"thresholds_version": version, "tau_amber": amber, "tau_red": red}

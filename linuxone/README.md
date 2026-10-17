@@ -7,9 +7,17 @@ The risk image also built successfully after installing the native OpenSSL
 build dependencies (UBI 10 packages, OpenSSL 3.5.8). After startup, the user
 verified the container was up and Uvicorn reported startup complete. The saved
 [`health response`](../eval/risk_service_health.json) confirms encrypted storage
-initialization and `upload_ready: true`; an actual upload remains to be verified
-on the VM. Full scoring remains unready while A/C artifacts are absent.
+initialization and `upload_ready: true`. The subsequent
+[`upload smoke`](../eval/upload_smoke.json) passed SHA-256, encrypted-original
+round-trip and crop checks in 139.339 ms for one synthetic image. This is not
+a percentile measurement. Full scoring remains unready while A's trained
+model and calibrated thresholds are absent.
 No stock classifier is used as a claim-photo detector.
+
+C's `PERSON_C` branch has now been merged and integrated locally. Deploy the
+gateway alongside the real risk service with `--with-gateway`. See
+[`INTEGRATION.md`](INTEGRATION.md) for the concrete run steps and remaining
+model handoff. The new gateway integration still needs the VM smoke run.
 
 Verified results from the user-supplied VM output are saved in
 [`eval/stock_resnet18.json`](../eval/stock_resnet18.json) and explained in
@@ -87,10 +95,10 @@ upload does not establish the preprocessing p95 or detector accuracy.
 |---|---|
 | A | Trained PyTorch model definition + strict state dictionary, or a compatible TorchScript artifact, alongside ONNX. Explicit RGB normalization, fake-class ordering, temperature and crop agreement. Put the manifest and artifact in `.runtime/models`. |
 | A + B | Validation/test crops and labels, LinuxONE parity scores and final calibration. Supply versioned `.runtime/models/thresholds.json`; share the same config with C's gateway. |
-| C | Privacy adapter at `.runtime/integrations/privacy_adapter.py`, callable `process(description=..., context=...)`, returning `redacted_record` and a real `egress_payload_id`. C owns redaction, pseudonymisation and the allowlisted egress log. |
-| C | Gateway forwards multipart `file` to `/evidence` and uses `X-Risk-Secret` for internal calls. It sends claim IDs, evidence IDs and privacy context, and owns idempotency, decision bands, journal and timeout behaviour. |
-| C + D | Agree polling/display for optional Granite results. The risk API reports async eligibility but does not enqueue Granite jobs yet; the gateway can enqueue eligible AMBER/RED claims after its decision. |
-| C / Lab 2 | A compatible local big-endian Granite GGUF at `.runtime/models/granite.gguf` and reviewed `.runtime/prompts/pii.txt` / `note.txt`. |
+| C, integrated | Shared `privacy/` rules and built-in `risk_service.c_privacy_adapter:process` now prepare and durably log allowlisted payloads. The launcher supplies a stable shared `HMAC_KEY`. |
+| C, integrated | `--with-gateway` starts C's real gateway, with authenticated uploads/scoring, full SHA evidence IDs, a 300 ms score deadline, idempotency and decision journal. |
+| C + D | Optional Granite jobs are now submitted/polled by the gateway after committing an AMBER/RED decision. Display results through `GET /claims/{id}`. |
+| C / Lab 2 | A compatible local big-endian Granite GGUF at `.runtime/models/granite.gguf`. Reviewed prompts are supplied in `llm/prompts/pii_second_pass.txt` and `adjuster_note.txt`, copied into runtime on first use. |
 | D | Use the measured JSON, real runtime screenshots, fallback disclosure and run instructions in the README/video. |
 
 Preprocessing is versioned as `rgb-short640-bicubic-centre-grid25-75-v1`:
@@ -119,7 +127,8 @@ header as the risk service, while its environment key is `RISK_SHARED_SECRET`.
   plan's PyTorch fallback and does not claim zDLC compilation.
 * Model accuracy, parity, thresholds, final latency and concurrency results
   remain unmeasured until the real detector and gateway are integrated.
-* Heatmaps and automatic risk-to-Granite queue integration are not implemented.
+* Heatmaps are not implemented. Gateway-to-Granite queue integration is tested;
+  real Granite inference still needs its compatible local GGUF and VM validation.
 * The real CICS production design is outside this platform implementation.
 
 ## Sources

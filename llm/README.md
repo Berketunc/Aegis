@@ -8,7 +8,9 @@ jobs are refused. A passing unit test is not evidence that Granite has run on Li
 Prerequisites:
 
 - B supplies the Lab 2 GGUF already on the VM, its exact filename, and its licence.
-- C supplies/reviews `pii.txt` and `note.txt` using `prompts/*.example.txt` as starting points.
+- C's prompts are `prompts/pii_second_pass.txt` and `prompts/adjuster_note.txt`, adapted
+  to the runtime's strict JSON schemas. C should review them against the supplied
+  actual Granite model, especially injection cases. `*.example.txt` files remain examples.
 - The caller and service share `RISK_SHARED_SECRET` (at least 32 random characters).
 - C calls these endpoints after the decision, only for AMBER/RED; C's rules handle the
   immediate privacy pass. D polls via C's gateway; this service has no public port.
@@ -47,6 +49,11 @@ and returns readiness, configuration errors, queue depth and in-flight count.
 ```json
 {"claim_id":"CLM-000123","band":"AMBER","description":"Contact Alex Doe about the bumper."}
 ```
+
+The gateway now uses this typed queue contract and authenticates both submission and
+polling. It never renders a prompt using claim text. It checks job identity, applies
+the second-pass pseudonyms, and only then submits the note. A failed or malformed
+PII check stops this sequence, leaving the note unavailable and the committed band unchanged.
 
 The completed result contains `findings`, each with `kind` and an exact `text` substring,
 and `review_status: "model_second_pass"`. **C must pseudonymise those findings before

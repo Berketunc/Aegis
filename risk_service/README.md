@@ -44,6 +44,7 @@ Configuration:
 | `AEGIS_MODEL_DEVICE` | Explicit `cpu` (default) or `nnpa`; no silent device fallback |
 | `AEGIS_TORCH_THREADS` | Torch CPU threads; default `1` |
 | `AEGIS_PRIVACY_ADAPTER` | Trusted import path, for example `privacy_adapter:process` |
+| `HMAC_KEY` | Stable secret shared with C's gateway, at least 32 bytes for the built-in adapter |
 | `AEGIS_THRESHOLDS_PATH` | Versioned threshold JSON shared with C's gateway |
 
 If the wrapper mounts A's code in `/models` and C's adapter in `/integrations`,
@@ -95,9 +96,10 @@ The successful response follows plan §14 and additionally includes
 `thresholds_version`, `redacted_record`, per-evidence scores, detailed duplicate
 matches and `async: {eligible, status: "not_configured"}`. `duplicate_of` is
 the matched **other claim ID** or null. Multiple photos use their maximum
-calibrated AI score; metadata flags are combined across photos. There is no
-Granite job queue yet; eligibility is reported honestly without claiming a job
-was queued. C2PA is only an unverified marker-presence check, never signature
+calibrated AI score; metadata flags are combined across photos. The risk service
+reports eligibility without directly submitting a Granite job. When enabled,
+C's gateway queues and polls Granite after committing its final AMBER/RED band.
+C2PA is only an unverified marker-presence check, never signature
 validation. Missing EXIF never independently decides anything.
 
 Privacy rules, metadata extraction and inference run in parallel. After those
@@ -181,7 +183,41 @@ a service restart.
 
 ## C's privacy adapter
 
-Provide a callable such as `privacy_adapter:process`:
+The integrated adapter is now available as
+`AEGIS_PRIVACY_ADAPTER=risk_service.c_privacy_adapter:process`. It imports C's
+shared `privacy.redact` and `privacy.build_egress`, checks its stable `HMAC_KEY`
+and log availability during startup, and writes real append-only rows to
+`AEGIS_DATA_DIR/privacy_egress.sqlite3`. `EG-RISK-...` IDs identify persisted
+allowlisted payload preparation, **not an outbound transmission**. The gateway
+retains its own final decision egress log. Missing HMAC configuration leaves
+privacy unavailable.
+
+The gateway sends an already-pseudonymised description, opaque policy token and
+minimal `{claim_id, damage_category}` privacy context; raw claimant form fields
+stay with C's gateway/vault. The built-in adapter can also accept an optional
+`gazetteer` context from a trusted internal caller, without persisting its values.
+Both services use the same HMAC key and rules.
+
+The gateway sends canonical `X-Risk-Secret`, plus `X-Shared-Secret` solely for
+C's legacy labelled stub compatibility. B authenticates `X-Risk-Secret` only.
+Both threshold-file readers accept `version` and `thresholds_version`; a file
+containing conflicting values is rejected. A gateway/risk version mismatch
+returns AMBER instead of applying different thresholds silently.
+
+Concurrent submissions with one idempotency key are serialised before claim-ID
+allocation and risk scoring (one gateway worker). The first commits; the second
+replays its result. Locks are discarded once holders and waiters finish.
+
+Gateway timing semantics: persisted decisions, journal rows, GET responses and
+replays contain `timings_ms.precommit_total`, which explicitly excludes the
+SQLite commit. A fresh POST response additionally contains measured `commit`
+and `total`, including the commit. A replay reports its current request latency
+separately under `replay_timings_ms.total`; it does not invent the original
+post-commit timing or rewrite the append-only journal. Use a client-side
+benchmark for full HTTP latency.
+
+For a custom adapter instead of the integrated implementation, provide a
+callable such as `privacy_adapter:process`:
 
 ```python
 def process(*, description: str, context: dict) -> dict:
@@ -193,8 +229,8 @@ def process(*, description: str, context: dict) -> dict:
     }
 ```
 
-The names in this example are outputs C must implement; it is not a runnable
-adapter. The service refuses scoring if no adapter is configured, import fails,
+The custom-adapter example is illustrative; the integrated adapter described
+above is implemented. The service refuses scoring if no adapter is configured, import fails,
 or the return value is incomplete. B does not fabricate an egress-log entry.
 
 ## Local tests

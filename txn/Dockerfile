@@ -28,4 +28,4 @@ ENV DB_PATH=/data/clmi.db \
     UI_DIR=/app/ui \
     PYTHONUNBUFFERED=1
 EXPOSE 8080
-CMD ["uvicorn", "txn.gateway.app:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "txn.gateway.app:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "1", "--no-access-log"]

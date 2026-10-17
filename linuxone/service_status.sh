@@ -4,12 +4,13 @@ docker_command=(docker)
 if ! docker info >/dev/null 2>&1; then docker_command=(sudo docker); fi
 found=false
 failed=0
-for name in aegis-risk aegis-granite; do
+for name in aegis-risk aegis-gateway aegis-granite; do
   if "${docker_command[@]}" container inspect "$name" >/dev/null 2>&1; then
     found=true
     echo "$name"
     port=8000
     if [[ "$name" == aegis-granite ]]; then port=8001; fi
+    if [[ "$name" == aegis-gateway ]]; then port=8080; fi
     if ! "${docker_command[@]}" exec -i "$name" python3 - "$port" <<'PY'
 import json
 import sys
@@ -35,7 +36,8 @@ while True:
         time.sleep(1)
 print(body)
 try:
-    ready = json.loads(body).get("status") == "ready"
+    state = json.loads(body)
+    ready = state.get("status") == "ready" or (state.get("status") == "ok" and state.get("txn") == "CLMI")
 except (ValueError, AttributeError):
     ready = False
 raise SystemExit(0 if ready else 1)

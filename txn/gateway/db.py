@@ -10,6 +10,8 @@ import sqlite3
 from datetime import datetime, timezone
 from typing import Any
 
+from privacy import build_egress
+
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS claim_seq (
     n  INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -188,6 +190,17 @@ def save_note(conn: sqlite3.Connection, claim_id: str, status: str, note: str | 
         conn.executemany("INSERT OR IGNORE INTO token_vault VALUES (?,?,?)", vault)
         if redacted is not None:
             conn.execute("UPDATE claims SET redacted_json = ? WHERE claim_id = ?", (_dumps(redacted), claim_id))
+            # Apply newly found identifiers to the current egress view too.
+            # This is a local payload update; no external request is made.
+            current = conn.execute("SELECT payload_json, dropped_json FROM egress WHERE claim_id = ?", (claim_id,)).fetchone()
+            if current is not None:
+                payload = json.loads(current[0])
+                payload["description_redacted"] = redacted.get("incident", {}).get("description", "")
+                payload, dropped = build_egress(payload)
+                dropped = sorted(set(json.loads(current[1])) | set(dropped))
+                conn.execute("UPDATE egress SET payload_json = ?, dropped_json = ?, ts = ? WHERE claim_id = ?",
+                             (_dumps(payload), _dumps(dropped), now(), claim_id))
+                journal(conn, claim_id, "EGRESS_PII_UPDATED", {"fields": sorted(payload), "dropped": dropped})
         conn.execute("INSERT OR REPLACE INTO notes VALUES (?,?,?,?,?)",
                      (claim_id, status, note, _dumps(pii_added), now()))
         journal(conn, claim_id, "PII_SECOND_PASS", {"tokens_added": pii_added})

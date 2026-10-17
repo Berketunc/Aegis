@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import math
 import os
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -20,7 +21,7 @@ class Thresholds:
 @dataclass
 class Settings:
     risk_url: str = field(default_factory=lambda: os.getenv("RISK_URL", "http://localhost:9000"))
-    risk_secret: str = field(default_factory=lambda: os.getenv("RISK_SECRET", "dev-shared-secret"))
+    risk_secret: str = field(default_factory=lambda: os.getenv("RISK_SECRET", os.getenv("AEGIS_RISK_SECRET", "dev-shared-secret")))
     risk_timeout_ms: int = field(default_factory=lambda: int(os.getenv("RISK_TIMEOUT_MS", "300")))
     db_path: str = field(default_factory=lambda: os.getenv("DB_PATH", str(TXN_DIR / "clmi.db")))
     thresholds_path: str = field(default_factory=lambda: os.getenv(
@@ -38,7 +39,12 @@ class Settings:
         """Read on every claim so A can drop in t-2 without a restart; the version goes in the decision record."""
         with open(self.thresholds_path, encoding="utf-8") as f:
             raw = json.load(f)
-        t = Thresholds(str(raw["version"]), float(raw["tau_red"]), float(raw["tau_amber"]))
-        if not 0.0 <= t.tau_amber <= t.tau_red <= 1.0:
+        version = raw.get("thresholds_version", raw.get("version"))
+        if "version" in raw and "thresholds_version" in raw and raw["version"] != raw["thresholds_version"]:
+            raise ValueError("Conflicting threshold versions")
+        if not isinstance(version, str) or not version.strip():
+            raise ValueError("A threshold version is required")
+        t = Thresholds(version, float(raw["tau_red"]), float(raw["tau_amber"]))
+        if not all(map(math.isfinite, [t.tau_amber, t.tau_red])) or not 0.0 <= t.tau_amber <= t.tau_red <= 1.0:
             raise ValueError(f"thresholds out of order: {t}")
         return t

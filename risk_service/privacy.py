@@ -17,6 +17,9 @@ class PrivacyAdapter:
                 self.function = getattr(importlib.import_module(module), name)
                 if not callable(self.function):
                     raise TypeError("Adapter must be callable")
+                check_ready = getattr(self.function, "check_ready", None)
+                if check_ready is not None:
+                    check_ready()
                 self.ready, self.error = True, None
             except Exception:
                 self.error = "privacy_adapter_load_failed"
