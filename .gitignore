@@ -1,0 +1,52 @@
+# Datasets and images: never commit images, only manifests
+CarDD_release/
+data/raw/
+data/real/
+data/fake/
+data/dataset/
+*.jpg
+*.jpeg
+*.png
+*.webp
+!evidence/*.png
+!evidence/*.jpg
+!eval/charts/*.png
+
+# Model weights and compiled artifacts
+*.onnx
+*.pt
+*.pth
+*.safetensors
+*.gguf
+*.so
+*.ckpt
+
+# Keys and secrets
+*.pem
+*.key
+.env
+.env.*
+secrets/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Local state
+*.sqlite
+*.db
+
+# Local working data (manifests are committed, images are not)
+data/raw/
+data/masters/
+logs/
+models/
+demo_assets/

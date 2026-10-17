@@ -1,0 +1,8 @@
+{
+  "set": "flux",
+  "n": 500,
+  "mean_p_damage": 0.8050463827848434,
+  "share_damaged_at_0.5": 0.87,
+  "share_scene_ok_at_0.5": 0.96,
+  "file": "data/tags/damage_flux.jsonl"
+}

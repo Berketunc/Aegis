@@ -1,0 +1,8 @@
+{
+  "set": "commons",
+  "n": 296,
+  "mean_p_damage": 0.47584122618207253,
+  "share_damaged_at_0.5": 0.4189189189189189,
+  "share_scene_ok_at_0.5": 0.5540540540540541,
+  "file": "data/tags/damage_commons.jsonl"
+}

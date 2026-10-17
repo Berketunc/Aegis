@@ -1,0 +1,233 @@
+{"id": "commons_000001", "p_damage": 0.6703, "p_scene_ok": 0.9894, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000002", "p_damage": 0.4523, "p_scene_ok": 0.998, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000003", "p_damage": 0.5801, "p_scene_ok": 0.9965, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000004", "p_damage": 0.343, "p_scene_ok": 0.9989, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000005", "p_damage": 0.5179, "p_scene_ok": 0.9997, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000006", "p_damage": 0.7892, "p_scene_ok": 0.3582, "scene_top": "a photo of a road sign", "scene_hard_reject": false}
+{"id": "commons_000007", "p_damage": 0.424, "p_scene_ok": 0.0026, "scene_top": "a chart or diagram", "scene_hard_reject": true}
+{"id": "commons_000008", "p_damage": 0.3568, "p_scene_ok": 0.0591, "scene_top": "a photo of an ambulance and paramedics", "scene_hard_reject": true}
+{"id": "commons_000009", "p_damage": 0.8124, "p_scene_ok": 0.9857, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000010", "p_damage": 0.3875, "p_scene_ok": 0.9994, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000011", "p_damage": 0.8737, "p_scene_ok": 0.9476, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000012", "p_damage": 0.3116, "p_scene_ok": 0.8543, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000013", "p_damage": 0.3508, "p_scene_ok": 0.9937, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000014", "p_damage": 0.581, "p_scene_ok": 0.9989, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000015", "p_damage": 0.2883, "p_scene_ok": 0.2715, "scene_top": "a photo of a group of people", "scene_hard_reject": true}
+{"id": "commons_000016", "p_damage": 0.2165, "p_scene_ok": 0.9929, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000017", "p_damage": 0.3745, "p_scene_ok": 0.9389, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000018", "p_damage": 0.5374, "p_scene_ok": 0.9763, "scene_top": "a photo of a wrecked passenger car", "scene_hard_reject": false}
+{"id": "commons_000019", "p_damage": 0.2775, "p_scene_ok": 0.938, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000020", "p_damage": 0.8174, "p_scene_ok": 0.9969, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000021", "p_damage": 0.7557, "p_scene_ok": 0.7073, "scene_top": "a photo of a wrecked passenger car", "scene_hard_reject": false}
+{"id": "commons_000022", "p_damage": 0.3086, "p_scene_ok": 0.941, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000023", "p_damage": 0.7268, "p_scene_ok": 0.9287, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000024", "p_damage": 0.5816, "p_scene_ok": 0.9993, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000025", "p_damage": 0.5741, "p_scene_ok": 0.999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000026", "p_damage": 0.1876, "p_scene_ok": 0.9944, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000027", "p_damage": 0.1446, "p_scene_ok": 0.0417, "scene_top": "a photo of injured people being rescued", "scene_hard_reject": true}
+{"id": "commons_000028", "p_damage": 0.5118, "p_scene_ok": 0.5112, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000029", "p_damage": 0.6143, "p_scene_ok": 0.8313, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000030", "p_damage": 0.8889, "p_scene_ok": 0.867, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000031", "p_damage": 0.7767, "p_scene_ok": 0.9751, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000032", "p_damage": 0.8626, "p_scene_ok": 0.9607, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000033", "p_damage": 0.7232, "p_scene_ok": 0.0354, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000034", "p_damage": 0.6877, "p_scene_ok": 0.9795, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000036", "p_damage": 0.434, "p_scene_ok": 0.8848, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000037", "p_damage": 0.7968, "p_scene_ok": 0.0047, "scene_top": "a photo of a highway with traffic", "scene_hard_reject": false}
+{"id": "commons_000038", "p_damage": 0.8441, "p_scene_ok": 0.8536, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000039", "p_damage": 0.6365, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000040", "p_damage": 0.1823, "p_scene_ok": 0.1966, "scene_top": "a photo of a bus or lorry", "scene_hard_reject": false}
+{"id": "commons_000041", "p_damage": 0.5703, "p_scene_ok": 0.818, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000042", "p_damage": 0.8924, "p_scene_ok": 0.1495, "scene_top": "a photo of a highway with traffic", "scene_hard_reject": false}
+{"id": "commons_000043", "p_damage": 0.9173, "p_scene_ok": 0.0672, "scene_top": "a photo of a highway with traffic", "scene_hard_reject": false}
+{"id": "commons_000044", "p_damage": 0.704, "p_scene_ok": 0.1288, "scene_top": "a photo of a bus or lorry", "scene_hard_reject": false}
+{"id": "commons_000046", "p_damage": 0.399, "p_scene_ok": 0.4753, "scene_top": "a photo of an ambulance and paramedics", "scene_hard_reject": true}
+{"id": "commons_000047", "p_damage": 0.8516, "p_scene_ok": 0.873, "scene_top": "a photo of a wrecked passenger car", "scene_hard_reject": false}
+{"id": "commons_000048", "p_damage": 0.2008, "p_scene_ok": 0.9901, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000050", "p_damage": 0.2416, "p_scene_ok": 0.9887, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000052", "p_damage": 0.1254, "p_scene_ok": 0.0165, "scene_top": "a photo of an ambulance and paramedics", "scene_hard_reject": true}
+{"id": "commons_000053", "p_damage": 0.2606, "p_scene_ok": 0.4339, "scene_top": "a photo of a bus or lorry", "scene_hard_reject": false}
+{"id": "commons_000054", "p_damage": 0.4637, "p_scene_ok": 0.0802, "scene_top": "a photo of a highway with traffic", "scene_hard_reject": false}
+{"id": "commons_000056", "p_damage": 0.4919, "p_scene_ok": 0.4593, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000057", "p_damage": 0.9471, "p_scene_ok": 0.0644, "scene_top": "a photo of a landscape", "scene_hard_reject": false}
+{"id": "commons_000058", "p_damage": 0.455, "p_scene_ok": 0.0104, "scene_top": "a photo of a road sign", "scene_hard_reject": false}
+{"id": "commons_000059", "p_damage": 0.4287, "p_scene_ok": 0.998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000060", "p_damage": 0.4194, "p_scene_ok": 0.9997, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000061", "p_damage": 0.6699, "p_scene_ok": 0.4869, "scene_top": "a photo of a bus or lorry", "scene_hard_reject": false}
+{"id": "commons_000062", "p_damage": 0.6714, "p_scene_ok": 0.4084, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000063", "p_damage": 0.3339, "p_scene_ok": 0.7753, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000064", "p_damage": 0.414, "p_scene_ok": 0.136, "scene_top": "a photo of a road sign", "scene_hard_reject": false}
+{"id": "commons_000066", "p_damage": 0.2313, "p_scene_ok": 0.001, "scene_top": "a photo of a fire engine", "scene_hard_reject": false}
+{"id": "commons_000067", "p_damage": 0.7267, "p_scene_ok": 0.1472, "scene_top": "a chart or diagram", "scene_hard_reject": true}
+{"id": "commons_000068", "p_damage": 0.6167, "p_scene_ok": 0.047, "scene_top": "a photo of a highway with traffic", "scene_hard_reject": false}
+{"id": "commons_000069", "p_damage": 0.1933, "p_scene_ok": 0.2699, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000070", "p_damage": 0.8275, "p_scene_ok": 0.001, "scene_top": "a chart or diagram", "scene_hard_reject": true}
+{"id": "commons_000071", "p_damage": 0.7226, "p_scene_ok": 0.9843, "scene_top": "a photo of a wrecked passenger car", "scene_hard_reject": false}
+{"id": "commons_000072", "p_damage": 0.4706, "p_scene_ok": 0.9969, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000074", "p_damage": 0.2746, "p_scene_ok": 0.8781, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000075", "p_damage": 0.2543, "p_scene_ok": 0.5394, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000076", "p_damage": 0.419, "p_scene_ok": 0.9998, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000077", "p_damage": 0.3727, "p_scene_ok": 0.3182, "scene_top": "a photo of a bus or lorry", "scene_hard_reject": false}
+{"id": "commons_000078", "p_damage": 0.261, "p_scene_ok": 0.0002, "scene_top": "a photo of injured people being rescued", "scene_hard_reject": true}
+{"id": "commons_000079", "p_damage": 0.4728, "p_scene_ok": 0.1457, "scene_top": "a photo of a highway with traffic", "scene_hard_reject": false}
+{"id": "commons_000081", "p_damage": 0.1257, "p_scene_ok": 0.1061, "scene_top": "a photo of injured people being rescued", "scene_hard_reject": true}
+{"id": "commons_000082", "p_damage": 0.2493, "p_scene_ok": 0.0533, "scene_top": "a photo of injured people being rescued", "scene_hard_reject": true}
+{"id": "commons_000083", "p_damage": 0.6562, "p_scene_ok": 0.1015, "scene_top": "a photo of a road sign", "scene_hard_reject": false}
+{"id": "commons_000084", "p_damage": 0.8259, "p_scene_ok": 0.1045, "scene_top": "a photo of a formula one car", "scene_hard_reject": false}
+{"id": "commons_000085", "p_damage": 0.6181, "p_scene_ok": 0.9897, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000086", "p_damage": 0.3586, "p_scene_ok": 0.9363, "scene_top": "a photo of a wrecked passenger car", "scene_hard_reject": false}
+{"id": "commons_000088", "p_damage": 0.229, "p_scene_ok": 0.0207, "scene_top": "a photo of police officers standing at a scene", "scene_hard_reject": true}
+{"id": "commons_000089", "p_damage": 0.268, "p_scene_ok": 0.9841, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000090", "p_damage": 0.2811, "p_scene_ok": 0.9633, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000091", "p_damage": 0.3333, "p_scene_ok": 0.9903, "scene_top": "a photo of a wrecked passenger car", "scene_hard_reject": false}
+{"id": "commons_000092", "p_damage": 0.3216, "p_scene_ok": 0.9891, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000094", "p_damage": 0.5745, "p_scene_ok": 0.9961, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000095", "p_damage": 0.0783, "p_scene_ok": 0.9825, "scene_top": "a photo of a wrecked passenger car", "scene_hard_reject": false}
+{"id": "commons_000096", "p_damage": 0.366, "p_scene_ok": 0.9925, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000097", "p_damage": 0.2329, "p_scene_ok": 0.9719, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000098", "p_damage": 0.2346, "p_scene_ok": 0.9793, "scene_top": "a photo of a wrecked passenger car", "scene_hard_reject": false}
+{"id": "commons_000099", "p_damage": 0.3617, "p_scene_ok": 0.9931, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000100", "p_damage": 0.1826, "p_scene_ok": 0.9475, "scene_top": "a photo of a wrecked passenger car", "scene_hard_reject": false}
+{"id": "commons_000101", "p_damage": 0.2786, "p_scene_ok": 0.8772, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000102", "p_damage": 0.3376, "p_scene_ok": 0.9592, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000103", "p_damage": 0.3191, "p_scene_ok": 0.9868, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000104", "p_damage": 0.2928, "p_scene_ok": 0.9949, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000105", "p_damage": 0.3057, "p_scene_ok": 0.9856, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000106", "p_damage": 0.3961, "p_scene_ok": 0.2592, "scene_top": "a photo of police officers standing at a scene", "scene_hard_reject": true}
+{"id": "commons_000107", "p_damage": 0.5846, "p_scene_ok": 0.233, "scene_top": "a photo of a highway with traffic", "scene_hard_reject": false}
+{"id": "commons_000108", "p_damage": 0.6464, "p_scene_ok": 0.5126, "scene_top": "a stereoscopic photo card with two images side by side", "scene_hard_reject": true}
+{"id": "commons_000109", "p_damage": 0.368, "p_scene_ok": 0.9459, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000111", "p_damage": 0.6491, "p_scene_ok": 0.6262, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000112", "p_damage": 0.0739, "p_scene_ok": 0.997, "scene_top": "a photo of a wrecked passenger car", "scene_hard_reject": false}
+{"id": "commons_000114", "p_damage": 0.2832, "p_scene_ok": 0.8688, "scene_top": "a photo of a wrecked passenger car", "scene_hard_reject": false}
+{"id": "commons_000115", "p_damage": 0.1159, "p_scene_ok": 0.5278, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000116", "p_damage": 0.2992, "p_scene_ok": 0.0373, "scene_top": "a photo of police officers standing at a scene", "scene_hard_reject": true}
+{"id": "commons_000119", "p_damage": 0.4913, "p_scene_ok": 0.8354, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000120", "p_damage": 0.7119, "p_scene_ok": 0.988, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000121", "p_damage": 0.2651, "p_scene_ok": 0.2062, "scene_top": "a photo of a bus or lorry", "scene_hard_reject": false}
+{"id": "commons_000122", "p_damage": 0.273, "p_scene_ok": 0.9937, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000123", "p_damage": 0.2174, "p_scene_ok": 0.0004, "scene_top": "a photo of injured people being rescued", "scene_hard_reject": true}
+{"id": "commons_000125", "p_damage": 0.325, "p_scene_ok": 0.9987, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000126", "p_damage": 0.2826, "p_scene_ok": 0.001, "scene_top": "a photo of injured people being rescued", "scene_hard_reject": true}
+{"id": "commons_000127", "p_damage": 0.1593, "p_scene_ok": 0.7474, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000128", "p_damage": 0.2767, "p_scene_ok": 0.9997, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000129", "p_damage": 0.4272, "p_scene_ok": 0.9975, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000130", "p_damage": 0.0902, "p_scene_ok": 0.6168, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000131", "p_damage": 0.1068, "p_scene_ok": 0.9674, "scene_top": "a photo of a wrecked passenger car", "scene_hard_reject": false}
+{"id": "commons_000132", "p_damage": 0.5821, "p_scene_ok": 0.9995, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000133", "p_damage": 0.588, "p_scene_ok": 0.0291, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000134", "p_damage": 0.2068, "p_scene_ok": 0.001, "scene_top": "a photo of a fire engine", "scene_hard_reject": false}
+{"id": "commons_000135", "p_damage": 0.0934, "p_scene_ok": 0.004, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000136", "p_damage": 0.1936, "p_scene_ok": 0.0834, "scene_top": "a photo of a bus or lorry", "scene_hard_reject": false}
+{"id": "commons_000137", "p_damage": 0.3698, "p_scene_ok": 0.0489, "scene_top": "a photo of an aircraft", "scene_hard_reject": false}
+{"id": "commons_000138", "p_damage": 0.2134, "p_scene_ok": 0.453, "scene_top": "a photo of a bus or lorry", "scene_hard_reject": false}
+{"id": "commons_000139", "p_damage": 0.3693, "p_scene_ok": 0.0012, "scene_top": "a photo of a fire engine", "scene_hard_reject": false}
+{"id": "commons_000140", "p_damage": 0.2676, "p_scene_ok": 0.1504, "scene_top": "a photo of a highway with traffic", "scene_hard_reject": false}
+{"id": "commons_000141", "p_damage": 0.5191, "p_scene_ok": 0.0323, "scene_top": "a photo of a group of people", "scene_hard_reject": true}
+{"id": "commons_000142", "p_damage": 0.832, "p_scene_ok": 0.9867, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000143", "p_damage": 0.3735, "p_scene_ok": 0.0026, "scene_top": "a photo of a fire engine", "scene_hard_reject": false}
+{"id": "commons_000144", "p_damage": 0.6114, "p_scene_ok": 0.5008, "scene_top": "a photo of a race car on a race track", "scene_hard_reject": false}
+{"id": "commons_000145", "p_damage": 0.0584, "p_scene_ok": 0.0023, "scene_top": "a photo of a fire engine", "scene_hard_reject": false}
+{"id": "commons_000147", "p_damage": 0.2944, "p_scene_ok": 0.0223, "scene_top": "a photo of a fire engine", "scene_hard_reject": false}
+{"id": "commons_000148", "p_damage": 0.7889, "p_scene_ok": 0.9834, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000149", "p_damage": 0.6346, "p_scene_ok": 0.2807, "scene_top": "a photo of a race car on a race track", "scene_hard_reject": false}
+{"id": "commons_000150", "p_damage": 0.4577, "p_scene_ok": 0.9994, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000151", "p_damage": 0.1492, "p_scene_ok": 0.9852, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000152", "p_damage": 0.061, "p_scene_ok": 0.0003, "scene_top": "a photo of a fire engine", "scene_hard_reject": false}
+{"id": "commons_000153", "p_damage": 0.8356, "p_scene_ok": 0.9996, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000154", "p_damage": 0.34, "p_scene_ok": 0.5029, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000155", "p_damage": 0.3235, "p_scene_ok": 0.9995, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000156", "p_damage": 0.1191, "p_scene_ok": 0.0018, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000157", "p_damage": 0.3293, "p_scene_ok": 0.007, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000158", "p_damage": 0.2267, "p_scene_ok": 0.0326, "scene_top": "a photo of a stock car covered in sponsor stickers", "scene_hard_reject": false}
+{"id": "commons_000159", "p_damage": 0.213, "p_scene_ok": 0.0017, "scene_top": "a photo of a fire engine", "scene_hard_reject": false}
+{"id": "commons_000160", "p_damage": 0.2869, "p_scene_ok": 0.003, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000161", "p_damage": 0.1971, "p_scene_ok": 0.0006, "scene_top": "a photo of a fire engine", "scene_hard_reject": false}
+{"id": "commons_000162", "p_damage": 0.2515, "p_scene_ok": 0.0004, "scene_top": "a photo of a fire engine", "scene_hard_reject": false}
+{"id": "commons_000163", "p_damage": 0.1444, "p_scene_ok": 0.0002, "scene_top": "a photo of a fire engine", "scene_hard_reject": false}
+{"id": "commons_000164", "p_damage": 0.1109, "p_scene_ok": 0.0016, "scene_top": "a photo of a fire engine", "scene_hard_reject": false}
+{"id": "commons_000165", "p_damage": 0.2039, "p_scene_ok": 0.0089, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000166", "p_damage": 0.0719, "p_scene_ok": 0.0067, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000167", "p_damage": 0.7943, "p_scene_ok": 0.9417, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000168", "p_damage": 0.1722, "p_scene_ok": 0.001, "scene_top": "a photo of a fire engine", "scene_hard_reject": false}
+{"id": "commons_000169", "p_damage": 0.6315, "p_scene_ok": 0.9996, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000170", "p_damage": 0.8935, "p_scene_ok": 0.0206, "scene_top": "a photo of a race car on a race track", "scene_hard_reject": false}
+{"id": "commons_000171", "p_damage": 0.7961, "p_scene_ok": 0.9831, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000172", "p_damage": 0.1957, "p_scene_ok": 0.343, "scene_top": "a photo of a race car on a race track", "scene_hard_reject": false}
+{"id": "commons_000173", "p_damage": 0.6366, "p_scene_ok": 0.0177, "scene_top": "a photo of a formula one car", "scene_hard_reject": false}
+{"id": "commons_000174", "p_damage": 0.0806, "p_scene_ok": 0.0003, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000175", "p_damage": 0.7518, "p_scene_ok": 0.9803, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000176", "p_damage": 0.2239, "p_scene_ok": 0.6211, "scene_top": "a photo of a wrecked passenger car", "scene_hard_reject": false}
+{"id": "commons_000177", "p_damage": 0.2138, "p_scene_ok": 0.0011, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000178", "p_damage": 0.9008, "p_scene_ok": 0.055, "scene_top": "a photo of a race car on a race track", "scene_hard_reject": false}
+{"id": "commons_000179", "p_damage": 0.2649, "p_scene_ok": 0.999, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000180", "p_damage": 0.5639, "p_scene_ok": 0.0003, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000181", "p_damage": 0.4744, "p_scene_ok": 0.0009, "scene_top": "a photo of a race car on a race track", "scene_hard_reject": false}
+{"id": "commons_000182", "p_damage": 0.3045, "p_scene_ok": 0.0032, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000183", "p_damage": 0.8743, "p_scene_ok": 0.0002, "scene_top": "a photo of a race car on a race track", "scene_hard_reject": false}
+{"id": "commons_000184", "p_damage": 0.9328, "p_scene_ok": 0.0239, "scene_top": "a photo of a formula one car", "scene_hard_reject": false}
+{"id": "commons_000186", "p_damage": 0.8095, "p_scene_ok": 0.8145, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000187", "p_damage": 0.8984, "p_scene_ok": 0.5954, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000188", "p_damage": 0.1761, "p_scene_ok": 0.0018, "scene_top": "a photo of a fire engine", "scene_hard_reject": false}
+{"id": "commons_000189", "p_damage": 0.1637, "p_scene_ok": 0.0022, "scene_top": "a photo of a fire engine", "scene_hard_reject": false}
+{"id": "commons_000190", "p_damage": 0.8147, "p_scene_ok": 0.9853, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000191", "p_damage": 0.9443, "p_scene_ok": 0.3158, "scene_top": "a photo of a formula one car", "scene_hard_reject": false}
+{"id": "commons_000192", "p_damage": 0.1748, "p_scene_ok": 0.0055, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000193", "p_damage": 0.6154, "p_scene_ok": 0.9863, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000194", "p_damage": 0.849, "p_scene_ok": 0.0005, "scene_top": "a photo of a race car on a race track", "scene_hard_reject": false}
+{"id": "commons_000195", "p_damage": 0.868, "p_scene_ok": 0.0058, "scene_top": "a photo of a race car on a race track", "scene_hard_reject": false}
+{"id": "commons_000196", "p_damage": 0.8198, "p_scene_ok": 0.0, "scene_top": "a photo of bumper cars at a fairground", "scene_hard_reject": false}
+{"id": "commons_000197", "p_damage": 0.9043, "p_scene_ok": 0.0032, "scene_top": "a photo of a race car on a race track", "scene_hard_reject": false}
+{"id": "commons_000198", "p_damage": 0.8647, "p_scene_ok": 0.9999, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000199", "p_damage": 0.173, "p_scene_ok": 0.0022, "scene_top": "a photo of a fire engine", "scene_hard_reject": false}
+{"id": "commons_000200", "p_damage": 0.5087, "p_scene_ok": 0.9961, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000201", "p_damage": 0.2066, "p_scene_ok": 0.9916, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000202", "p_damage": 0.2551, "p_scene_ok": 0.9941, "scene_top": "a photo of a wrecked passenger car", "scene_hard_reject": false}
+{"id": "commons_000203", "p_damage": 0.5446, "p_scene_ok": 0.0513, "scene_top": "an old black and white photograph", "scene_hard_reject": true}
+{"id": "commons_000204", "p_damage": 0.5754, "p_scene_ok": 0.8347, "scene_top": "a photo of a wrecked passenger car", "scene_hard_reject": false}
+{"id": "commons_000205", "p_damage": 0.595, "p_scene_ok": 0.9962, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000206", "p_damage": 0.2833, "p_scene_ok": 0.9011, "scene_top": "a photo of a wrecked passenger car", "scene_hard_reject": false}
+{"id": "commons_000207", "p_damage": 0.7721, "p_scene_ok": 0.5192, "scene_top": "a photo of a race car on a race track", "scene_hard_reject": false}
+{"id": "commons_000208", "p_damage": 0.6273, "p_scene_ok": 0.9741, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000209", "p_damage": 0.6695, "p_scene_ok": 0.0031, "scene_top": "a photo of a stock car covered in sponsor stickers", "scene_hard_reject": false}
+{"id": "commons_000210", "p_damage": 0.9186, "p_scene_ok": 0.0171, "scene_top": "a photo of a formula one car", "scene_hard_reject": false}
+{"id": "commons_000211", "p_damage": 0.907, "p_scene_ok": 0.0682, "scene_top": "a photo of a race car on a race track", "scene_hard_reject": false}
+{"id": "commons_000212", "p_damage": 0.6277, "p_scene_ok": 0.8796, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000213", "p_damage": 0.2321, "p_scene_ok": 0.1251, "scene_top": "a photo of an ambulance and paramedics", "scene_hard_reject": true}
+{"id": "commons_000215", "p_damage": 0.3614, "p_scene_ok": 0.9982, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000216", "p_damage": 0.2636, "p_scene_ok": 0.9618, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000217", "p_damage": 0.7411, "p_scene_ok": 0.6175, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000218", "p_damage": 0.371, "p_scene_ok": 0.9908, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000219", "p_damage": 0.3762, "p_scene_ok": 0.9974, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000220", "p_damage": 0.6771, "p_scene_ok": 0.9952, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000222", "p_damage": 0.3059, "p_scene_ok": 0.2651, "scene_top": "a photo of an ambulance and paramedics", "scene_hard_reject": true}
+{"id": "commons_000223", "p_damage": 0.3889, "p_scene_ok": 0.9871, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000224", "p_damage": 0.8775, "p_scene_ok": 0.0004, "scene_top": "a photo of a formula one car", "scene_hard_reject": false}
+{"id": "commons_000225", "p_damage": 0.7302, "p_scene_ok": 0.9956, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000227", "p_damage": 0.4444, "p_scene_ok": 0.8763, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000229", "p_damage": 0.5704, "p_scene_ok": 0.4996, "scene_top": "a photo of a race car on a race track", "scene_hard_reject": false}
+{"id": "commons_000231", "p_damage": 0.366, "p_scene_ok": 0.0177, "scene_top": "a photo of a formula one car", "scene_hard_reject": false}
+{"id": "commons_000232", "p_damage": 0.8661, "p_scene_ok": 0.0001, "scene_top": "a photo of a formula one car", "scene_hard_reject": false}
+{"id": "commons_000233", "p_damage": 0.3883, "p_scene_ok": 0.9995, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000234", "p_damage": 0.3702, "p_scene_ok": 0.3801, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000235", "p_damage": 0.4874, "p_scene_ok": 0.0692, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000236", "p_damage": 0.8878, "p_scene_ok": 0.2891, "scene_top": "a photo of a race car on a race track", "scene_hard_reject": false}
+{"id": "commons_000237", "p_damage": 0.6028, "p_scene_ok": 0.9994, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000238", "p_damage": 0.4442, "p_scene_ok": 0.998, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
+{"id": "commons_000239", "p_damage": 0.1881, "p_scene_ok": 0.9939, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000240", "p_damage": 0.8801, "p_scene_ok": 0.0389, "scene_top": "a photo of a formula one car", "scene_hard_reject": false}
+{"id": "commons_000241", "p_damage": 0.7131, "p_scene_ok": 0.006, "scene_top": "a photo of a formula one car", "scene_hard_reject": false}
+{"id": "commons_000242", "p_damage": 0.4161, "p_scene_ok": 0.0002, "scene_top": "a photo of police officers standing at a scene", "scene_hard_reject": true}
+{"id": "commons_000244", "p_damage": 0.4143, "p_scene_ok": 0.2742, "scene_top": "a photo of a crane or tow truck", "scene_hard_reject": false}
+{"id": "commons_000245", "p_damage": 0.4685, "p_scene_ok": 0.0064, "scene_top": "a photo of a formula one car", "scene_hard_reject": false}
+{"id": "commons_000246", "p_damage": 0.2462, "p_scene_ok": 0.123, "scene_top": "a photo of a formula one car", "scene_hard_reject": false}
+{"id": "commons_000247", "p_damage": 0.5964, "p_scene_ok": 0.4485, "scene_top": "a photo of a wrecked passenger car", "scene_hard_reject": false}
+{"id": "commons_000248", "p_damage": 0.6644, "p_scene_ok": 0.2519, "scene_top": "a photo of a race car on a race track", "scene_hard_reject": false}
+{"id": "commons_000249", "p_damage": 0.3595, "p_scene_ok": 0.0634, "scene_top": "a photo of a formula one car", "scene_hard_reject": false}
+{"id": "commons_000250", "p_damage": 0.519, "p_scene_ok": 0.9998, "scene_top": "a photo of a damaged car", "scene_hard_reject": false}
+{"id": "commons_000251", "p_damage": 0.5572, "p_scene_ok": 0.9994, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000252", "p_damage": 0.8972, "p_scene_ok": 0.9947, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000253", "p_damage": 0.6951, "p_scene_ok": 0.9865, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000254", "p_damage": 0.9578, "p_scene_ok": 0.9843, "scene_top": "a photo of a wrecked passenger car", "scene_hard_reject": false}
+{"id": "commons_000255", "p_damage": 0.6742, "p_scene_ok": 0.9885, "scene_top": "a photo of a crashed car parked on a street", "scene_hard_reject": false}
+{"id": "commons_000256", "p_damage": 0.4745, "p_scene_ok": 0.9748, "scene_top": "a photo of a car after a road accident", "scene_hard_reject": false}
