@@ -63,6 +63,22 @@ def test_encryption_reused_evidence_and_non_pickle_crops(tmp_path):
         EvidenceStore(tmp_path, index, b"y" * 32).put(raw)
 
 
+def test_reupload_refreshes_evidence_stored_under_an_older_preprocessing_version(tmp_path):
+    index = EvidenceIndex(tmp_path)
+    store = EvidenceStore(tmp_path, index, b"x" * 32)
+    raw = image_bytes()
+    first = store.put(raw)
+    with index.connect() as db:  # simulate a record left by the previous recipe
+        db.execute("UPDATE evidence SET preprocessing_version='rgb-short640-bicubic-centre-grid25-75-v1', metadata='{}'")
+    assert index.get(first["evidence_id"])["preprocessing_version"] != PREPROCESS_VERSION
+    again = store.put(raw)
+    record = index.get(again["evidence_id"])
+    assert again["evidence_id"] == first["evidence_id"]
+    assert record["preprocessing_version"] == PREPROCESS_VERSION
+    assert json.loads(record["metadata"])["native_short_side"] == 400
+    assert store.load_crops(record).shape == (3, 3, 224, 224)
+
+
 def add_hash(index, evidence_id, perceptual):
     prepared = PreparedImage(np.zeros((3, 3, 224, 224), dtype=np.uint8), perceptual, {}, [])
     index.add(evidence_id, evidence_id, prepared, PREPROCESS_VERSION, PHASH_VERSION)

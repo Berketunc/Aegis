@@ -46,8 +46,15 @@ class EvidenceIndex:
             db.close()
 
     def add(self, evidence_id, sha256, prepared, preprocessing_version, phash_version):
+        # Upsert: the store rewrites crops.npy on every upload, so a photo first seen
+        # under an older preprocessing version is refreshed here instead of being
+        # refused at scoring time. Claim associations are untouched.
         with self.connect() as db:
-            db.execute("INSERT OR IGNORE INTO evidence VALUES (?, ?, ?, ?, ?, ?, ?)", (
+            db.execute("""INSERT INTO evidence VALUES (?, ?, ?, ?, ?, ?, ?)
+                          ON CONFLICT(evidence_id) DO UPDATE SET
+                            phash=excluded.phash, metadata=excluded.metadata,
+                            preprocessing_version=excluded.preprocessing_version,
+                            phash_version=excluded.phash_version, crop_boxes=excluded.crop_boxes""", (
                 evidence_id, sha256, prepared.phash, json.dumps(prepared.metadata),
                 preprocessing_version, phash_version, json.dumps(prepared.crop_boxes),
             ))
