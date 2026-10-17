@@ -25,6 +25,14 @@ host. Mount the data directory persistently and keep a protected backup of the
 encryption key alongside the evidence backup. Losing the key loses access to
 encrypted originals. Do not commit runtime secrets, photos or model weights.
 
+On this s390x image, pip builds `cryptography` from source. The Dockerfile
+installs a C compiler, OpenSSL/libffi development headers and pkg-config inside
+the image before pip runs. It detects Debian/Ubuntu and RPM package managers;
+the container's distribution can differ from the VM host. Rust was successfully
+bootstrapped by the Python build backend in the observed VM build. The first
+source compilation can take several minutes. Installing headers on the VM host
+alone does not fix a missing-header error inside a Docker build.
+
 Configuration:
 
 | Variable | Meaning |
