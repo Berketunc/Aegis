@@ -22,6 +22,8 @@ passed on LinuxONE: native COBOL examples, real upload, replay, journal and
 pseudonymised views. Its one fictional claim returned AMBER because thresholds
 were absent, taking 10.446 ms end to end. This is degraded-path evidence;
 successful trained-detector scoring still needs A's files.
+The subsequent [`native gateway/policy suite`](../eval/native_gateway_tests.json)
+passed all 67 tests, including the 23 COBOL cases skipped on the Mac.
 
 Verified results from the user-supplied VM output are saved in
 [`eval/stock_resnet18.json`](../eval/stock_resnet18.json) and explained in

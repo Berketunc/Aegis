@@ -47,14 +47,18 @@ trip of 10.446 ms. No trained detector ran, and no percentile was established.
 
 Local tests exercise both real ASGI applications, durable egress preparation,
 timeouts, threshold mismatches, replay and concurrent duplicate submissions.
-Local COBOL tests still skip because the Mac has no `cobc`; the VM smoke above
-proves its explicit cases, not the full native parity suite.
+Local COBOL tests still skip because the Mac has no `cobc`. The user then ran
+the selected gateway/policy suites inside the native VM image: **67 passed,
+zero skipped, one deprecation warning, 2.57 seconds**. This includes all 23
+COBOL cases previously skipped locally. The saved
+[`native test result`](../eval/native_gateway_tests.json) records that scope;
+these tests use controlled risk fixtures and do not validate A's model.
 
 Integration validation on 17 October: **114 tests passed, 23 COBOL tests
 skipped**. Shell syntax, Python compilation and patch whitespace checks passed.
 
-To run the previously skipped native policy/gateway cases on the VM using the
-actual built image, from the repository directory:
+The native policy/gateway verification used this command, from the VM repository
+directory. It need not be repeated until policy/gateway code changes:
 
 ```bash
 sudo docker run --rm --network none \
