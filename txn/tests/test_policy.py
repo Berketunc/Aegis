@@ -7,7 +7,7 @@ from txn.gateway.policy import PolicyInput, encode, evaluate, evaluate_cobol, ev
 
 R, A = 0.85, 0.60
 CASES = [
-    # (score, dup, swtag, risk_ok) -> (band, reasons)
+    # (score, dup, swtag, risk_ok[, lowres]) -> (band, reasons)
     ((0.10, 0, 0, 1), ("GREEN", ["NONE"])),
     ((0.00, 0, 0, 1), ("GREEN", ["NONE"])),
     ((0.5999, 0, 0, 1), ("GREEN", ["NONE"])),
@@ -26,14 +26,21 @@ CASES = [
     # Fail-safe: risk service down is AMBER regardless of anything else, never GREEN.
     ((0.00, 0, 0, 0), ("AMBER", ["RISK_SERVICE_UNAVAILABLE"])),
     ((0.99, 1, 1, 0), ("AMBER", ["RISK_SERVICE_UNAVAILABLE"])),
+    # Low-resolution photo: the AI score alone can hold the claim for review, never refer it.
+    ((0.90, 0, 0, 1, 1), ("AMBER", ["AI_SCORE_ABOVE_RED", "LOW_RESOLUTION_EVIDENCE"])),
+    ((1.00, 0, 1, 1, 1), ("AMBER", ["AI_SCORE_ABOVE_RED", "LOW_RESOLUTION_EVIDENCE", "EDITING_SOFTWARE_TAG"])),
+    ((0.90, 1, 0, 1, 1), ("RED", ["DUPLICATE_PHOTO", "AI_SCORE_ABOVE_RED", "LOW_RESOLUTION_EVIDENCE"])),
+    ((0.70, 0, 0, 1, 1), ("AMBER", ["AI_SCORE_ABOVE_AMBER"])),
+    ((0.10, 0, 0, 1, 1), ("GREEN", ["NONE"])),
+    ((0.90, 0, 0, 0, 1), ("AMBER", ["RISK_SERVICE_UNAVAILABLE"])),
     # Out-of-range scores are clamped, not trusted.
     ((1.70, 0, 0, 1), ("RED", ["AI_SCORE_ABOVE_RED"])),
     ((-0.2, 0, 0, 1), ("GREEN", ["NONE"])),
 ]
 
 
-def _pin(score, dup, sw, ok):
-    return PolicyInput(score, R, A, bool(dup), bool(sw), bool(ok))
+def _pin(score, dup, sw, ok, lowres=0):
+    return PolicyInput(score, R, A, bool(dup), bool(sw), bool(ok), bool(lowres))
 
 
 @pytest.mark.parametrize("args,expected", CASES)
@@ -43,8 +50,9 @@ def test_python_twin(args, expected):
 
 def test_encode_is_fixed_width():
     line = encode(_pin(0.91, 0, 0, 1))
-    assert line == "09100 08500 06000 0 0 1"
-    assert len(line) == 23
+    assert line == "09100 08500 06000 0 0 1 0"
+    assert len(line) == 25
+    assert encode(_pin(0.91, 0, 0, 1, 1)).endswith(" 1 1")
 
 
 def test_parse_output_rejects_garbage():
@@ -75,4 +83,7 @@ def test_cobol_matches_python(cobol_bin, args, expected):
 
 def test_cobol_rejects_bad_input(cobol_bin):
     proc = subprocess.run([cobol_bin], input="garbage\n", capture_output=True, text=True, timeout=2)
+    assert proc.stdout.strip() == "AMBER POLICY_INPUT_INVALID"
+    # The pre-low-resolution 23-column format is rejected too, never silently defaulted.
+    proc = subprocess.run([cobol_bin], input="09100 08500 06000 0 0 1\n", capture_output=True, text=True, timeout=2)
     assert proc.stdout.strip() == "AMBER POLICY_INPUT_INVALID"

@@ -82,12 +82,13 @@
     POLICY_INPUT_INVALID: ["Fail-safe: the decision rule received malformed input.", "warn"],
     INFO_EXIF_MISSING: ["Information only: no camera metadata (messaging apps strip it). Never changes the band.", "info"],
     INFO_C2PA_MANIFEST_PRESENT: ["Information only: a C2PA content-credentials manifest is present (not yet validated).", "info"],
+    LOW_RESOLUTION_EVIDENCE: ["Low-resolution photo (short side under 480 px): the detector is less reliable on small photos, so the AI score alone holds the claim for review instead of referring it.", "warn"],
   };
   const REASON_SHORT = {
     AI_SCORE_ABOVE_RED: "AI score above red", AI_SCORE_ABOVE_AMBER: "AI score above amber", DUPLICATE_PHOTO: "Re-used photo",
     EDITING_SOFTWARE_TAG: "Editing-software tag", RISK_SERVICE_UNAVAILABLE: "Fail-safe: risk service down",
     POLICY_ENGINE_ERROR: "Fail-safe: rule error", THRESHOLDS_UNAVAILABLE: "Fail-safe: thresholds", POLICY_INPUT_INVALID: "Fail-safe: bad input",
-    INFO_EXIF_MISSING: "No camera metadata (info)", INFO_C2PA_MANIFEST_PRESENT: "C2PA manifest (info)", NONE: "No flags",
+    INFO_EXIF_MISSING: "No camera metadata (info)", INFO_C2PA_MANIFEST_PRESENT: "C2PA manifest (info)", LOW_RESOLUTION_EVIDENCE: "Low-resolution photo", NONE: "No flags",
   };
   const DAMAGE = { dent: "Dent", scratch: "Scratch / scuff", lamp: "Smashed lamp", windscreen: "Cracked windscreen", bumper: "Bumper damage", other: "Other" };
   const STATUS = {
@@ -118,7 +119,8 @@
     if (!s.riskOk) return { band: "AMBER", reasons: ["RISK_SERVICE_UNAVAILABLE"] };
     const r = [];
     if (s.duplicate) r.push(["DUPLICATE_PHOTO", 2]);
-    if (f(s.aiScore) >= f(T.tau_red)) r.push(["AI_SCORE_ABOVE_RED", 2]);
+    if (f(s.aiScore) >= f(T.tau_red) && s.lowRes) { r.push(["AI_SCORE_ABOVE_RED", 1]); r.push(["LOW_RESOLUTION_EVIDENCE", 1]); }
+    else if (f(s.aiScore) >= f(T.tau_red)) r.push(["AI_SCORE_ABOVE_RED", 2]);
     else if (f(s.aiScore) >= f(T.tau_amber)) r.push(["AI_SCORE_ABOVE_AMBER", 1]);
     if (s.softwareTag) r.push(["EDITING_SOFTWARE_TAG", 1]);
     let band = "GREEN", reasons = ["NONE"];

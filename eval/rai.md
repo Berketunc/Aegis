@@ -1,37 +1,42 @@
 # Responsible-AI statement
 
-Aegis screens claim photos and routes flagged claims to human review. It never rejects a claim automatically. This statement separates implemented controls from A's pending model evaluation.
+Aegis screens the photos attached to motor-insurance claims for signs of AI generation or AI editing, inside the claims transaction on IBM Z, and routes flagged claims to a person. It never rejects a claim automatically. This statement separates what is implemented and measured from what is still pending.
 
-## Human review and failures
+## Human review and failure behaviour
 
-GREEN continues normal processing, AMBER requires review, and RED refers a claim to an investigator with reasons. RED is not proof of fraud. Risk errors/timeouts, malformed responses, unavailable thresholds and policy failures produce AMBER. Automated tests cover these cases, replay and concurrent duplicate submissions. Native GnuCOBOL policy/gateway tests passed on LinuxONE; the current pre-model deployment exercises the degraded path.
+GREEN continues normal processing. AMBER requires human review. RED refers a claim to an investigator with the reasons attached. RED is not proof of fraud, and nobody is told "fake": adjusters see a band, a calibrated score and reason codes. Keeping a person in every adverse decision is how the design meets UK GDPR Article 22 on solely automated decisions.
 
-## Accuracy and calibration remain pending
+Nothing fails open. A risk-service error or timeout (300 ms), a malformed response, unavailable thresholds, a mismatched threshold version or a policy-engine failure all produce AMBER. The decision rule is real COBOL (`txn/CLMIPOL.cbl`) with a Python twin; 25 truth-table cases run against both and must agree. These paths passed natively on LinuxONE (`eval/native_gateway_tests.json`) and in the fail-safe smoke (`linuxone/smoke_failures.py`).
 
-The planned validation false-positive caps are 1% for RED and 5% for AMBER. These are targets, not established results. A and B must fit thresholds on deployed LinuxONE scores, including the policy's four-decimal rounding, and report test performance by source, camera subgroup and compression level. Stock ImageNet timings do not establish detector accuracy. Dataset balance, shortcut tests, held-out generators, subgroup FPR and calibration remain unverified until A supplies the dataset/model cards and evaluation results.
+## Accuracy, calibration and who gets flagged
 
-Decisions record model/config versions and reasons. Missing EXIF and C2PA-marker presence are informational; marker presence is not signature validation. Duplicate matching and metadata are additional signals with their own limitations.
+Model `det-r18-v4` (`eval/model_card.md`, `eval/results.md`), test split, thresholds `t-0`:
+
+- Real damage photos wrongly reaching RED: **1.2%**; reaching AMBER: **5.0%**. Thresholds are set by these false-positive caps (1% and 5% on validation), not by how many fakes they catch.
+- RED rate among real test photos stays between **0.4% and 2.8%** across JPEG quality, image size, compressibility, source and damaged/undamaged subgroups (`eval/runs/det-r18-v4_mean_audit.md`). The Commons and undamaged subgroups are small (n = 41 and 36) and are reported as such.
+- Fully generated images from a generator never seen in training (FLUX.1-schnell): TPR **0.50** at 1% FPR, AUROC 0.944. In-distribution: TPR 0.67 at 1% FPR. Reported rather than hidden.
+- Small inpainted edits are the main weakness: AUROC 0.62 with the standard three crops. The heatmap exists to show adjusters where to look, not to prove an edit.
+- **Small photos are the main fairness risk.** On test photos halved in size, 16.8% of real ones exceed τ_red. The decision rule therefore caps the AI score at AMBER when the native short side is below 480 px (`LOW_RESOLUTION_EVIDENCE`), so claimants with older phones or compressed messaging-app photos are not sent to an investigator on the score alone. The duplicate-photo rule still applies.
+- Scores are temperature-calibrated (T = 0.676). `t-0` was fitted on Modal FP32 scores; `t-1` is fitted on the compiled model's LinuxONE scores after the parity check (`linuxone/RUNBOOK.md`, step 0b) because 16-bit accelerator arithmetic shifts scores slightly.
+
+Every decision records model version, thresholds version, reasons and timings. Missing EXIF and a present C2PA marker are informational only and never change the band; the C2PA check is marker presence, not signature validation.
+
+## Data and shortcut controls
+
+Real photos come from CarDD (research licence, collected before May 2022) and Wikimedia Commons (CC0, public domain, CC BY, CC BY-SA, last uploaded before 1 January 2022, attribution kept in `data/commons_manifest.csv`). Images showing injured people are excluded by a scene filter and a visual spot-check (`data/spotcheck_log.md`). No images are redistributed; only manifests are in Git.
+
+Half of the fakes are regenerated copies of the real photos, so content cannot separate the classes: the damage share differs by 0.5 points between real and fake, and logistic regressions on file size, dimensions and global colour score AUROC 0.50 to 0.55 (`data/dataset_card.md`). On content-matched pairs the model reaches AUROC 0.985, which means it reads generation traces, not scene content.
 
 ## Advisory local language model
 
-Granite is queued only after an AMBER/RED decision commits and cannot alter that decision. The typed internal API uses a shared secret, bounded queues and sequential inference. Claim text is untrusted; accepted PII findings must occur literally in the input. Notes require three bullets and the disclaimer that a detector score is one signal, not proof. Invalid output becomes unavailable.
-
-The runtime, provisioning tool and real-model smoke checks are prepared. Actual inference, adversarial/privacy acceptance, throughput and memory are verified only when VM smoke results are saved. No external LLM fallback is configured. Passing small fixture sets cannot prove resistance to all prompt injection or PII leakage.
+Granite runs on LinuxONE through llama.cpp, only after an AMBER or RED decision is committed, and cannot alter that decision. Claim text is treated as untrusted input: it is fenced, accepted PII findings must occur literally in the input, notes must be three bullets that include the statement that the detector score is one signal, not proof, and any output that fails validation becomes "note unavailable". No external LLM is configured. Real-model behaviour on the injection and PII cases is verified by `linuxone/smoke_granite.py`; passing a small fixture set does not prove resistance to all prompt injection.
 
 ## Privacy and storage
 
-Structured identity and detected identifiers receive stable HMAC pseudonyms. Regex/gazetteer rules can miss unusual identifiers. The private token vault stores identity values and the restricted claim record can temporarily contain missed identifiers. With Granite enabled, descriptions and damage-category free text are withheld from adjuster views and current egress payloads while PII review is pending or unavailable. Successful PII review releases reviewed text independently of note success. GREEN and Granite-disabled claims explicitly report `rules_only`, without claiming a second pass.
+Structured identity and detected identifiers receive stable HMAC pseudonyms; investigators can link records without seeing identities, and re-identification is an explicit, journaled action. Rules can miss unusual identifiers, so with Granite enabled, free text is withheld from adjuster views and egress payloads until the second pass succeeds. Original photo bytes are AES-256-GCM encrypted at rest. The detector reads the original pixels because redaction destroys the traces it analyses; privacy controls govern who sees personal data, not what the model sees. Anything that could leave IBM Z is built from an allowlist of named fields and logged. The demo's role header is not authentication; the gateway is reachable only through SSH to loopback.
 
-Identity reveal is explicit and journaled. `X-Role` and the console role selector are demo controls; access is through SSH to the loopback-bound gateway. Production needs real authentication, authorisation and retention controls. The HMAC key is a protected runtime secret, not hardware-backed in this prototype.
+## What is real, what is not
 
-Original photo bytes are AES-256-GCM encrypted with fresh nonces. Crop arrays, SQLite databases and the vault are sensitive ordinary files in restricted directories. The detector reads original pixels because image redaction changes the traces it analyses. No public original-download endpoint is exposed.
+CICS is emulated by a FastAPI gateway following CICS patterns; the COBOL rule is real and runs on LinuxONE. The detector runs with PyTorch for s390x and the NNPA extension; zDLC compilation is planned, not achieved. Personas in the console and demo are fictional. Compression, unseen generators, adaptive fraudsters (for example re-photographing a screen) and new cameras can change error rates; the team's phone-photo hold-out measures the last of these when available.
 
-Allowlisted payloads are prepared and logged locally. A PREPARED/EGRESS audit row does not mean external transmission occurred. Historical first-pass rows are retained; subsequent PII review updates the current view with an additional journal event. No outbound claim-data service is configured.
-
-## Provenance and limits
-
-Console personas and offline scores/maps/notes are fictional and labelled demo data. A's image licences, consent, labels and exclusion rules require their final dataset card; they are not asserted as completed here. D's optional evidence assets have a separate attribution manifest.
-
-Compression, unseen generators, adaptive manipulation and camera differences can change error rates. Patch-score maps are advisory; edit localisation is unvalidated. CICS is emulated with FastAPI/SQLite; the policy is real COBOL on LinuxONE. The PyTorch/NNPA fallback is used; no zDLC compilation is claimed.
-
-Before use beyond a prototype: complete A's evaluation, validate privacy/LLM behavior on representative data, implement authenticated roles and retention, test a private backup restore, monitor subgroup errors, and provide an appeal/review process.
+Before any use beyond a prototype: fit `t-1` on LinuxONE scores, validate privacy and LLM behaviour on representative data, add real authentication, authorisation and retention, monitor subgroup error rates in production, and provide an appeal and review process for claimants.

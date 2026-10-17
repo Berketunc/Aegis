@@ -2,8 +2,8 @@
 
 Everything below is scripted. Run it on the VM, in this order, from the
 repository directory (`~/aegis-person-b` or a fresh clone). Each step says which
-file it produces; commit those files, because the VM has no backups. Nothing
-here needs A's model, except where marked **after A**.
+file it produces; commit those files, because the VM has no backups. Only step 0b and the
+scored benchmark in step 3 need A's files.
 
 Current state: risk, gateway and privacy run on LinuxONE and the degraded
 AMBER path is verified (`eval/gateway_smoke.json`). Granite has never run, the
@@ -16,6 +16,36 @@ git fetch && git checkout codex/person-b-platform && git pull
 bash linuxone/start_services.sh --with-gateway          # rebuilds images, keeps .runtime keys
 bash linuxone/service_status.sh                          # expect upload/privacy ready, model unready
 ```
+
+## 0b. Install A's detector and thresholds (needs A's files)
+
+A's `modal run train/export_onnx.py --run det-r18-v4` leaves `best.pt`,
+`temperature.json`, `export.json` and `parity_*.npz` in `models/det-r18-v4/`.
+Copy that directory to the VM, then:
+
+```bash
+python3 linuxone/install_model.py --run det-r18-v4 --weights models/det-r18-v4/best.pt \
+    --temperature models/det-r18-v4/temperature.json --export models/det-r18-v4/export.json \
+    --thresholds eval/thresholds_t-0.json
+bash linuxone/start_services.sh --with-gateway      # model loads once at startup
+bash linuxone/service_status.sh                      # expect ready: true, model.version det-r18-v4
+```
+
+Parity check (plan 7.7), then A fits `t-1` on these LinuxONE scores:
+
+```bash
+mkdir -p eval/parity
+for split in val test; do
+  sudo docker exec -i aegis-risk python3 - /models/parity_$split.npz /tmp/$split.npy < linuxone/parity_logits.py
+  sudo docker cp aegis-risk:/tmp/$split.npy eval/parity/linuxone_${split}_logits_cpu.npy
+done
+# A: python train/fit_thresholds_linuxone.py --run det-r18-v4 --version t-1 --build cpu \
+#        --val-logits eval/parity/linuxone_val_logits_cpu.npy --test-logits eval/parity/linuxone_test_logits_cpu.npy
+# then re-run install_model.py with --thresholds eval/thresholds_t-1.json and restart.
+```
+
+Repeat with `AEGIS_MODEL_DEVICE=nnpa` in `.runtime/services.env` for the NNPA build
+(`--build nnpa`). Produces `eval/parity_t-1.md` and `eval/thresholds_t-1.json`.
 
 ## 1. Fail-safe evidence (C, plan 12.1 step 6)
 
@@ -79,7 +109,7 @@ encrypted-evidence summary. Screenshots still have to be taken by hand:
 - Community Cloud portal showing the instance
 - terminal with `uname -m` and `lscpu`
 - `docker ps` and `docker stats` under the 8-client load
-- `cobc -x` compile and `echo "09100 08500 06000 0 0 1" | txn/CLMIPOL` inside the gateway image
+- `cobc -x` compile and `echo "09100 08500 06000 0 0 1 0" | txn/CLMIPOL` inside the gateway image
 - `GET /journal` and `GET /claims/{id}/views` as adjuster vs authorised in the console
 - Granite container log with the model filename
 - `sudo iptables -L` showing only SSH

@@ -24,17 +24,19 @@ UI ── POST /claims ────► gateway  "CLMI"
 | Band | When | Outcome |
 |---|---|---|
 | **RED** | calibrated AI score ≥ τ_red, **or** the same photo was already used on a different claim | Refer to an investigator. **Never auto-reject.** |
-| **AMBER** | τ_amber ≤ score < τ_red, **or** metadata names an editing/generation tool, **or** the risk service is unavailable | Human review |
+| **AMBER** | τ_amber ≤ score < τ_red, **or** metadata names an editing/generation tool, **or** the risk service is unavailable, **or** score ≥ τ_red on a **low-resolution photo** (native short side < 480 px; reason `LOW_RESOLUTION_EVIDENCE`, because the detector's false-positive rate is far higher on small photos, see `eval/results.md`) | Human review |
 | **GREEN** | otherwise | Fast-track |
 
 Every matching reason is reported, and the band is the most severe one. Missing EXIF and a present C2PA manifest are added as `INFO_*` reasons and never change the band. Thresholds come from a versioned config (`THRESHOLDS_PATH`, written by the data team); the version, model version and timings are stored with every decision.
 
 The COBOL program reads one fixed-width line and writes one line:
 ```
-$ echo "07000 08500 06000 1 1 1" | ./CLMIPOL
+$ echo "07000 08500 06000 1 1 1 0" | ./CLMIPOL
 RED DUPLICATE_PHOTO,AI_SCORE_ABOVE_AMBER,EDITING_SOFTWARE_TAG
+$ echo "09000 08500 06000 0 0 1 1" | ./CLMIPOL
+AMBER AI_SCORE_ABOVE_RED,LOW_RESOLUTION_EVIDENCE
 ```
-Columns: score, τ_red, τ_amber (all ×10000), duplicate flag, software-tag flag, risk-service-OK flag. The test suite runs 19 truth-table cases against both the COBOL binary and the Python twin and requires identical output.
+Columns: score, τ_red, τ_amber (all ×10000), duplicate flag, software-tag flag, risk-service-OK flag, low-resolution flag. The test suite runs 25 truth-table cases against both the COBOL binary and the Python twin and requires identical output.
 
 ## Fail-safe: nothing fails open
 

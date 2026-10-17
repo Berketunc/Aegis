@@ -15,7 +15,7 @@ def test_green_claim_end_to_end(client):
     d = r.json()
     assert d["band"] == "GREEN" and d["reasons"] == ["NONE"]
     assert d["claim_id"].startswith("CLM-")
-    assert d["thresholds_version"] == "t-0" and d["model_version"] == "stub-0"
+    assert d["thresholds_version"] == "t-dev" and d["model_version"] == "stub-0"
     assert set(d["timings_ms"]) >= {"gateway", "risk", "policy", "total"}
     events = [j["event"] for j in client.get("/journal", params={"claim_id": d["claim_id"]}).json()]
     assert events == ["DECISION", "EGRESS"]
@@ -68,7 +68,7 @@ def test_concurrent_duplicate_commit_returns_first_decision(client):
     first = client.post("/claims", json=claim_body([ev], key="race")).json()
     with pytest.raises(db.DuplicateKey):
         db.commit_decision(conn, claim_id=db.reserve_claim_id(conn), idem_key="race", redacted={}, vault=[],
-                           decision={"band": "GREEN", "reasons": ["NONE"], "thresholds_version": "t-0",
+                           decision={"band": "GREEN", "reasons": ["NONE"], "thresholds_version": "t-dev",
                                      "policy_engine": "python", "timings_ms": {}},
                            signals=None, egress_id="EG-x", egress_payload={}, egress_dropped=[])
     assert db.find_by_key(conn, "race")["claim_id"] == first["claim_id"]

@@ -3,7 +3,7 @@
  * for its photo. Bands and reasons are NOT stored: the console derives them with the same rule as CLMIPOL. */
 window.AEGIS_DEMO = {
  "thresholds": {
-  "version": "t-0",
+  "version": "t-dev",
   "tau_red": 0.85,
   "tau_amber": 0.6
  },

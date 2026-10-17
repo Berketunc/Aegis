@@ -31,7 +31,7 @@ typed queued Granite requests and the `--with-gateway` launcher. The original
 | `txn/gateway/granite.py` | Post-commit job: PII second pass + adjuster note, output validation, prompt fencing |
 | `txn/CLMIPOL.cbl` | The decision rule in COBOL (GnuCOBOL / Enterprise COBOL compatible, free format with `*>` comments) |
 | `txn/stub_risk.py` | Fake risk service implementing §14; scores come from the filename; `POST /stub/mode` for fail/slow/garbage |
-| `txn/thresholds.example.json` | Placeholder `t-0` (τ_red 0.85, τ_amber 0.60) |
+| `txn/thresholds.example.json` | Development placeholder `t-dev` (τ_red 0.85, τ_amber 0.60); A's real thresholds are `eval/thresholds_t-<n>.json` |
 | `txn/Dockerfile`, `txn/Dockerfile.stub`, `txn/docker-compose.dev.yml` | Containers; **build context = repo root** |
 | `txn/tests/` | pytest; `conftest.py` puts the repo root on `sys.path`; COBOL tests skip if `cobc` isn't on PATH |
 | `privacy/` | Stdlib-only package: `redact()`, `pseudonym()`, `contains_pii()`, `build_egress()`. Meant to be shared with B's risk service. |
@@ -69,7 +69,7 @@ uname -m                                   # s390x
 apt-cache policy gnucobol gnucobol3
 sudo apt install -y gnucobol3 || sudo apt install -y gnucobol
 cobc -x -o txn/CLMIPOL txn/CLMIPOL.cbl
-echo "09100 08500 06000 0 0 1" | txn/CLMIPOL     # expect: RED AI_SCORE_ABOVE_RED
+echo "09100 08500 06000 0 0 1 0" | txn/CLMIPOL   # expect: RED AI_SCORE_ABOVE_RED
 echo "garbage" | txn/CLMIPOL                     # expect: AMBER POLICY_INPUT_INVALID
 
 python3 -m venv .venv && . .venv/bin/activate     # Ubuntu 22.04 ships Python 3.10; the code needs ≥ 3.10
@@ -112,7 +112,7 @@ Set real secrets with environment variables (don't commit them): `RISK_SECRET` (
 - [ ] Commit C's files on a branch and merge into the main codespace (§5).
 - [ ] Run §4 on the VM: native tests with `cobc`, then `docker build`. **Untested on s390x.**
 - [ ] Integration test against **B's real risk service**: check the field names, the `claim_id` echo, `X-Shared-Secret`, multipart field `file`, and that the 300 ms deadline holds with the real detector. If B's response shape differs from §14, adapt `RiskResponse` in `txn/gateway/risk_client.py`; don't loosen the fail-safe.
-- [ ] Replace `t-0` with A's `t-1` (§3).
+- [ ] Replace `t-dev` with A's fitted thresholds (`t-0` now, `t-1` after LinuxONE parity).
 - [ ] Demonstrate the fail-safe live: `docker stop <risk-service>` → a claim → AMBER `RISK_SERVICE_UNAVAILABLE`.
 
 **Should do**

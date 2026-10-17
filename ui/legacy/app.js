@@ -54,6 +54,7 @@
     POLICY_INPUT_INVALID: "Fail-safe: the decision rule received malformed input.",
     INFO_EXIF_MISSING: "Information only: the photo has no camera metadata. Messaging apps strip it, so this never changes the band.",
     INFO_C2PA_MANIFEST_PRESENT: "Information only: the photo carries a C2PA content-credentials manifest (not yet validated).",
+    LOW_RESOLUTION_EVIDENCE: "Low-resolution photo: the AI score alone can hold the claim for review but not refer it.",
   };
   const SCENARIOS = {
     genuine: {

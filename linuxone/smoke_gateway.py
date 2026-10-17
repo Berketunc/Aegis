@@ -27,9 +27,10 @@ def main(expect_degraded=False):
     # A missing model/threshold must not hide a broken COBOL executable.
     binary = os.environ.get("CLMIPOL_BIN", "/app/txn/CLMIPOL")
     for line, expected in (
-        ("00100 08500 06000 0 0 1", "GREEN NONE"),
-        ("09000 08500 06000 0 0 1", "RED AI_SCORE_ABOVE_RED"),
-        ("00100 08500 06000 0 0 0", "AMBER RISK_SERVICE_UNAVAILABLE"),
+        ("00100 08500 06000 0 0 1 0", "GREEN NONE"),
+        ("09000 08500 06000 0 0 1 0", "RED AI_SCORE_ABOVE_RED"),
+        ("09000 08500 06000 0 0 1 1", "AMBER AI_SCORE_ABOVE_RED,LOW_RESOLUTION_EVIDENCE"),
+        ("00100 08500 06000 0 0 0 0", "AMBER RISK_SERVICE_UNAVAILABLE"),
     ):
         run = subprocess.run([binary], input=line + "\n", text=True,
                              capture_output=True, check=True, timeout=5)

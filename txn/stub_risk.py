@@ -3,6 +3,7 @@
 Scores come from the upload's filename so demo photos are predictable:
   *fake*  -> 0.93    *edit* / *inflat* -> 0.72    *gimp* / *ps_* -> software tag set    otherwise 0.08
 The same file bytes used on a second claim -> duplicate_of = the first claim.
+*small* in the filename -> native_short_side 320 (low-resolution rule), otherwise 1080.
 POST /stub/mode {"mode": "ok"|"fail"|"slow"|"garbage", "score": float|null} drives the fail-safe demo.
 
 Run: uvicorn txn.stub_risk:app --port 9000
@@ -86,7 +87,8 @@ async def score(request: Request, x_shared_secret: str | None = Header(default=N
         "claim_id": claim_id,
         "model_version": "stub-0",
         "signals": {"ai_score": ai,
-                    "metadata": {"exif_present": "noexif" not in names, "software_tag": sw, "c2pa_manifest": False},
+                    "metadata": {"exif_present": "noexif" not in names, "software_tag": sw, "c2pa_manifest": False,
+                                 "native_short_side": 320 if "small" in names else 1080},
                     "duplicate_of": dup},
         "egress_payload_id": None,
         "timings_ms": {"privacy": 0.0, "load_crops": 0.0, "inference": 0.0, "metadata": 0.0, "dup": 0.0,

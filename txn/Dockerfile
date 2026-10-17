@@ -17,7 +17,7 @@ COPY txn txn
 
 # The decision rule is compiled inside the image, on the target architecture.
 RUN cobc -x -o txn/CLMIPOL txn/CLMIPOL.cbl \
- && echo "00100 08500 06000 0 0 1" | txn/CLMIPOL | grep -q "^GREEN NONE$"
+ && echo "00100 08500 06000 0 0 1 0" | txn/CLMIPOL | grep -q "^GREEN NONE$"
 
 RUN useradd --system --no-create-home clmi && mkdir /data && chown clmi /data
 USER clmi

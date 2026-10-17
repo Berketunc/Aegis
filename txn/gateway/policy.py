@@ -20,6 +20,7 @@ class PolicyInput:
     duplicate: bool
     software_tag: bool
     risk_ok: bool
+    low_resolution: bool = False   # native short side below the low-resolution limit (A's handoff)
 
 
 @dataclass(frozen=True)
@@ -34,9 +35,9 @@ def _fixed(x: float) -> int:
 
 
 def encode(p: PolicyInput) -> str:
-    """Fixed-width line read by CLMIPOL.cbl: 'SSSSS RRRRR AAAAA D S K'."""
+    """Fixed-width line read by CLMIPOL.cbl: 'SSSSS RRRRR AAAAA D S K L'."""
     return (f"{_fixed(p.ai_score):05d} {_fixed(p.tau_red):05d} {_fixed(p.tau_amber):05d} "
-            f"{int(p.duplicate)} {int(p.software_tag)} {int(p.risk_ok)}")
+            f"{int(p.duplicate)} {int(p.software_tag)} {int(p.risk_ok)} {int(p.low_resolution)}")
 
 
 def parse_output(line: str) -> tuple[str, list[str]]:
@@ -55,7 +56,12 @@ def evaluate_python(p: PolicyInput) -> tuple[str, list[str]]:
     else:
         if p.duplicate:
             reasons.append(("DUPLICATE_PHOTO", "RED"))
-        if score >= red:
+        if score >= red and p.low_resolution:
+            # Small photos: the detector's false-positive rate is much higher, so the
+            # score alone may hold the claim for review but not refer it (train/HANDOFF.md).
+            reasons.append(("AI_SCORE_ABOVE_RED", "AMBER"))
+            reasons.append(("LOW_RESOLUTION_EVIDENCE", "AMBER"))
+        elif score >= red:
             reasons.append(("AI_SCORE_ABOVE_RED", "RED"))
         elif score >= amber:
             reasons.append(("AI_SCORE_ABOVE_AMBER", "AMBER"))

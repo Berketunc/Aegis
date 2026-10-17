@@ -15,6 +15,7 @@ class Metadata(BaseModel):
     exif_present: bool | None = None
     software_tag: str | None = None
     c2pa_manifest: bool | None = None
+    native_short_side: int | None = None   # smallest short side across the claim's photos, before any resize
 
 
 class Signals(BaseModel):

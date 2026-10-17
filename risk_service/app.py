@@ -165,7 +165,9 @@ def create_app(settings: Settings | None = None):
 
         def metadata():
             per_image = [json.loads(record["metadata"]) for record in records]
+            sides = [item["native_short_side"] for item in per_image if item.get("native_short_side")]
             return {"exif_present": any(item["exif_present"] for item in per_image),
+                    "native_short_side": min(sides) if sides else None,
                     "software_tag": next((item["software_tag"] for item in per_image if item["software_tag"]), None),
                     "c2pa_manifest": any(item["c2pa_manifest"] for item in per_image),
                     "c2pa_check": "marker_presence_only_unverified"}

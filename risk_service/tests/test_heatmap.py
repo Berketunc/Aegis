@@ -20,9 +20,9 @@ def test_grid_covers_resized_image_without_shrinking_to_224():
     crops, boxes, size = heatmap_crops(image_bytes())
     assert crops.shape == (16, 3, 224, 224)
     assert crops.dtype == np.uint8
-    assert size == [853, 640]
+    assert size == [800, 600]  # short side 600 < 640: native pixels kept, never upscaled
     assert boxes[0] == [0, 0, 224, 224]
-    assert boxes[-1] == [629, 416, 853, 640]
+    assert boxes[-1] == [576, 376, 800, 600]
     assert all(right - left == bottom - top == 224 for left, top, right, bottom in boxes)
 
 

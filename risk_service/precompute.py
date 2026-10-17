@@ -1,4 +1,11 @@
-"""Versioned preprocessing: RGB, short side 640, three 224 px crops."""
+"""Versioned preprocessing, identical to A's training recipe (train/train_modal.py).
+
+fit_short_side: shrink so the short side is 640, never enlarge (photos with a short
+side between 224 and 640 keep their native pixels; tinier ones are lifted to 224),
+bilinear. three_crops: centre plus the upper-left and lower-right 4x4 grid cells.
+grid_crops: 4x4 evenly spaced windows for the heatmap. Any change here must be
+mirrored in training and bump PREPROCESS_VERSION, or stored crops become invalid.
+"""
 from dataclasses import dataclass
 from io import BytesIO
 import warnings
@@ -6,7 +13,9 @@ import warnings
 import numpy as np
 from PIL import Image, ImageOps, UnidentifiedImageError
 
-PREPROCESS_VERSION = "rgb-short640-bicubic-centre-grid25-75-v1"
+PREPROCESS_VERSION = "rgb-fit640-noupscale-bilinear-centre-gridcells-v2"
+SHORT = 640
+CROP = 224
 PHASH_VERSION = "phash64-dct32-median64-v1"
 Image.MAX_IMAGE_PIXELS = 40_000_000
 
@@ -23,25 +32,54 @@ class PreparedImage:
     crop_boxes: list
 
 
+def fit_short_side(image: Image.Image) -> Image.Image:
+    """A's fit_short_side(im, 640, no_upscale=True): shrink only, bilinear."""
+    width, height = image.size
+    target = max(min(SHORT, min(width, height)), CROP)
+    if target == min(width, height):
+        return image
+    k = target / min(width, height)
+    return image.resize((max(CROP, round(width * k)), max(CROP, round(height * k))), Image.Resampling.BILINEAR)
+
+
+def three_crop_boxes(width: int, height: int) -> list:
+    """A's three_crops geometry: centre, upper-left grid cell, lower-right grid cell, clamped."""
+    centres = [((width - CROP) // 2, (height - CROP) // 2),
+               (width // 4 - CROP // 2, height // 4 - CROP // 2),
+               (3 * width // 4 - CROP // 2, 3 * height // 4 - CROP // 2)]
+    boxes = []
+    for x, y in centres:
+        x, y = min(max(0, x), width - CROP), min(max(0, y), height - CROP)
+        boxes.append([x, y, x + CROP, y + CROP])
+    return boxes
+
+
+def grid_crop_boxes(width: int, height: int, n: int = 4) -> list:
+    """A's grid_crops geometry: n x n evenly spaced windows, row-major."""
+    xs = [round(i * (width - CROP) / (n - 1)) for i in range(n)]
+    ys = [round(j * (height - CROP) / (n - 1)) for j in range(n)]
+    return [[x, y, x + CROP, y + CROP] for y in ys for x in xs]
+
+
+def _oriented_rgb(source: Image.Image) -> Image.Image:
+    return fit_short_side(ImageOps.exif_transpose(source).convert("RGB"))
+
+
+def _stack(image: Image.Image, boxes: list) -> np.ndarray:
+    return np.stack([np.asarray(image.crop(tuple(box)), dtype=np.uint8).transpose(2, 0, 1) for box in boxes])
+
+
 def heatmap_crops(raw: bytes):
-    """Cover the oriented, short640 image with a 4×4 grid of 224 px windows.
+    """Cover the oriented, fitted image with a 4x4 grid of 224 px windows.
 
     Windows overlap where needed; no full image is downsampled to 224 pixels.
     Originals have already passed upload decoding limits before this is called.
     """
     with Image.open(BytesIO(raw)) as source:
-        rgb = ImageOps.exif_transpose(source).convert("RGB")
+        rgb = _oriented_rgb(source)
         width, height = rgb.size
-        scale = 640 / min(width, height)
-        width, height = max(640, round(width * scale)), max(640, round(height * scale))
-        rgb = rgb.resize((width, height), Image.Resampling.BICUBIC)
-        boxes = []
-        for row in range(4):
-            for column in range(4):
-                left, top = round((width - 224) * column / 3), round((height - 224) * row / 3)
-                boxes.append([left, top, left + 224, top + 224])
-        crops = np.stack([np.asarray(rgb.crop(box), dtype=np.uint8).transpose(2, 0, 1) for box in boxes])
-        return crops, boxes, [width, height]
+        boxes = grid_crop_boxes(width, height)
+        return _stack(rgb, boxes), boxes, [width, height]
 
 
 def phash64(image: Image.Image) -> str:
@@ -82,16 +120,12 @@ def prepare_image(raw: bytes) -> PreparedImage:
                 if max(width, height) / min(width, height) > 20:
                     raise InvalidImage("Image aspect ratio exceeds the supported limit")
                 perceptual = phash64(rgb)
-                scale = 640 / min(width, height)
-                width, height = max(640, round(width * scale)), max(640, round(height * scale))
-                rgb = rgb.resize((width, height), Image.Resampling.BICUBIC)
-                boxes = []
-                for fraction in (0.5, 0.25, 0.75):
-                    left = round((width - 224) * fraction)
-                    top = round((height - 224) * fraction)
-                    boxes.append([left, top, left + 224, top + 224])
-                crops = np.stack([np.asarray(rgb.crop(box), dtype=np.uint8).transpose(2, 0, 1) for box in boxes])
-                return PreparedImage(crops, perceptual, metadata, boxes)
+                native_short_side = min(width, height)
+                rgb = fit_short_side(rgb)
+                width, height = rgb.size
+                boxes = three_crop_boxes(width, height)
+                metadata["native_short_side"] = native_short_side
+                return PreparedImage(_stack(rgb, boxes), perceptual, metadata, boxes)
     except (UnidentifiedImageError, OSError, ValueError, Image.DecompressionBombError, Image.DecompressionBombWarning) as exc:
         if isinstance(exc, InvalidImage):
             raise

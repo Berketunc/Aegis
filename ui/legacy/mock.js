@@ -4,7 +4,7 @@
 (function () {
   "use strict";
 
-  const T = { version: "t-0", tau_red: 0.85, tau_amber: 0.60 };
+  const T = { version: "t-dev", tau_red: 0.85, tau_amber: 0.60 };
   const MAX_BYTES = 15 * 1024 * 1024;
   const db = {
     seq: 0, claimSeq: 0,

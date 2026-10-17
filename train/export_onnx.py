@@ -117,6 +117,7 @@ def main(run: str = "det-r18-v1", n_parity: int = 300):
     print(json.dumps(info, indent=2))
     local = Path("models") / run
     local.mkdir(parents=True, exist_ok=True)
-    for f in ("model.onnx", "parity_val.npz", "parity_test.npz", "export.json", "temperature.json"):
+    for f in ("model.onnx", "best.pt", "parity_val.npz", "parity_test.npz", "export.json", "temperature.json"):
         subprocess.run(["modal", "volume", "get", "--force", "claimshield-data", f"/data/models/{run}/{f}", str(local / f)], check=True)
-    print(f"local copies in {local}/ (gitignored). Hand model.onnx + parity_*.npz + export.json to B.")
+    print(f"local copies in {local}/ (gitignored). Hand best.pt + temperature.json + export.json + parity_*.npz to B "
+          f"(linuxone/install_model.py); model.onnx is for the zDLC path.")

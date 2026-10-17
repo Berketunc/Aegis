@@ -65,14 +65,15 @@ aspect ratio of 20:1. The response includes:
 {
   "evidence_id": "EV-<full 64-character SHA-256>",
   "sha256": "<full 64-character SHA-256>",
-  "preprocessing_version": "rgb-short640-bicubic-centre-grid25-75-v1",
+  "preprocessing_version": "rgb-fit640-noupscale-bilinear-centre-gridcells-v2",
   "phash_version": "phash64-dct32-median64-v1",
-  "crop_boxes": [[528,208,752,432],[264,104,488,328],[792,312,1016,536]],
+  "crop_boxes": [[288,88,512,312],[88,0,312,224],[488,188,712,412]],
   "timings_ms": {"upload_preprocess": 0.0}
 }
 ```
 
-The crop-box example is an oriented 800×400 photo resized to 1280×640. Upload
+The crop-box example is an oriented 800×400 photo, kept at native size because its
+short side is already below 640 (never upscaled). Upload
 preprocessing includes file reads, image decode, encryption, crop preparation and
 storage, and remains separate from risk-decision latency.
 
@@ -119,19 +120,29 @@ Failures: 401 invalid secret, 404 missing evidence, 413 upload too large, 415
 unsupported/invalid image, 422 malformed fields and 503 unavailable dependencies
 or processing failures. C must convert risk-service failures/timeouts to AMBER.
 
-## Exact preprocessing handoff to A
+## Preprocessing, identical to A's training recipe
 
-Confirm this before A exports a model; the plan leaves the two grid positions
-unspecified. The implemented version is:
+`PREPROCESS_VERSION = rgb-fit640-noupscale-bilinear-centre-gridcells-v2` is a
+line-for-line port of `three_crops()` / `fit_short_side()` / `grid_crops()` in
+`train/train_modal.py` (model `det-r18-v4`), verified pixel-identical against
+that reference on seven image sizes:
 
 1. Apply EXIF orientation, convert to RGB.
-2. Resize the shortest side to 640 using Pillow bicubic, rounding each dimension.
-3. Produce three 224×224 crops in order: centre, then positions at 25% and 75%
-   of each available top-left coordinate range. For fraction `f`,
-   `left = round((width - 224) * f)`, `top = round((height - 224) * f)`.
-4. Store a non-pickle NumPy array `uint8[3,3,224,224]` in RGB CHW order.
+2. **Shrink only, never enlarge** (bilinear): short side > 640 → short side 640;
+   224 ≤ short side ≤ 640 → native pixels; short side < 224 → lifted to 224.
+   Upscaling small photos made honest photos look synthetic to earlier models.
+3. Three 224×224 crops: centre `((w-224)//2, (h-224)//2)`, upper-left grid cell
+   `(w//4-112, h//4-112)`, lower-right grid cell `(3w//4-112, 3h//4-112)`, each
+   clamped into the image.
+4. Store a non-pickle NumPy array `uint8[3,3,224,224]` in RGB CHW order. The
+   native short side (before any resize) is kept in the metadata flags as
+   `native_short_side`; the gateway uses it for the low-resolution rule.
 5. At inference divide by 255 and apply the manifest's RGB mean/std. Average
    the three logits first, then apply temperature scaling and sigmoid.
+
+The heatmap uses the same fit and a 4×4 grid of evenly spaced windows
+(`grid_crops`, row-major). Any change here must be mirrored in training and
+bump the version string, or stored crops are refused at scoring time.
 
 Original files are AES-256-GCM encrypted with a fresh 12-byte nonce, with the
 SHA-256 bound as authenticated associated data. Crop arrays and the SQLite index
@@ -141,21 +152,24 @@ unauthenticated original-download endpoint.
 
 ## Trained model manifest from A
 
-Example shape only: the temperature, model name and artifact must come from A's
-actual validation/export, and thresholds must be calibrated on LinuxONE scores.
-These example values are not a trained detector or an approved threshold set.
+`linuxone/install_model.py` writes this manifest from A's `best.pt`,
+`temperature.json` and `export.json` (train/HANDOFF.md). The event's s390x image
+has torch but no torchvision, so the weights load into the pure-torch twin
+`risk_service/resnet18.py` with strict key matching:
 
 ```json
 {
-  "model_version": "det-r18-v2",
-  "preprocessing_version": "rgb-short640-bicubic-centre-grid25-75-v1",
-  "format": "torchscript",
-  "artifact": "detector.ts",
-  "sha256": "<optional actual artifact digest; remove field if not supplied>",
+  "model_version": "det-r18-v4",
+  "preprocessing_version": "rgb-fit640-noupscale-bilinear-centre-gridcells-v2",
+  "format": "state_dict",
+  "artifact": "detector.pth",
+  "sha256": "<digest of detector.pth, checked at load>",
+  "factory": "risk_service.resnet18:build_detector",
+  "factory_kwargs": {"num_outputs": 1},
   "output_kind": "binary_logit",
   "mean": [0.485, 0.456, 0.406],
   "std": [0.229, 0.224, 0.225],
-  "temperature": 1.0,
+  "temperature": 0.676,
   "calibration_bias": 0.0
 }
 ```
@@ -174,12 +188,13 @@ warm-up run happen once at process startup; a failure leaves scoring unavailable
 Threshold JSON shape:
 
 ```json
-{"thresholds_version": "t-1", "tau_amber": 0.5, "tau_red": 0.9}
+{"version": "t-0", "model_version": "det-r18-v4", "tau_amber": 0.5801, "tau_red": 0.7539, "...": "extra keys are ignored"}
 ```
 
-Replace both illustrative numeric values with A's fitted LinuxONE thresholds.
-The same file/version must be used by C's gateway. Model/config changes require
-a service restart.
+A's `eval/thresholds_t-0.json` (Modal FP32) is installed as is; `t-1` replaces it
+after the LinuxONE parity check (`linuxone/parity_logits.py`,
+`train/fit_thresholds_linuxone.py`). The same file/version must be used by C's
+gateway. Model/config changes require a service restart.
 
 ## C's privacy adapter
 

@@ -226,7 +226,9 @@ def create_app(settings: Settings | None = None, transport: httpx.AsyncBaseTrans
             pin = PolicyInput(
                 ai_score=sig.ai_score if sig else 0.0, tau_red=tau_red, tau_amber=tau_amber,
                 duplicate=bool(sig and sig.duplicate_of and sig.duplicate_of != claim_id),
-                software_tag=bool(sig and sig.metadata.software_tag), risk_ok=risk is not None)
+                software_tag=bool(sig and sig.metadata.software_tag), risk_ok=risk is not None,
+                low_resolution=bool(sig and sig.metadata.native_short_side is not None
+                                    and sig.metadata.native_short_side < settings.low_res_short_side))
             result = await asyncio.to_thread(evaluate, pin, settings.policy_engine, settings.clmipol_bin)
             band, reasons, engine = result.band, list(result.reasons), result.engine
             if threshold_mismatch:

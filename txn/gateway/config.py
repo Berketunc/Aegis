@@ -23,6 +23,8 @@ class Settings:
     risk_url: str = field(default_factory=lambda: os.getenv("RISK_URL", "http://localhost:9000"))
     risk_secret: str = field(default_factory=lambda: os.getenv("RISK_SECRET", os.getenv("AEGIS_RISK_SECRET", "dev-shared-secret")))
     risk_timeout_ms: int = field(default_factory=lambda: int(os.getenv("RISK_TIMEOUT_MS", "300")))
+    # Below this native short side the AI score alone cannot give RED (train/HANDOFF.md: 17% real FPR on half-size photos).
+    low_res_short_side: int = field(default_factory=lambda: int(os.getenv("LOW_RES_SHORT_SIDE", "480")))
     db_path: str = field(default_factory=lambda: os.getenv("DB_PATH", str(TXN_DIR / "clmi.db")))
     thresholds_path: str = field(default_factory=lambda: os.getenv(
         "THRESHOLDS_PATH", str(TXN_DIR / "thresholds.example.json")))

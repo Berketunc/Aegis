@@ -4,6 +4,8 @@ What B needs to serve the detector on LinuxONE and what C's decision rule reads.
 
 ## Files (from `modal run train/export_onnx.py --run <run>`, local copies in `models/<run>/`, gitignored)
 
+**Integrated:** B's risk service implements exactly the preprocessing below (`risk_service/precompute.py`, verified pixel-identical against `three_crops`). B loads `best.pt` (strict state dict) through a torchvision-free ResNet-18 twin, because the s390x image has no torchvision: `python3 linuxone/install_model.py --run det-r18-v4 --weights best.pt --temperature temperature.json --export export.json --thresholds eval/thresholds_t-0.json`. The low-resolution rule below is implemented in `CLMIPOL.cbl` (`LOW_RESOLUTION_EVIDENCE`, limit 480 px).
+
 | File | What it is |
 |---|---|
 | `model.onnx` | ResNet-18, opset 17, static input `crops` `[3,3,224,224]` float32, output `logits` `[3,1]` |

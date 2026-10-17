@@ -99,7 +99,7 @@ upload does not establish the preprocessing p95 or detector accuracy.
 
 | Owner | Required files / agreement |
 |---|---|
-| A | Trained PyTorch model definition + strict state dictionary, or a compatible TorchScript artifact, alongside ONNX. Explicit RGB normalization, fake-class ordering, temperature and crop agreement. Put the manifest and artifact in `.runtime/models`. |
+| A | `best.pt`, `temperature.json`, `export.json` and `parity_*.npz` from `modal run train/export_onnx.py --run det-r18-v4`. `python3 linuxone/install_model.py` writes the manifest, weights and thresholds into `.runtime/models`; `linuxone/parity_logits.py` produces the LinuxONE logits A needs for `t-1`. |
 | A + B | Validation/test crops and labels, LinuxONE parity scores and final calibration. Supply versioned `.runtime/models/thresholds.json`; share the same config with C's gateway. |
 | C, integrated | Shared `privacy/` rules and built-in `risk_service.c_privacy_adapter:process` now prepare and durably log allowlisted payloads. The launcher supplies a stable shared `HMAC_KEY`. |
 | C, integrated | `--with-gateway` starts C's real gateway, with authenticated uploads/scoring, full SHA evidence IDs, a 300 ms score deadline, idempotency and decision journal. |
@@ -107,10 +107,11 @@ upload does not establish the preprocessing p95 or detector accuracy.
 | C / Lab 2 | A compatible local big-endian Granite GGUF at `.runtime/models/granite.gguf`. Reviewed prompts are supplied in `llm/prompts/pii_second_pass.txt` and `adjuster_note.txt`, copied into runtime on first use. |
 | D | Use the measured JSON, real runtime screenshots, fallback disclosure and run instructions in the README/video. |
 
-Preprocessing is versioned as `rgb-short640-bicubic-centre-grid25-75-v1`:
-EXIF orientation, RGB, shortest side 640 with bicubic resize, then 224-pixel
-crops at 50%, 25% and 75% of each available axis. A must approve or replace this
-exact convention before generating final evaluation crops or training exports.
+Preprocessing is versioned as `rgb-fit640-noupscale-bilinear-centre-gridcells-v2`
+and is a verified pixel-identical port of A's training recipe (`three_crops` in
+`train/train_modal.py`): EXIF orientation, RGB, short side shrunk to 640 but
+never enlarged, then the centre crop and the upper-left and lower-right 4×4 grid
+cells at 224 px. Install A's weights with `python3 linuxone/install_model.py`.
 
 ## Optional Granite service
 

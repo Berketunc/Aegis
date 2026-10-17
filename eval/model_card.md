@@ -5,7 +5,7 @@
 ## Intended use
 
 - **Task.** Score one motor-insurance claim photo for signs that it was generated or edited by an image-generation model. Output is a calibrated probability, `ai_score`.
-- **Where it runs.** Inside the claims transaction on IBM LinuxONE, compiled with the IBM Z Deep Learning Compiler. Original photos never leave IBM Z.
+- **Where it runs.** Inside the claims transaction on IBM LinuxONE. In this prototype it runs with PyTorch for s390x and the NNPA extension; compilation with the IBM Z Deep Learning Compiler is the planned production path (`zdlc/README.md`). Original photos never leave IBM Z.
 - **How it is used.** One signal among several (duplicate-photo check, metadata flags). The transaction layer maps scores to bands with versioned thresholds. **RED means a person investigates; nothing is rejected automatically.**
 - **Out of scope.** Proving fraud; judging people; video; documents; photos of anything other than vehicles; any decision without human review.
 

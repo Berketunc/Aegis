@@ -33,7 +33,8 @@ def test_preprocessing_applies_orientation_and_has_deterministic_crops():
     prepared = prepare_image(image_bytes(exif=exif))
     assert prepared.crops.shape == (3, 3, 224, 224)
     assert prepared.crops.dtype == np.uint8
-    assert prepared.crop_boxes == [[208, 528, 432, 752], [104, 264, 328, 488], [312, 792, 536, 1016]]
+    assert prepared.crop_boxes == [[88, 288, 312, 512], [0, 88, 224, 312], [176, 488, 400, 712]]  # 400x800 kept native; lower-right x clamped to w-224
+    assert prepared.metadata["native_short_side"] == 400
     assert len(prepared.phash) == 16
     assert prepared.metadata["exif_present"] is True
     assert prepared.metadata["software_tag"] == "Adobe Photoshop"
